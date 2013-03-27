@@ -1,5 +1,6 @@
 from __future__ import with_statement
 
+import logging
 from google.appengine.api import files
 
 import sys
