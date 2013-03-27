@@ -17,18 +17,25 @@ note_store = client.get_note_store()
 # list notebooks
 notebooks = note_store.listNotebooks()
 for notebook in notebooks:
-    print "  * ", notebook.name
+    print "  * ", notebook.name, " - ", notebook.guid
 
 # get a list of note metadata
 pageSize = 10
  
-filter = NoteFilter(order=Types.NoteSortOrder.UPDATED)
+filter = NoteFilter(order=Types.NoteSortOrder.UPDATED, notebookGuid=notebooks[0].guid)
 
 spec = NotesMetadataResultSpec()
+spec.includeGuid = True
 spec.includeTitle = True
+spec.includeContent = True
 spec.includeUpdated = True
 
 notes_meta = note_store.findNotesMetadata(auth_token, filter, 0, pageSize, spec)
 
+#note_list = note_store.findNotes(auth_token, filter, 0, 10)
+
 for note in notes_meta.notes:
-	print ' '.join([str(note.title), '-', str(note.updated)])
+	print ' - '.join([str(note.title), str(note.updated), str(note.guid)])
+	unit = note_store.getNote(auth_token, note.guid, True, True, False, False)
+	print unit.content
+	print '=========='
