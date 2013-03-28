@@ -5,15 +5,13 @@ api_version: 1
 threadsafe: yes
 
 handlers:
-- url: /favicon\.ico
-  static_files: favicon.ico
-  upload: favicon\.ico
+- url: /cron/.*
+  script: cron.app
+  login: admin
 
-- url: /sync
+- url: /sync/.*
   script: sync.app
-
-- url: .*
-  script: main.app
+  login: admin
 
 libraries:
 - name: webapp2
