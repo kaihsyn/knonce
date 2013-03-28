@@ -5,6 +5,15 @@ api_version: 1
 threadsafe: yes
 
 handlers:
+- url: /css
+  static_dir: statics/css
+
+- url: /img
+  static_dir: statics/img
+
+- url: /script
+  static_dir: statics/script
+
 - url: /cron/.*
   script: cron.app
   login: admin
@@ -13,6 +22,26 @@ handlers:
   script: sync.app
   login: admin
 
+- url: /(home)?
+  script: home.app
+
 libraries:
 - name: webapp2
   version: "2.5.2"
+
+- name: jinja2
+  version: "2.6"
+
+skip_files:
+- ^(.*/)?app\.yaml
+- ^(.*/)?app\.yml
+- ^(.*/)?index\.yaml
+- ^(.*/)?index\.yml
+- ^(.*/)?#.*#
+- ^(.*/)?.*~
+- ^(.*/)?.*\.py[co]
+- ^(.*/)?.*/RCS/.*
+- ^(.*/)?\..*
+- ^(coffee/).*
+- ^(sass/).*
+- ^(.sass-cache/).*
