@@ -14,6 +14,7 @@ from evernote.edam.notestore.ttypes import NotesMetadataResultSpec
 
 def sandbox():
 	# connect to evernote
+	auth_token = "S=s1:U=5d553:E=14501517f86:C=13da9a05386:P=1cd:A=en-devtoken:V=2:H=efe4a8b4effc55003bac87158cdd6f87"
 	client = EvernoteClient(token=auth_token, sandbox=True)
 
 	# get notestore

@@ -25,6 +25,12 @@ handlers:
 - url: /(home)?
   script: home.app
 
+- url: /logout
+  script: auth.app
+
+- url: /auth/google(/callback)?
+  script: auth.app
+
 libraries:
 - name: webapp2
   version: "2.5.2"
