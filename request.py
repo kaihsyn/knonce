@@ -1,16 +1,18 @@
 import webapp2
-from webapp2_extras import sessions
+import logging
+from webapp2_extras import auth, sessions, jinja2
+from jinja2.runtime import TemplateNotFound
 from secrets import SESSION_KEY
 
 # webapp2 config
 app_config = {
-  'webapp2_extras.sessions': {
-    'cookie_name': '_simpleauth_sess',
-    'secret_key': SESSION_KEY
-  },
-  'webapp2_extras.auth': {
-    'user_attributes': []
-  }
+    'webapp2_extras.sessions': {
+        'cookie_name': '_simpleauth_sess',
+        'secret_key': SESSION_KEY
+    },
+    'webapp2_extras.auth': {
+        'user_attributes': []
+    }
 }
 
 # Session Handling class, gets the store, dispatches the request
@@ -66,5 +68,6 @@ class RequestHandler(webapp2.RequestHandler):
         try:
             self.response.write(self.jinja2.render_template(template_name, **values))
         except TemplateNotFound:
+            logging.info(jinja2.default_config)
             self.abort(404)
   

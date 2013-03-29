@@ -6,7 +6,7 @@ import webapp2
 import logging
 
 import secrets
-from knonce import request
+import request
 from simpleauth import SimpleAuthHandler
 
 class AuthHDL(request.RequestHandler, SimpleAuthHandler):
@@ -68,6 +68,8 @@ class AuthHDL(request.RequestHandler, SimpleAuthHandler):
     user = self.auth.store.user_model.get_by_auth_id(auth_id)
     _attrs = self._to_user_model_attrs(data, self.USER_ATTRS[provider])
 
+    logging.info(_attrs)
+
     if user:
       logging.info('Found existing user to log in')
       # Existing users might've changed their profile data so we update our
@@ -103,13 +105,8 @@ class AuthHDL(request.RequestHandler, SimpleAuthHandler):
         if ok:
           self.auth.set_session(self.auth.store.user_to_dict(user))
 
-    # Remember auth data during redirect, just for this demo. You wouldn't
-    # normally do this.
-    self.session.add_flash(data, 'data - from _on_signin(...)')
-    self.session.add_flash(auth_info, 'auth_info - from _on_signin(...)')
-
     # Go to the profile page
-    self.redirect('/profile')
+    self.redirect('/')
 
   def logout(self):
     self.auth.unset_session()

@@ -22,7 +22,7 @@ handlers:
   script: sync.app
   login: admin
 
-- url: /(home)?
+- url: /
   script: home.app
 
 - url: /logout
@@ -51,3 +51,4 @@ skip_files:
 - ^(coffee/).*
 - ^(sass/).*
 - ^(.sass-cache/).*
+- secrets.py.template

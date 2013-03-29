@@ -1,16 +1,16 @@
+import sys
+if 'lib' not in sys.path:
+	sys.path[0:0] = ['lib']
+
 import logging
 import webapp2
-import jinja2
-import os
 
-class MainHandler(webapp2.RequestHandler):
+import request
+
+class MainHandler(request.RequestHandler):
 	def get(self):
-
-		template = jinja_environment.get_template('views/home.html')
-		self.response.out.write(template.render())
+		self.render('home.html')
 
 app = webapp2.WSGIApplication([
     ('/', MainHandler)
-], debug=True)
-
-jinja_environment = jinja2.Environment(loader=jinja2.FileSystemLoader(os.path.dirname(__file__)))
+], debug=True, config=request.app_config)
