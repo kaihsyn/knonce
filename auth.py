@@ -105,8 +105,7 @@ class AuthHDL(request.RequestHandler, SimpleAuthHandler):
         if ok:
           self.auth.set_session(self.auth.store.user_to_dict(user))
 
-    # Go to the profile page
-    self.redirect('/')
+    self.redirect('/settings')
 
   def logout(self):
     self.auth.unset_session()

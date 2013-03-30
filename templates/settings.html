@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+
+{% block title %}
+Settings | Knonce
+{% endblock %}
+
+{% block body_dark %}
+<h1>Settings</h1>
+{% endblock %}
+
+{% block body_light %}
+<ul id="menu" class="nav nav-tabs">
+	<li class="active"><a href="#notebook" data-toggle="tab">Notebook</a></li>
+	<li><a href="#account" data-toggle="tab">Account</a></li>
+</ul>
+<div class="tab-content">
+	<div class="tab-pane active" id="notebook">
+		{% if connect is defined %}
+			{% if connect %}
+			<div class="alert alert-success">
+			  <button type="button" class="close" data-dismiss="alert">&times;</button>
+			  <strong>Success!</strong> We have connected to your Evernote account.
+			</div>
+			{% else %}
+			<div class="alert">
+			  <button type="button" class="close" data-dismiss="alert">&times;</button>
+			  <strong>Sorry!</strong> We failed to connect with your Evernote account. Please give it a try later, or contact support.
+			</div>
+			{% endif %}
+		{% endif %}
+
+		{% if unit is not none %}
+			<form class="form-horizontal">
+				<div class="control-group">
+					<div class="control-label">username</div>
+					<div class="controls">
+						<span class="help-inline only">{{unit.username}}</span>
+					</div>
+				</div>
+				<div class="control-group">
+					<div class="control-label">notebook</div>
+					<div class="controls">
+						<span class="help-inline only">{{unit.notebook_name}}</span>
+					</div>
+				</div>
+			</form>
+		{% else %}
+			<p>
+				Let's get started by coonecting your Evernote account.
+			</p>
+			<p>
+				<a class="kbtn" href="/auth/evernote"><img src="/img/btn_en.png" width="200" alt="Connect Evernote"></a>
+			</p>
+		{% endif %}
+	</div>
+	<div class="tab-pane" id="account">
+		<form id="form-account" class="form-horizontal" method="post">
+			<div class="control-group">
+				<div class="control-label">name</div>
+				<div class="controls">
+					{% if user.en_name %}
+					<span class="help-inline only">{{user.en_name}}</span>
+					{% else %}
+					<span class="help-inline only gray">wait to sync with Evernote</span>
+					{% endif %}
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label">display-name</label>
+				<div class="controls">
+					<input class="input-large" type="text" name="display" placeholder="Spiderman" value="{{user.display}}">
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label">emaill</label>
+				<div class="controls">
+					<input class="input-large" type="email" name="email" placeholder="you@domain.com" value="{{user.email}}">
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label">bio</label>
+				<div class="controls">
+					<textarea id="f-acct-bio" class="input-xlarge" name="bio" rows="3" placeholder="tell us a little bit about you...">{{user.bio}}</textarea><br/>
+					<span id="f-acct-bio-limit" class="help-inline only gray">max 500 characters</span>
+				</div>
+			</div>
+			<div class="control-group">
+				<div class="controls">
+					<button id="f-acct-btn" class="btn btn-info" type="submit" name="submit">Update</button><span id="f-acct-msg" class="help-inline"></span>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+{% endblock %}
+
+{% block script %}
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/js/bootstrap.min.js"></script>
+<script>
+	$('#menu a').click(function (e) {
+		e.preventDefault();
+		$(this).tab('show');
+	});
+
+	{% if show is defined %}
+	$('#menu a[href="#{{show}}"]').tab('show');
+	{% endif %}
+
+	$('#f-acct-bio').change(function() {
+		if ($('#f-acct-bio').val().length > 500) {
+			$('#f-acct-bio-limit').addClass('red')
+			$('#f-acct-bio-limit').removeClass('gray')
+			$('#f-acct-btn').addClass('disabled')
+		} else {
+			$('#f-acct-bio-limit').addClass('gray')
+			$('#f-acct-bio-limit').removeClass('red')
+			$('#f-acct-btn').removeClass('disabled')
+		}
+	});
+
+	$('#form-account').submit(function() {
+		if ($('#f-acct-bio').val().length > 500) {
+			$('#f-acct-msg').html('Length of bio exceeds the max limit.')
+			return false;
+		}
+		return true;
+	});
+</script>
+{% endblock %}

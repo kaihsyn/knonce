@@ -1,12 +1,114 @@
-@import url(http://fonts.googleapis.com/css?family=Delius+Swash+Caps|Raleway:400);
+@import url(http://fonts.googleapis.com/css?family=Delius+Swash+Caps|Sanchez);
 body {
   background-color: whitesmoke; }
 
-.bg-gray {
+a {
+  color: #09abd3; }
+
+a:hover {
+  color: #0898bb; }
+
+a.kbtn {
+  display: inline-block;
+  margin-top: 0px;
+  margin-bottom: 3px; }
+
+a.kbtn:hover {
+  margin-top: 1px;
+  margin-bottom: 2px; }
+
+a.kbtn:active {
+  margin-top: 3px;
+  margin-bottom: 0px; }
+
+h1 {
+  font-family: Sanchez, Courier, serif;
+  font-weight: normal;
+  font-size: 35px; }
+
+footer {
+  height: 160px; }
+
+.serif {
+  font-family: Sanchez, Courier, serif; }
+
+#top {
   background-color: #bbbbbb;
-  padding-bottom: 5px;
-  margin-bottom: 30px; }
+  height: 35px;
+  text-align: right;
+  padding-top: 5px; }
+
+#top a {
+  display: inline-block;
+  color: white;
+  font-family: Sanchez, Courier, serif; }
+
+#top a:hover {
+  margin-top: 1px;
+  text-decoration: none; }
+
+#top a:active {
+  margin-top: 3px; }
+
+#gray {
+  background-color: #bbbbbb;
+  padding-top: 80px;
+  padding-bottom: 20px;
+  margin-bottom: 20px; }
 
 .title {
   font-family: "Delius Swash Caps", Helvetica, Arial, Verdana;
   text-shadow: 1px 1px #cccccc; }
+
+.nav-tabs {
+  border-bottom-color: #bbbbbb;
+  margin-bottom: 45px; }
+
+.nav-tabs > li > a:hover, .nav-tabs > li > a:focus {
+  border-color: transparent transparent #bbbbbb; }
+
+.nav-tabs > .active > a, .nav-tabs > .active > a:hover, .nav-tabs > .active > a:focus {
+  border: 1px solid #bbbbbb;
+  border-bottom-color: transparent;
+  background-color: whitesmoke; }
+
+.form-horizontal .control-label {
+  width: 120px; }
+
+.form-horizontal .controls {
+  margin-left: 140px; }
+
+div.control-label {
+  margin-bottom: 5px; }
+
+.help-inline.only {
+  margin-top: 5px;
+  padding-left: 0px;
+  color: #09abd3; }
+
+.help-inline.only.gray {
+  color: #999999; }
+
+.help-inline.only.red {
+  color: #cc0000; }
+
+.form-search input, .form-inline input, .form-horizontal input, .form-search textarea, .form-inline textarea, .form-horizontal textarea, .form-search select, .form-inline select, .form-horizontal select, .form-search .help-inline, .form-inline .help-inline, .form-horizontal .help-inline, .form-search .uneditable-input, .form-inline .uneditable-input, .form-horizontal .uneditable-input, .form-search .input-prepend, .form-inline .input-prepend, .form-horizontal .input-prepend, .form-search .input-append, .form-inline .input-append, .form-horizontal .input-append {
+  font-family: Sanchez, Courier, serif; }
+
+@media (max-width: 767px) {
+  body {
+    padding-left: 0px;
+    padding-right: 0px; }
+
+  .row {
+    padding-left: 20px;
+    padding-right: 20px; }
+
+  .bg-gray {
+    padding-top: 40px; }
+
+  .form-horizontal .control-label {
+    width: auto; }
+
+  .form-horizontal .controls {
+    margin-left: 0px; } }

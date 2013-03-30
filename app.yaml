@@ -28,8 +28,14 @@ handlers:
 - url: /logout
   script: auth.app
 
+- url: /auth/evernote(/callback)?
+  script: auth_en.app
+
 - url: /auth/google(/callback)?
   script: auth.app
+
+- url: /settings
+  script: settings.app
 
 libraries:
 - name: webapp2
@@ -52,3 +58,4 @@ skip_files:
 - ^(sass/).*
 - ^(.sass-cache/).*
 - secrets.py.template
+- kaihsyn.py

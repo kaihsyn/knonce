@@ -3,12 +3,13 @@ sys.path.append('./lib')
 
 import webapp2
 import logging
+import request
 
-#from knonce.model.unit import Unit
+from knonce.unit import Unit
 #from evernote.api.client import EvernoteClient
-#import evernote.edam.notestore.NoteStore as NoteStore
+#import evernote.edam.notestore.NoteStore as NoteStore		
 
-class SyncEvernoteHDL(webapp2.RequestHandler):
+class SyncEnHDL(request.RequestHandler):
 	def post(self):
 		
 		logging.info('Sync Evernote')
@@ -30,5 +31,5 @@ class SyncEvernoteHDL(webapp2.RequestHandler):
 		"""
 
 app = webapp2.WSGIApplication([
-  ('/sync/evernote', SyncEvernoteHDL)
-])
+	('/sync/evernote', SyncEnHDL)
+	], debug=True, config=request.app_config)

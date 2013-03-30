@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	{% if title is defined %}
+	<title>{{ title }} | Knonce</title>
+	{% else %}
+	<title>{% block title %}Knonce{% endblock %}</title>
+	{% endif %}
+
+	<link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.0/css/bootstrap-combined.no-icons.min.css" rel="stylesheet">
+	<link href="//netdna.bootstrapcdn.com/font-awesome/3.0.2/css/font-awesome.css" rel="stylesheet">
+
+	<link href="css/base.css" rel="stylesheet">
+
+	{% block head %}{% endblock %}
+</head>
+<body>
+	<div id="top" class="row">
+	<div class="span8 offset2">
+	<div id="top">
+		{% if logged_in %}
+			<a href="/logout"><i class="icon-signout"></i> Logout</a>
+		{% endif %}
+	</div>
+	</div>
+	</div>
+
+	<div id="gray" class="row">
+	<div class="span8 offset2">
+	<div class="wrap">
+	{% block body_dark %}{% endblock %}
+	</div>
+	</div>
+	</div>
+
+	<div class="row">
+	<div class="span8 offset2">
+	<div class="wrap">
+	{% block body_light %}{% endblock %}
+	</div>
+	</div>
+	</div>
+	{% block script %}{% endblock %}
+	<footer>
+
+	</footer>
+</body>
+</html>
