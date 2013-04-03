@@ -26,6 +26,8 @@ class AuthHDL(request.RequestHandler):
 		if not self.logged_in:
 			self.redirect('/')
 
+		#TODO prevent people to load this page directly
+
 		client = get_evernote_client()
 		callbackUrl = 'http://%s/auth/evernote/callback' % self.request.host
 		request_token = client.get_request_token(callbackUrl)
@@ -50,19 +52,25 @@ class CallbackHDL(request.RequestHandler):
 				self.request.get('oauth_verifier')
 			)
 		except KeyError:
-			self.session.add_flash(False, key='connect_evernote')
+			self.session.add_flash('connect_en', key='not_done')
 			return self.redirect('/settings')
 
-		unit = Unit.get_by_user_key(self.current_user.key)
-		if unit is None:
-			unit = Unit(parent=self.current_user.key)
+		try:
+			unit = Unit.get_by_user_key(self.current_user.key)
+			if unit is None:
+				unit = Unit(parent=self.current_user.key)
 
-		unit.token = token
-		unit.put()
+			unit.token = token
+			unit.put()
+		except:
+			self.session.add_flash('connect_en', key='not_done')
+			return self.redirect('/settings')
 
-		self.session.add_flash(True, key='connect_evernote')
-		self.session.add_flash(self.update_info(client), key='update_info')
-
+		if not self.update_info(client):
+			self.session.add_flash('connect_en', key='not_done')
+			return self.redirect('/settings')
+		
+		self.session.add_flash('connect_en', key='done')
 		return self.redirect('/settings')
 
 	def update_info(self, client):

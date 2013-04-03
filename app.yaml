@@ -37,6 +37,9 @@ handlers:
 - url: /settings
   script: settings.app
 
+- url: /settings/update/.*
+  script: settings.app
+
 libraries:
 - name: webapp2
   version: "2.5.2"

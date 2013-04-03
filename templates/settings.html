@@ -15,18 +15,26 @@ Settings | Knonce
 </ul>
 <div class="tab-content">
 	<div class="tab-pane active" id="notebook">
-		{% if connect is defined %}
-			{% if connect %}
+		{% if done is defined and (done == 'connect_en' or done == 'notebook') %}
 			<div class="alert alert-success">
-			  <button type="button" class="close" data-dismiss="alert">&times;</button>
-			  <strong>Success!</strong> We have connected to your Evernote account.
+				<button type="button" class="close" data-dismiss="alert">&times;</button>
+				<strong>Success!</strong>
+				{% if done == 'notebook' %}
+				Your notebook selection is updated.
+				{% elif done == 'connect_en' %}
+				We have connected to your Evernote account.
+				{% endif %}
 			</div>
-			{% else %}
+		{% elif not_done is defined and (not_done == 'connect_en' or not_done == 'notebook') %}
 			<div class="alert">
-			  <button type="button" class="close" data-dismiss="alert">&times;</button>
-			  <strong>Sorry!</strong> We failed to connect with your Evernote account. Please give it a try later, or contact support.
+				<button type="button" class="close" data-dismiss="alert">&times;</button>
+				<strong>Sorry!</strong>
+				{% if not_done == 'notebook' %}
+				We failed to save your changes. Please give it a try later, or contact support.
+				{% elif not_done == 'connect_en' %}
+				We failed to connect with your Evernote account. Please give it a try later, or contact support.
+				{% endif %}
 			</div>
-			{% endif %}
 		{% endif %}
 
 		{% if unit is not none %}
@@ -40,7 +48,13 @@ Settings | Knonce
 				<div class="control-group">
 					<div class="control-label">notebook</div>
 					<div class="controls">
-						<span class="help-inline only">{{unit.notebook_name}}</span>
+						<div class="hide">
+							<select id="nblist" name="notebook"></select>
+						</div>
+						<span class="help-inline only">
+							{{unit.notebook_name}}
+							<a href="#" onClick="loadList();">Edit</a>
+						</span>
 					</div>
 				</div>
 			</form>
@@ -54,7 +68,21 @@ Settings | Knonce
 		{% endif %}
 	</div>
 	<div class="tab-pane" id="account">
-		<form id="form-account" class="form-horizontal" method="post">
+		{% if done is defined and done == 'account' %}
+			<div class="alert alert-success">
+				<button type="button" class="close" data-dismiss="alert">&times;</button>
+				<strong>Success!</strong>
+				Your account information is updated.
+			</div>
+		{% elif not_done is defined and not_done == 'account' %}
+			<div class="alert">
+				<button type="button" class="close" data-dismiss="alert">&times;</button>
+				<strong>Sorry!</strong>
+				We failed to save your changes. Please give it a try later, or contact support.
+			</div>
+		{% endif %}
+
+		<form id="form-account" class="form-horizontal" method="post" action="/settings/update/account">
 			<div class="control-group">
 				<div class="control-label">name</div>
 				<div class="controls">
@@ -98,15 +126,21 @@ Settings | Knonce
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/js/bootstrap.min.js"></script>
 <script>
+	{# load notebooks #}
+
+
+	{# tab menu #}
 	$('#menu a').click(function (e) {
 		e.preventDefault();
 		$(this).tab('show');
 	});
 
-	{% if show is defined %}
-	$('#menu a[href="#{{show}}"]').tab('show');
+	{# default tap #}
+	{% if show is defined and show == 'account' %}
+	$('#menu a[href="#account"]').tab('show');
 	{% endif %}
 
+	{# bio check #}
 	$('#f-acct-bio').change(function() {
 		if ($('#f-acct-bio').val().length > 500) {
 			$('#f-acct-bio-limit').addClass('red')
@@ -119,6 +153,7 @@ Settings | Knonce
 		}
 	});
 
+	{# account info update submit #}
 	$('#form-account').submit(function() {
 		if ($('#f-acct-bio').val().length > 500) {
 			$('#f-acct-msg').html('Length of bio exceeds the max limit.')
