@@ -63,8 +63,6 @@ class NBSelectHDL(request.RequestHandler):
 
 		self.render('settings.html', vars)
 
-
-
 app = webapp2.WSGIApplication([
     ('/settings', SettingsHDL),
     ('/settings/update/(notebook|account)', SettingsHDL),

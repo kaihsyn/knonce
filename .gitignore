@@ -1,4 +1,5 @@
 .DS_Store
 .sass-cache/*
 secrets.py
+kaihsyn.py
 *.pyc*
