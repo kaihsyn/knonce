@@ -23,7 +23,7 @@ class SettingsHDL(request.RequestHandler):
 
 		self.render('settings.html', vars)
 
-	def post(self, target):
+	def put(self, target):
 		if not self.logged_in:
 			self.redirect('/')
 
@@ -58,6 +58,6 @@ class NBSelectHDL(request.RequestHandler):
 
 app = webapp2.WSGIApplication([
 	webapp2.Route(r'/settings', handler='settings.SettingsHDL:get', name='get-settings', methods=['GET']),
-    webapp2.Route(r'/settings/<target:(notebook|account)>', handler='settings.SettingsHDL:post', name='update-settings', methods=['POST']),
+    webapp2.Route(r'/settings/<target:(notebook|account)>', handler='settings.SettingsHDL:put', name='update-settings', methods=['PUT']),
     (r'/select', NBSelectHDL)
 	], debug=True, config=request.app_config)
