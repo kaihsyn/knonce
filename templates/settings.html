@@ -38,7 +38,7 @@ Settings | Knonce
 		{% endif %}
 
 		{% if unit is not none %}
-			<form class="form-horizontal">
+			<div class="form-horizontal">
 				<div class="control-group">
 					<div class="control-label">username</div>
 					<div class="controls">
@@ -48,15 +48,12 @@ Settings | Knonce
 				<div class="control-group">
 					<div class="control-label">notebook</div>
 					<div class="controls">
-						<div class="hide">
-							<select id="nblist" name="notebook"></select>
-						</div>
 						<span class="help-inline only">
 							<a href="#" onClick="nbChoose();" class="kl-tooltip" data-placement="right" title="Click to edit notebook selection.">{{unit.notebook_name}}</a>
 						</span>
 					</div>
 				</div>
-			</form>
+			</div>
 		{% else %}
 			<p>
 				Let's get started by coonecting your Evernote account.
@@ -129,8 +126,8 @@ Settings | Knonce
 <script src="/script/settings.js"></script>
 <script>
 	{# default tap #}
-	{% if show is defined and show == 'account' %}
-	$('#menu a[href="#account"]').tab('show');
+	{% if show is defined %}
+	$('#menu a[href="#{{show}}"]').tab('show');
 	{% endif %}
 </script>
 {% endblock %}

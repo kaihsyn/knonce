@@ -101,6 +101,7 @@ class AuthHDL(request.RequestHandler, SimpleAuthHandler):
         
       else:
         logging.info('Creating a brand new user')
+        _attrs['pub_id'] = ''
         ok, user = self.auth.store.user_model.create_user(auth_id, **_attrs)
         if ok:
           self.auth.set_session(self.auth.store.user_to_dict(user))

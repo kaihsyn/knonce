@@ -6,6 +6,8 @@ import logging
 import webapp2
 import request
 
+from google.appengine.ext.db import TransactionFailedError
+
 from knonce.unit import Unit
 
 class SettingsHDL(request.RequestHandler):
@@ -19,17 +21,6 @@ class SettingsHDL(request.RequestHandler):
 			'user': user
 		}
 
-		done = self.session.get_flashes(key='done')
-		if len(done) > 0:
-			logging.info(done[0][0])
-			vars['done'] = done[0][0]
-			vars['show'] = vars['done']
-		
-		not_done = done = self.session.get_flashes(key='not_done')
-		if len(not_done) > 0:
-			vars['not_done'] = not_done[0][0]
-			vars['show'] = vars['not_done']
-
 		self.render('settings.html', vars)
 
 	def post(self, target):
@@ -37,24 +28,26 @@ class SettingsHDL(request.RequestHandler):
 			self.redirect('/')
 
 		if target == 'account':
+			user = self.current_user
 			try:
-				user = self.current_user
 				user.display = self.request.get('display')
 				user.email = self.request.get('email')
 				user.bio = self.request.get('bio')
 				user.put()
-			except:
-				self.session.add_flash('account', key='not_done')
-				self.redirect('/settings')
-
-			self.session.add_flash('account', key='done')
+			except TransactionFailedError:
+				self.response.status = '500 Database Error'
 
 		elif target == 'notebook':
 			unit = Unit.get_by_user_key(user.key)
 
-			pass
+			if unit is None:
+				self.response.status = '400 Unit Not Found'
 
-		self.redirect('/settings')
+			try:
+				unit.alias = self.request.get('alias')
+				unit.put()
+			except TransactionFailedError:
+				self.response.status = '500 Database Error'
 
 class NBSelectHDL(request.RequestHandler):
 	def get(self):
@@ -64,7 +57,7 @@ class NBSelectHDL(request.RequestHandler):
 		self.render('settings.html', vars)
 
 app = webapp2.WSGIApplication([
-    ('/settings', SettingsHDL),
-    ('/settings/update/(notebook|account)', SettingsHDL),
-    ('/select', NBSelectHDL)
+	webapp2.Route(r'/settings', handler='settings.SettingsHDL:get', name='get-settings', methods=['GET']),
+    webapp2.Route(r'/settings/<target:(notebook|account)>', handler='settings.SettingsHDL:post', name='update-settings', methods=['POST']),
+    (r'/select', NBSelectHDL)
 	], debug=True, config=request.app_config)

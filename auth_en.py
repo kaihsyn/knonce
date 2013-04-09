@@ -4,12 +4,14 @@ if 'lib' not in sys.path:
 
 import logging
 import webapp2
+from google.appengine.ext import ndb
 
 import request
 
 from evernote.api.client import EvernoteClient
 from secrets import EN_CONSUMER_KEY, EN_CONSUMER_SECRET
 from knonce.unit import Unit
+from knonce import helper
 
 def get_evernote_client(token=None):
 	if token:
@@ -26,7 +28,9 @@ class AuthHDL(request.RequestHandler):
 		if not self.logged_in:
 			self.redirect('/')
 
-		#TODO prevent people to load this page directly
+		unit = Unit.query(ancestor=self.current_user).get()
+		if unit is None or unit.token != '':
+			return self.redirect("/%s/settings" % self.current_user.pub_id)
 
 		client = get_evernote_client()
 		callbackUrl = 'http://%s/auth/evernote/callback' % self.request.host
@@ -59,6 +63,15 @@ class CallbackHDL(request.RequestHandler):
 			unit = Unit.get_by_user_key(self.current_user.key)
 			if unit is None:
 				unit = Unit(parent=self.current_user.key)
+				logging.info('Create new Unit')
+
+				#generate an initial id for the user
+				for x in xrange(10):
+					alias = helper.code_generator(size=16)
+					if Unit.query(Unit.alias==alias).count(1) == 0:
+						logging.info('Generated alias is %s' % alias)
+						unit.alias = alias
+						break
 
 			unit.token = token
 			unit.put()

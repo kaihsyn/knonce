@@ -34,10 +34,7 @@ handlers:
 - url: /auth/google(/callback)?
   script: auth.app
 
-- url: /settings
-  script: settings.app
-
-- url: /settings/update/.*
+- url: /settings(/.*)?
   script: settings.app
 
 libraries:
