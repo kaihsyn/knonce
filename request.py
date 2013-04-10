@@ -1,5 +1,6 @@
 import webapp2
 import logging
+import json
 from webapp2_extras import auth, sessions, jinja2
 from jinja2.runtime import TemplateNotFound
 from secrets import SESSION_KEY
@@ -70,4 +71,8 @@ class RequestHandler(webapp2.RequestHandler):
         except TemplateNotFound:
             logging.info(jinja2.default_config)
             self.abort(404)
+
+    def render_json(self, json_vars={}):
+        self.response.headers['Content-Type'] = 'application/json'
+        return self.response.out.write(json.dumps(json_vars))
   
