@@ -33,5 +33,4 @@
 		if $('#f-acct-bio').val().length > 500
 			$('#f-acct-msg').html 'Length of bio exceeds the max limit.'
 			return false
-
 		return true
