@@ -8,31 +8,19 @@ from google.appengine.ext import ndb
 
 import request
 
-from evernote.api.client import EvernoteClient
-from secrets import EN_CONSUMER_KEY, EN_CONSUMER_SECRET
 from knonce.unit import Unit
 from knonce import helper
-
-def get_evernote_client(token=None):
-	if token:
-		return EvernoteClient(token=token, sandbox=True)
-	else:
-		return EvernoteClient(
-			consumer_key=EN_CONSUMER_KEY,
-			consumer_secret=EN_CONSUMER_SECRET,
-			sandbox=True
-		)
 
 class AuthHDL(request.RequestHandler):
 	def get(self):
 		if not self.logged_in:
 			self.redirect('/')
 
-		unit = Unit.query(ancestor=self.current_user).get()
-		if unit is None or unit.token != '':
-			return self.redirect("/%s/settings" % self.current_user.pub_id)
+		unit = Unit.query(ancestor=self.current_user.key).get()
+		if unit is not None and unit.token != '':
+			return self.redirect("/settings")
 
-		client = get_evernote_client()
+		client = helper.get_evernote_client()
 		callbackUrl = 'http://%s/auth/evernote/callback' % self.request.host
 		request_token = client.get_request_token(callbackUrl)
 
@@ -49,14 +37,15 @@ class CallbackHDL(request.RequestHandler):
 			self.redirect('/')
 
 		try:
-			client = get_evernote_client()
+			client = helper.get_evernote_client()
 			token = client.get_access_token(
 				self.session.get('oauth_token'),
 				self.session.get('oauth_token_secret'),
 				self.request.get('oauth_verifier')
 			)
 		except KeyError:
-			self.session.add_flash('connect_en', key='not_done')
+			self.session.add_flash(False, level='en', key='connect')
+			logging.error('Failed to retrieve access token data in call back function.')
 			return self.redirect('/settings')
 
 		try:
@@ -76,14 +65,16 @@ class CallbackHDL(request.RequestHandler):
 			unit.token = token
 			unit.put()
 		except:
-			self.session.add_flash('connect_en', key='not_done')
+			self.session.add_flash(False, level='en', key='connect')
+			logging.error('Failed to create unit.')
 			return self.redirect('/settings')
 
 		if not self.update_info(client):
-			self.session.add_flash('connect_en', key='not_done')
+			self.session.add_flash(False, level='en', key='connect')
+			logging.error('Failed to update unit.')
 			return self.redirect('/settings')
 		
-		self.session.add_flash('connect_en', key='done')
+		self.session.add_flash(True, level='en', key='connect')
 		return self.redirect('/settings')
 
 	def update_info(self, client):
