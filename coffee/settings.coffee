@@ -1,16 +1,30 @@
 	# add tooltips
 	$('.kl-tooltip').tooltip()
 
-	# choose notebooks
-	cbChoose = ->
-		$.get(
-			'/api/setting/notebook_list',
-			{},
-			(->
+	# notebook list
+	$('#nb-select>.help-inline.only').on 'click', 'a', ->
+		$('#nb-select-name').hide()
+		$('#nb-select-spin').show()
+		$('#nb-select>select').html ''
 
-			),
-			'json'
-		)
+		$.get('/settings/notebook_list')
+			.done((data) ->
+				for nb in data.notebooks
+					$('#nb-select>select').append "<option value=\"#{nb.value}\" data-name=\"#{nb.name}\">#{nb.name}</option>"
+				$('#nb-select>select').show()
+			)
+			.fail((data) ->
+				$('#nb-select-name').show()
+				$('#nb-select-msg')
+					.html('- Failed to load notebooks list.')
+					.show()
+					.delay(5000)
+					.hide()
+			)
+			.always((data) ->
+				$('#nb-select-spin').hide()
+			)
+		return false
 
 	# tab menu
 	$('#menu a').click (e) ->

@@ -83,11 +83,13 @@ class SettingsHDL(request.RequestHandler):
 			notebooks = note_store.listNotebooks()
 		except error.ttypes.EDAMUserException, e:
 			logging.error("Evernote API Error: %s on %s." % (e.errorCode, e.parameter))
-			return self.response.status = '500 Evernote Connection Error'
+			self.response.status = '500 Evernote Connection Error'
+			return
 
 		except error.ttypes.EDAMSystemException, e:
 			logging.error("Evernote API Error: %s with message \"%s\"." % (e.errorCode, e.message))
-			return self.response.status = '500 Evernote Connection Error'
+			self.response.status = '500 Evernote Connection Error'
+			return
 
 		json_vars = { 'notebooks': [] }
 		for nb in notebooks:

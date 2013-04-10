@@ -46,7 +46,7 @@ Settings | Knonce
 		{% endif %}
 		#}
 		{% if unit is not none %}
-			<div class="form-horizontal">
+			<form class="form-horizontal">
 				<div class="control-group">
 					<div class="control-label">username</div>
 					<div class="controls">
@@ -55,14 +55,16 @@ Settings | Knonce
 				</div>
 				<div class="control-group">
 					<div class="control-label">notebook</div>
-					<div class="controls">
-						<
-						<span class="help-inline only">
-							<a href="#" onClick="nbChoose();" class="kl-tooltip" data-placement="right" title="Click to edit notebook selection.">{{unit.notebook_name}}</a>
+					<div id="nb-select" class="controls">
+						<select class="hide"></select>
+						<span id="nb-select-spin" class="help-inline only hide"><i class="icon-spinner icon-spin icon-large"></i></span>
+						<span id="nb-select-name" class="help-inline only">
+							<a href="#" class="kl-tooltip" data-placement="right" title="Click to edit notebook selection.">{{unit.notebook_name}}</a>
 						</span>
+						<span id="nb-select-msg" class="help-inline hide"></span>
 					</div>
 				</div>
-			</div>
+			</form>
 		{% else %}
 			<p>
 				Let's get started by coonecting your Evernote account.
