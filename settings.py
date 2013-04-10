@@ -52,8 +52,8 @@ class SettingsHDL(request.RequestHandler):
 		if not self.logged_in:
 			self.redirect('/')
 
+		user = self.current_user
 		if target == 'account':
-			user = self.current_user
 			try:
 				user.display = self.request.get('display')
 				user.email = self.request.get('email')
@@ -66,10 +66,19 @@ class SettingsHDL(request.RequestHandler):
 			unit = Unit.get_by_user_key(user.key)
 
 			if unit is None:
-				self.response.status = '400 Unit Not Found'
+				self.response.status = '404 Unit Not Found'
+
+			""" check alias """
+			if self.request.get('alias'):
+				if unit.alias != self.request.get('alias') and Unit.query(Unit.alias==unit.alias).count(1) > 0:
+					self.response.status = '400 Value Of \'alias\' Is Taken'
+				elif self.request.get('alias') == '':
+					self.response.status = '400 Value Of \'alias\' Can\'t Be Empty'
 
 			try:
 				unit.alias = self.request.get('alias')
+				unit.notebook_name = self.request.get('notebook_name')
+				unit.notebook_guid = self.request.get('notebook_guid')
 				unit.put()
 			except TransactionFailedError:
 				self.response.status = '500 Database Error'

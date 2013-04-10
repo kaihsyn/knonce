@@ -22,34 +22,13 @@ Settings | Knonce
 				{{ msg.body }}
 			</div>
 		{% endif %}
-		{#
-		{% if done is defined and (done == 'connect_en' or done == 'notebook') %}
-			<div class="alert alert-success">
-				<button type="button" class="close" data-dismiss="alert">&times;</button>
-				<strong>Success!</strong>
-				{% if done == 'notebook' %}
-				Your notebook selection is updated.
-				{% elif done == 'connect_en' %}
-				We have connected to your Evernote account.
-				{% endif %}
-			</div>
-		{% elif not_done is defined and (not_done == 'connect_en' or not_done == 'notebook') %}
-			<div class="alert">
-				<button type="button" class="close" data-dismiss="alert">&times;</button>
-				<strong>Sorry!</strong>
-				{% if not_done == 'notebook' %}
-				We failed to save your changes. Please give it a try later, or contact support.
-				{% elif not_done == 'connect_en' %}
-				We failed to connect with your Evernote account. Please give it a try later, or contact support.
-				{% endif %}
-			</div>
-		{% endif %}
-		#}
-		{% if unit is not none %}
+
+		{% if unit is defined %}
 			<form id="nb" class="form-horizontal">
 				<div class="control-group">
 					<div class="control-label">alias</div>
 					<div class="controls">
+						<span class="help-inline no-space">http://www.knonce.com/</span>
 						<input class="input-medium" type="text" name="alias" value="{{unit.alias}}"></input>
 					</div>
 				</div>
@@ -57,9 +36,11 @@ Settings | Knonce
 					<div class="control-label">notebook</div>
 					<div id="nb-select" class="controls">
 						<select class="hide"></select>
-						<span id="nb-select-spin" class="help-inline only hide"><i class="icon-spinner icon-spin icon-large"></i></span>
+						<span id="nb-select-spin" class="help-inline hide">
+							<i class="icon-spinner icon-spin icon-large"></i>
+						</span>
 						<span id="nb-select-name" class="help-inline only">
-							<a href="#" class="kl-tooltip" data-placement="right" title="Click to edit notebook selection.">{{unit.notebook_name}}</a>
+							<a href="#" class="kl-tooltip" data-placement="right" title="Click to change your notebook.">{{unit.notebook_name}}</a>
 						</span>
 						<span id="nb-select-msg" class="help-inline hide"></span>
 					</div>
@@ -67,6 +48,10 @@ Settings | Knonce
 				<div class="control-group">
 					<div id="nb-select" class="controls">
 						<button class="btn btn-primary" type="submit">Save</button>
+						<span id="nb-msg" class="help-inline hide"></span>
+						<span id="nb-spin" class="help-inline hide">
+							<i class="icon-spinner icon-spin icon-large"></i>
+						</span>
 					</div>
 				</div>
 				<input type="hidden" name="choose_notebook" value="false"></input>
@@ -90,22 +75,8 @@ Settings | Knonce
 				{{ msg.body }}
 			</div>
 		{% endif %}
-		{#
-		{% if done is defined and done == 'account' %}
-			<div class="alert alert-success">
-				<button type="button" class="close" data-dismiss="alert">&times;</button>
-				<strong>Success!</strong>
-				Your account information is updated.
-			</div>
-		{% elif not_done is defined and not_done == 'account' %}
-			<div class="alert">
-				<button type="button" class="close" data-dismiss="alert">&times;</button>
-				<strong>Sorry!</strong>
-				We failed to save your changes. Please give it a try later, or contact support.
-			</div>
-		{% endif %}
-		#}
-		<form id="form-account" class="form-horizontal" method="post" action="/settings/update/account">
+
+		<form id="form-account" class="form-horizontal">
 			<div class="control-group">
 				<div class="control-label">name</div>
 				<div class="controls">
@@ -137,7 +108,11 @@ Settings | Knonce
 			</div>
 			<div class="control-group">
 				<div class="controls">
-					<button id="f-acct-btn" class="btn btn-primary" type="submit" name="submit">Save</button><span id="f-acct-msg" class="help-inline"></span>
+					<button id="f-acct-btn" class="btn btn-primary" type="submit" name="submit">Save</button>
+					<span id="f-acct-msg" class="help-inline hide"></span>
+					<span id="f-acct-spin" class="help-inline hide">
+						<i class="icon-spinner icon-spin icon-large"></i>
+					</span>
 				</div>
 			</div>
 		</form>

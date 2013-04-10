@@ -2,8 +2,8 @@ KL = exports ? this
 
 # get notebook list
 KL.get_notebook_list = ->
-	$('#nb-select-name').hide()
-	$('#nb-select-spin').show()
+	$('#nb-select-name').fadeOut('fast')
+	$('#nb-select-spin').fadeIn()
 	$('#nb-select>select').html ''
 
 	$('#nb [name="choose_notebook"]').val 'true'
@@ -12,18 +12,14 @@ KL.get_notebook_list = ->
 		.done((data) ->
 			for nb in data.notebooks
 				$('#nb-select>select').append "<option value=\"#{nb.guid}\">#{nb.name}</option>"
-			$('#nb-select>select').show()
+			$('#nb-select>select').fadeIn()
 		)
 		.fail((data) ->
-			$('#nb-select-name').show()
-			$('#nb-select-msg')
-				.html('- Failed to load notebooks list.')
-				.show()
-				.delay(5000)
-				.hide()
+			$('#nb-select-name').fadeIn()
+			$('#nb-select-msg').html('- Failed to load notebooks list.').fadeIn().delay(5000).fadeOut()
 		)
 		.always((data) ->
-			$('#nb-select-spin').hide()
+			$('#nb-select-spin').fadeOut()
 		)
 
 ## TAB
@@ -48,6 +44,25 @@ $('#nb').submit ->
 	if $('#nb [name="choose_notebook"]').val() == 'true'
 		$('#nb [name="notebook_name"]').val $("#nb-select>select>[value=\"#{$('#nb-select>select').val()}\"]").html()
 		$('#nb [name="notebook_guid"]').val $('#nb-select>select').val()
+
+	$('#nb-spin').fadeIn('fast')
+	$('#nb-msg').fadeOut().html('')
+
+	$.ajax({
+		type: "PUT",
+		url: "/settings/notebook",
+		data: $(this).serialize()
+	})
+	.done(->
+		$('#nb-msg').html('Settings Saved!').fadeIn().delay(5000).fadeOut()
+	)
+	.fail(->
+		$('#nb-msg').html('Failed to save.').fadeIn()
+	)
+	.always(->
+		$('#nb-spin').fadeOut('fast')
+	)
+
 	return false
 
 ## ACCOUNT
@@ -66,6 +81,25 @@ $('#f-acct-bio').change ->
 # account info update submit
 $('#form-account').submit ->
 	if $('#f-acct-bio').val().length > 500
-		$('#f-acct-msg').html 'Length of bio exceeds the max limit.'
+		$('#f-acct-msg').html('Length of bio exceeds the max limit.').fadeIn().delay(3000).fadeOut()
 		return false
-	return true
+
+	$('#f-acct-spin').fadeIn('fast')
+	$('#f-acct-msg').fadeOut().html('')
+
+	$.ajax({
+		type: "PUT",
+		url: "/settings/account",
+		data: $(this).serialize()
+	})
+	.done(->
+		$('#f-acct-msg').html('Settings Saved!').fadeIn().delay(5000).fadeOut()
+	)
+	.fail(->
+		$('#f-acct-msg').html('Failed to save.').fadeIn()
+	)
+	.always(->
+		$('#f-acct-spin').fadeOut('fast')
+	)
+
+	return false

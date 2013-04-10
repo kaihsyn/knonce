@@ -81,15 +81,21 @@ footer {
 div.control-label {
   margin-bottom: 5px; }
 
+.help-inline {
+  display: inline-block; }
+
 .help-inline.only {
   margin-top: 5px;
   padding-left: 0px;
   color: #09abd3; }
 
-.help-inline.only.gray {
+.help-inline.no-space {
+  padding-left: 0px; }
+
+.help-inline.gray {
   color: #999999; }
 
-.help-inline.only.red {
+.help-inline.red {
   color: #cc0000; }
 
 .form-search input, .form-inline input, .form-horizontal input, .form-search textarea, .form-inline textarea, .form-horizontal textarea, .form-search select, .form-inline select, .form-horizontal select, .form-search .help-inline, .form-inline .help-inline, .form-horizontal .help-inline, .form-search .uneditable-input, .form-inline .uneditable-input, .form-horizontal .uneditable-input, .form-search .input-prepend, .form-inline .input-prepend, .form-horizontal .input-prepend, .form-search .input-append, .form-inline .input-append, .form-horizontal .input-append {

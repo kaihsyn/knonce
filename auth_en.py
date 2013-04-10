@@ -48,6 +48,7 @@ class CallbackHDL(request.RequestHandler):
 			logging.error('Failed to retrieve access token data in call back function.')
 			return self.redirect('/settings')
 
+		unit = None
 		try:
 			unit = Unit.get_by_user_key(self.current_user.key)
 			if unit is None:
@@ -61,7 +62,7 @@ class CallbackHDL(request.RequestHandler):
 			logging.error('Failed to create unit.')
 			return self.redirect('/settings')
 
-		if not self.update_info(client):
+		if not self.update_info(client, self.current_user, unit):
 			unit.key.delete()
 			self.session.add_flash(False, level='en', key='connect')
 			logging.error('Failed to update unit.')
@@ -70,10 +71,8 @@ class CallbackHDL(request.RequestHandler):
 		self.session.add_flash(True, level='en', key='connect')
 		return self.redirect('/settings')
 
-	def update_info(self, client):
+	def update_info(self, client, user, unit):
 		# update info
-		user = self.current_user
-		unit = Unit.get_by_user_key(user.key)
 		if unit is None:
 			return False
 
@@ -89,7 +88,7 @@ class CallbackHDL(request.RequestHandler):
 		#generate an initial id for the unit if alias is already used
 		unit.alias = unit.username
 		x = 0
-		while Unit.query(Unit.alias == unit.alias).count(1) > 0:
+		while Unit.query(Unit.alias==unit.alias).count(1) > 0:
 			unit.alias = helper.code_generator(size=16)
 			x += 1
 
