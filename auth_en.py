@@ -54,14 +54,6 @@ class CallbackHDL(request.RequestHandler):
 				unit = Unit(parent=self.current_user.key)
 				logging.info('Create new Unit')
 
-				#generate an initial id for the user
-				for x in xrange(10):
-					alias = helper.code_generator(size=16)
-					if Unit.query(Unit.alias==alias).count(1) == 0:
-						logging.info('Generated alias is %s' % alias)
-						unit.alias = alias
-						break
-
 			unit.token = token
 			unit.put()
 		except:
@@ -70,6 +62,7 @@ class CallbackHDL(request.RequestHandler):
 			return self.redirect('/settings')
 
 		if not self.update_info(client):
+			unit.key.delete()
 			self.session.add_flash(False, level='en', key='connect')
 			logging.error('Failed to update unit.')
 			return self.redirect('/settings')
@@ -92,7 +85,25 @@ class CallbackHDL(request.RequestHandler):
 
 		# update notebook
 		unit.username = en_user.username
-		unit.put()
+
+		#generate an initial id for the unit if alias is already used
+		unit.alias = unit.username
+		x = 0
+		while Unit.query(Unit.alias == unit.alias).count(1) > 0:
+			unit.alias = helper.code_generator(size=16)
+			x += 1
+
+			if x >= 10:
+				logging.info('Failed to generate valid alias.')
+				return False
+				
+		logging.info('Generated alias is %s' % unit.alias)
+
+		""" save Unit """
+		try:
+			unit.put()
+		except:
+			return False
 
 		# update user information
 		user.en_name = en_user.name
