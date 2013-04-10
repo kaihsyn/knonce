@@ -46,11 +46,11 @@ Settings | Knonce
 		{% endif %}
 		#}
 		{% if unit is not none %}
-			<form class="form-horizontal">
+			<form id="nb" class="form-horizontal">
 				<div class="control-group">
-					<div class="control-label">username</div>
+					<div class="control-label">alias</div>
 					<div class="controls">
-						<span class="help-inline only">{{unit.username}}</span>
+						<input class="input-medium" type="text" name="alias" value="{{unit.alias}}"></input>
 					</div>
 				</div>
 				<div class="control-group">
@@ -64,6 +64,14 @@ Settings | Knonce
 						<span id="nb-select-msg" class="help-inline hide"></span>
 					</div>
 				</div>
+				<div class="control-group">
+					<div id="nb-select" class="controls">
+						<button class="btn btn-primary" type="submit">Save</button>
+					</div>
+				</div>
+				<input type="hidden" name="choose_notebook" value="false"></input>
+				<input type="hidden" name="notebook_name" value="{{unit.notebook_name}}"></input>
+				<input type="hidden" name="notebook_guid" value="{{unit.notebook_guid}}"></input>
 			</form>
 		{% else %}
 			<p>
@@ -129,7 +137,7 @@ Settings | Knonce
 			</div>
 			<div class="control-group">
 				<div class="controls">
-					<button id="f-acct-btn" class="btn btn-info" type="submit" name="submit">Update</button><span id="f-acct-msg" class="help-inline"></span>
+					<button id="f-acct-btn" class="btn btn-primary" type="submit" name="submit">Save</button><span id="f-acct-msg" class="help-inline"></span>
 				</div>
 			</div>
 		</form>
@@ -144,9 +152,16 @@ Settings | Knonce
 {% block script %}
 <script src="/script/settings.js"></script>
 <script>
-	{# default tap #}
+	var KL = typeof exports !== "undefined" && exports !== null ? exports : this;
+
+	{# default tab #}
 	{% if msg is defined %}
 	$('#menu a[href="#{{ msg.tab }}"]').tab('show');
+	{% endif %}
+
+	{# default tab #}
+	{% if unit is defined and unit.notebook_name is none %}
+	KL.get_notebook_list()
 	{% endif %}
 </script>
 {% endblock %}
