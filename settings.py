@@ -19,7 +19,10 @@ class SettingsHDL(request.RequestHandler):
 
 		""" add user information """
 		user = self.current_user
-		template_vars = { 'user': user }
+		template_vars = {
+			'user': user,
+			'host': self.request.host,
+		}
 
 		""" check if still connected """
 		unit = Unit.get_by_user_key(user.key)
