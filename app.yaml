@@ -14,6 +14,9 @@ handlers:
 - url: /script
   static_dir: statics/script
 
+- url: /hook/.+
+  script: webhook.app
+
 - url: /cron/.*
   script: cron.app
   login: admin
