@@ -25,37 +25,30 @@ def sandbox():
 	# list notebooks
 	notebooks = note_store.listNotebooks()
 	for notebook in notebooks:
-	    print "  * ", notebook.name, " - ", notebook.guid
+	    print "  * ", notebook.name, " - ", notebook.guid, " - ", notebook.updateSequenceNum
 
 	# get a list of note metadata
 	pageSize = 10
-	 
-	filter = NoteFilter(order=Types.NoteSortOrder.UPDATED, notebookGuid=notebooks[0].guid)
-
-	spec = NotesMetadataResultSpec()
-	spec.includeGuid = True
-	spec.includeTitle = True
-	spec.includeContent = True
-	spec.includeUpdated = True
-
-	notes_meta = note_store.findNotesMetadata(auth_token, filter, 0, pageSize, spec)
-
-	#note_list = note_store.findNotes(auth_token, filter, 0, 10)
 	
-	for note in notes_meta.notes:
-		print ' - '.join([str(note.title), str(note.updated), str(note.guid)])
-		unit = note_store.getNote(auth_token, note.guid, True, True, False, False)
-		print unit.content
-		"""
-		for resource in unit.resources:
-			file_name = files.blobstore.create(mime_type=resource.mime)
-			with files.open(file_name, 'a') as f:
-			  f.write(resource.data.body)
-			files.finalize(file_name)
-			blob_key = files.blobstore.get_blob_key(file_name)
+	for nbguid in notebooks:
+		filter = NoteFilter(order=Types.NoteSortOrder.UPDATED, notebookGuid=nbguid.guid)
 
-			logging.info(blob_key)
-		"""
-		logging.info('==========')
+		spec = NotesMetadataResultSpec()
+		spec.includeGuid = True
+		spec.includeTitle = True
+		spec.includeContent = True
+		spec.includeUpdated = True
+		spec.includeUpdateSequenceNum = True
 
+		notes_meta = note_store.findNotesMetadata(auth_token, filter, 0, pageSize, spec)
+
+		#note_list = note_store.findNotes(auth_token, filter, 0, 10)
+		print '==============='
+		for note in notes_meta.notes:
+			print ' - '.join([str(note.title), str(note.updated), str(note.guid), str(note.updateSequenceNum)])
+			"""
+			unit = note_store.getNote(auth_token, note.guid, True, True, False, False)
+			print unit.contentnfo('==========')
+			"""
+		
 sandbox()
