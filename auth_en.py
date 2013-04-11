@@ -25,8 +25,13 @@ class AuthHDL(request.RequestHandler):
 		request_token = client.get_request_token(callbackUrl)
 
 		# Save the request token information for later
-		self.session['oauth_token'] = request_token['oauth_token']
-		self.session['oauth_token_secret'] = request_token['oauth_token_secret']
+		try:
+			self.session['oauth_token'] = request_token['oauth_token']
+			self.session['oauth_token_secret'] = request_token['oauth_token_secret']
+		except KeyError:
+			self.session.add_flash(False, level='en', key='connect')
+			logging.error('Failed to retrieve access token data in auth function.')
+			return self.redirect('/settings')
 
 		# Redirect the user to the Evernote authorization URL
 		return self.redirect(client.get_authorize_url(request_token))
