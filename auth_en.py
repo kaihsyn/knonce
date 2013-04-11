@@ -16,7 +16,7 @@ class AuthHDL(request.RequestHandler):
 		if not self.logged_in:
 			self.redirect('/')
 
-		unit = Unit.query(ancestor=self.current_user.key).fetch(projection=['token'])
+		unit = Unit.get_by_user_key(self.current_user.key, ['token'])
 		if unit is not None and unit.token != '':
 			return self.redirect("/settings")
 

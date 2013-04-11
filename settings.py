@@ -57,11 +57,22 @@ class SettingsHDL(request.RequestHandler):
 
 		user = self.current_user
 		if target == 'account':
-			if [user.display, user.email, user.bio] != [self.request.get('display'), self.request.get('email'), self.request.get('bio')]
+			put = False
+
+			if user.display != self.request.get('display'):
+				user.display = self.request.get('display')
+				put = True
+
+			if user.email != self.request.get('email'):
+				user.email = self.request.get('email')
+				put = True
+
+			if user.bio != self.request.get('bio'):
+				user.bio = self.request.get('bio')
+				put = True
+
+			if put:
 				try:
-					user.display = self.request.get('display')
-					user.email = self.request.get('email')
-					user.bio = self.request.get('bio')
 					user.put()
 				except TransactionFailedError:
 					self.response.status = '500 Database Error'
@@ -74,16 +85,27 @@ class SettingsHDL(request.RequestHandler):
 
 			""" check alias """
 			if self.request.get('alias'):
-				if unit.alias != self.request.get('alias') and Unit.query(Unit.alias==unit.alias).count(1) > 0:
+				if unit.alias != self.request.get('alias') and Unit.query(Unit.alias==self.request.get('alias')).count(1) > 0:
 					self.response.status = '400 Value Of \'alias\' Is Taken'
 				elif self.request.get('alias') == '':
 					self.response.status = '400 Value Of \'alias\' Can\'t Be Empty'
 
-			if [unit.alias, unit.notebook_name, unit.notebook_guid] != [self.request.get('alias'), self.request.get('notebook_name'), self.request.get('notebook_guid')]
+			put = False
+
+			if unit.alias != self.request.get('alias'):
+				unit.alias = self.request.get('alias')
+				put = True
+
+			if unit.notebook_name != self.request.get('notebook_name'):
+				unit.notebook_name = self.request.get('notebook_name')
+				put = True
+
+			if unit.notebook_guid != self.request.get('notebook_guid'):
+				unit.notebook_guid = self.request.get('notebook_guid')
+				put = True
+
+			if put:
 				try:
-					unit.alias = self.request.get('alias')
-					unit.notebook_name = self.request.get('notebook_name')
-					unit.notebook_guid = self.request.get('notebook_guid')
 					unit.put()
 				except TransactionFailedError:
 					self.response.status = '500 Database Error'

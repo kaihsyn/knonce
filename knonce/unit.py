@@ -5,7 +5,7 @@ class Unit(ndb.Model):
 	alias = ndb.StringProperty(default='')
 	notebook_name = ndb.StringProperty(indexed = False)
 	notebook_guid = ndb.StringProperty(indexed = False)
-	token = ndb.StringProperty(default='', indexed=False)
+	token = ndb.StringProperty(default='')
 	connected = ndb.BooleanProperty(default=False)
 
 	@staticmethod
@@ -14,4 +14,5 @@ class Unit(ndb.Model):
 			unit = Unit.query(ancestor=user_key).fetch(1, projection=None)
 		except:
 			return None
-		return unit
+		
+		return unit[0] if len(unit) > 0 else None
