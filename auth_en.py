@@ -16,7 +16,7 @@ class AuthHDL(request.RequestHandler):
 		if not self.logged_in:
 			self.redirect('/')
 
-		unit = Unit.query(ancestor=self.current_user.key).get()
+		unit = Unit.query(ancestor=self.current_user.key).fetch(projection=['token'])
 		if unit is not None and unit.token != '':
 			return self.redirect("/settings")
 
@@ -48,30 +48,24 @@ class CallbackHDL(request.RequestHandler):
 			logging.error('Failed to retrieve access token data in call back function.')
 			return self.redirect('/settings')
 
-		unit = None
-		try:
-			unit = Unit.get_by_user_key(self.current_user.key)
-			if unit is None:
-				unit = Unit(parent=self.current_user.key)
-				logging.info('Create new Unit')
-
-			unit.token = token
-			unit.put()
-		except:
+		if not self.update_info(client, self.current_user, token):
 			self.session.add_flash(False, level='en', key='connect')
-			logging.error('Failed to create unit.')
-			return self.redirect('/settings')
-
-		if not self.update_info(client, self.current_user, unit):
-			unit.key.delete()
-			self.session.add_flash(False, level='en', key='connect')
-			logging.error('Failed to update unit.')
+			logging.error('Failed to working on unit.')
 			return self.redirect('/settings')
 		
 		self.session.add_flash(True, level='en', key='connect')
 		return self.redirect('/settings')
 
-	def update_info(self, client, user, unit):
+	def update_info(self, client, user, token):
+
+		unit = Unit.get_by_user_key(self.current_user.key)
+		if unit is None:
+			unit = Unit(parent=self.current_user.key)
+			logging.info('Create new Unit')
+
+		unit.token = token
+		unit.connected = True
+
 		# update info
 		if unit is None:
 			return False
@@ -105,8 +99,9 @@ class CallbackHDL(request.RequestHandler):
 			return False
 
 		# update user information
-		user.en_name = en_user.name
-		user.put()
+		if user.en_name != en_user.name:
+			user.en_name = en_user.name
+			user.put()
 
 		return True
 

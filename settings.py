@@ -57,13 +57,14 @@ class SettingsHDL(request.RequestHandler):
 
 		user = self.current_user
 		if target == 'account':
-			try:
-				user.display = self.request.get('display')
-				user.email = self.request.get('email')
-				user.bio = self.request.get('bio')
-				user.put()
-			except TransactionFailedError:
-				self.response.status = '500 Database Error'
+			if [user.display, user.email, user.bio] != [self.request.get('display'), self.request.get('email'), self.request.get('bio')]
+				try:
+					user.display = self.request.get('display')
+					user.email = self.request.get('email')
+					user.bio = self.request.get('bio')
+					user.put()
+				except TransactionFailedError:
+					self.response.status = '500 Database Error'
 
 		elif target == 'notebook':
 			unit = Unit.get_by_user_key(user.key)
@@ -78,16 +79,17 @@ class SettingsHDL(request.RequestHandler):
 				elif self.request.get('alias') == '':
 					self.response.status = '400 Value Of \'alias\' Can\'t Be Empty'
 
-			try:
-				unit.alias = self.request.get('alias')
-				unit.notebook_name = self.request.get('notebook_name')
-				unit.notebook_guid = self.request.get('notebook_guid')
-				unit.put()
-			except TransactionFailedError:
-				self.response.status = '500 Database Error'
+			if [unit.alias, unit.notebook_name, unit.notebook_guid] != [self.request.get('alias'), self.request.get('notebook_name'), self.request.get('notebook_guid')]
+				try:
+					unit.alias = self.request.get('alias')
+					unit.notebook_name = self.request.get('notebook_name')
+					unit.notebook_guid = self.request.get('notebook_guid')
+					unit.put()
+				except TransactionFailedError:
+					self.response.status = '500 Database Error'
 
 	def nb_list(self):
-		unit = Unit.get_by_user_key(self.current_user.key)
+		unit = Unit.get_by_user_key(self.current_user.key, ['token'])
 		client = helper.get_evernote_client(token=unit.token)
 
 		note_store = client.get_note_store()
