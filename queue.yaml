@@ -1,9 +1,9 @@
 queue:
 - name: sync-evernote
-  rate: 45/s
-  bucket_size: 10
+  rate: 10/s
+  bucket_size: 1
   retry_parameters:
-    task_age_limit: 1d
-    min_backoff_seconds: 30
-    max_backoff_seconds: 960
+    task_age_limit: 3d
+    min_backoff_seconds: 10
+    max_backoff_seconds: 200
     max_doublings: 2
