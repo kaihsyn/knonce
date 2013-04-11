@@ -11,12 +11,24 @@
 {% endblock %}
 
 {% block body_light %}
-{% if logged_in %}
-	<p class="serif">
-		Hey, there!<br/>
-		View your <a href="/settings" class="">Account Settings</a> here.
-	</p>
-{% else %}
-	<a href="/auth/google" class="kbtn"><img src="/img/btn_google.png"></a>
-{% endif %}
+	{% if logged_in %}
+		<p class="serif">
+			Hey, there!<br/>
+			View your <a href="/settings" class="">Account Settings</a> here.
+		</p>
+	{% elif beta is defined and beta %}
+		<p class="serif">
+			Got you in the line!<br>
+			We will send an email to you when rolling out to more users.<br>
+			<br>
+			Thank you!
+		</p>
+	{% else %}
+		<p class="serif">
+			<a href="/auth/google" class="kbtn"><img src="/img/btn_google.png"></a><br>
+			<br>
+			Login to get in the line for our beta test.<br>
+			For members, login to manage your account.
+		</p>
+	{% endif %}
 {% endblock %}

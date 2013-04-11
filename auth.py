@@ -106,6 +106,17 @@ class AuthHDL(request.RequestHandler, SimpleAuthHandler):
         if ok:
           self.auth.set_session(self.auth.store.user_to_dict(user))
 
+    active = False
+    try:
+      active = user.active
+    except AttributeError:
+      pass
+
+    if not active:
+      self.auth.unset_session()
+      self.redirect('/beta')
+      return
+
     self.redirect('/settings')
 
   def logout(self):

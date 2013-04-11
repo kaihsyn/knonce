@@ -7,10 +7,14 @@ import webapp2
 
 import request
 
-class MainHandler(request.RequestHandler):
+class MainHDL(request.RequestHandler):
 	def get(self):
 		self.render('home.html')
 
+	def beta(self):
+		self.render('home.html', {'beta':True})
+
 app = webapp2.WSGIApplication([
-    ('/', MainHandler)
+    webapp2.Route('/', handler='home.MainHDL:get', name='main-page', methods=['GET']),
+    webapp2.Route('/beta', handler='home.MainHDL:beta', name='main-page-w-beta', methods=['GET'])
 ], debug=True, config=request.app_config)

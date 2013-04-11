@@ -25,6 +25,9 @@ handlers:
 - url: /
   script: home.app
 
+- url: /beta
+  script: home.app
+
 - url: /logout
   script: auth.app
 
