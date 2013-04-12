@@ -6,7 +6,6 @@ from google.appengine.api import taskqueue
 class CronSyncEvernoteHDL(webapp2.RequestHandler):
     def get(self):
     	logging.info('Cron Sync Evernote')
-    	taskqueue.add(queue_name='sync-evernote', url='/sync/evernote', params={'key': 'abcdgogady'})
 
 app = webapp2.WSGIApplication([
     ('/cron/sync-evernote', CronSyncEvernoteHDL)
