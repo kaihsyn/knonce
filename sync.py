@@ -69,7 +69,7 @@ class SyncENHDL(request.RequestHandler):
 					""" skip sync """
 					return
 			else:
-				#TODO update
+				#TODO update: handle if already have the note or not
 
 		logging.info('Evernote: guid = %s, synced.') % self.request.get('guid')
 
