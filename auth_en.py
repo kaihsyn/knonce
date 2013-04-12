@@ -16,8 +16,8 @@ class AuthHDL(request.RequestHandler):
 		if not self.logged_in:
 			self.redirect('/')
 
-		unit = Unit.get_by_user_key(self.current_user.key, ['token'])
-		if unit is not None and unit.token != '':
+		unit = Unit.get_by_user_key(self.current_user.key, ['connected'])
+		if unit is not None and not unit.connected:
 			return self.redirect("/settings")
 
 		client = helper.get_evernote_client()
@@ -63,6 +63,12 @@ class CallbackHDL(request.RequestHandler):
 
 	def update_info(self, client, user, token):
 
+		try:
+			user_store = client.get_user_store()
+			en_user = user_store.getUser()
+		except:
+			return False
+
 		unit = Unit.get_by_user_key(self.current_user.key)
 		if unit is None:
 			unit = Unit(parent=self.current_user.key)
@@ -70,19 +76,8 @@ class CallbackHDL(request.RequestHandler):
 
 		unit.token = token
 		unit.connected = True
-
-		# update info
-		if unit is None:
-			return False
-
-		try:
-			user_store = client.get_user_store()
-			en_user = user_store.getUser()
-		except:
-			return False
-
-		# update notebook
 		unit.username = en_user.username
+		unit.user_id = en_user.id
 
 		#generate an initial id for the unit if alias is already used
 		unit.alias = unit.username

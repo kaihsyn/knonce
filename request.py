@@ -29,7 +29,6 @@ class RequestHandler(webapp2.RequestHandler):
             # Save all sessions.
             self.session_store.save_sessions(self.response)
 
-
     @webapp2.cached_property    
     def jinja2(self):
         """Returns a Jinja2 renderer cached in the app registry"""
