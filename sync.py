@@ -48,7 +48,7 @@ class SyncENHDL(request.RequestHandler):
 			note_key = Note.query(Note.guid==self.request.get('guid')).fetch(1, key_only=True)
 			note_key.delete()
 
-		if self.request.get('reason') == 'create'
+		if self.request.get('reason') == 'create':
 			""" check notebook """
 			if note.notebookGuid != unit.notebook_guid:
 				""" skip sync """
@@ -56,7 +56,7 @@ class SyncENHDL(request.RequestHandler):
 			else:
 				#TODO sync
 
-		elif self.request.get('reason') == 'update'
+		elif self.request.get('reason') == 'update':
 			""" check if don't have this note and notebook is different """
 			if note.notebookGuid != unit.notebook_guid:
 				note_key = Note.query(Note.guid==self.request.get('guid')).fetch(1, key_only=True)

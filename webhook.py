@@ -6,10 +6,10 @@ from secrets import EN_WEBHOOK
 
 class EvernoteWebhookHDL(webapp2.RequestHandler):
     def get(self):
-    	miss_var = False
+        miss_var = False
         params = {}
 
-    	if self.request.get('userId') and self.request.get('userId') != '':
+        if self.request.get('userId') and self.request.get('userId') != '':
     		params['user_id'] = self.request.get('userId')
     	else:
     		params['user_id'] = '[no userId]'
@@ -32,7 +32,8 @@ class EvernoteWebhookHDL(webapp2.RequestHandler):
     		miss_var = True
 
     	if miss_var:
-    		logging.error('Evernote Webhook: %s %s %s' % (params['user_id'], params['guid'], params['reason']))
+            logging.error('Evernote Webhook: %s %s %s' % (params['user_id'], params['guid'], params['reason']))
+            return
     	else:
     		logging.info('Evernote Webhook: %s %s %s' % (params['user_id'], params['guid'], params['reason']))
 
