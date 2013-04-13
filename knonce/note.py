@@ -8,6 +8,8 @@ class Note(ndb.Model):
 	created = ndb.IntegerProperty()
 	tag = ndb.StringProperty(repeated=True)
 
+	first_add = ndb.DateTimeProperty(auto_now_add=True)
+
 class Tag(ndb.Model):
 	guid = ndb.StringProperty()
 	name = ndb.StringProperty()
