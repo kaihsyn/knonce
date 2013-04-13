@@ -17,7 +17,7 @@ class AuthHDL(request.RequestHandler):
 			self.redirect('/')
 
 		unit = Unit.get_by_user_key(self.current_user.key)
-		if unit is not None and not unit.connected:
+		if unit is not None and unit.token != '':
 			return self.redirect("/settings")
 
 		client = helper.get_evernote_client()
@@ -75,7 +75,6 @@ class CallbackHDL(request.RequestHandler):
 			logging.info('Create new Unit')
 
 		unit.token = token
-		unit.connected = True
 		unit.username = en_user.username
 		unit.user_id = en_user.id
 

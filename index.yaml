@@ -11,6 +11,19 @@ indexes:
 # your application using appcfg.py.
 
 - kind: Unit
+  properties:
+  - name: connected
+  - name: user_id
+  - name: notebook_guid
+  - name: token
+
+- kind: Unit
+  properties:
+  - name: user_id
+  - name: token
+  - name: notebook_guid
+
+- kind: Unit
   ancestor: yes
   properties:
   - name: token

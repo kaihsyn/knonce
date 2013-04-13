@@ -40,7 +40,7 @@ Settings | Knonce
 							<i class="icon-spinner icon-spin icon-large"></i>
 						</span>
 						<span id="nb-select-name" class="help-inline only">
-							<a href="#" class="kl-tooltip" data-placement="right" title="Click to change your notebook.">{{unit.notebook_name}}</a>
+							<a href="#" class="kl-tooltip" data-placement="right" title="Click to change your notebook.">{{unit.notebook_name if unit.notebook_name is not none else 'Choose a notebook to start!'}}</a>
 						</span>
 						<span id="nb-select-msg" class="help-inline hide"></span>
 					</div>
@@ -127,16 +127,17 @@ Settings | Knonce
 {% block script %}
 <script src="/script/settings.js"></script>
 <script>
-	var KL = typeof exports !== "undefined" && exports !== null ? exports : this;
+	{# var KL = typeof exports !== "undefined" && exports !== null ? exports : this; #}
 
 	{# default tab #}
 	{% if msg is defined %}
 	$('#menu a[href="#{{ msg.tab }}"]').tab('show');
 	{% endif %}
 
-	{# default tab #}
+	{# default tab 
 	{% if unit is defined and unit.notebook_name is none %}
 	KL.get_notebook_list()
 	{% endif %}
+	#}
 </script>
 {% endblock %}

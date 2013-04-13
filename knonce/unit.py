@@ -1,3 +1,4 @@
+import logging
 from google.appengine.ext import ndb
 
 class Unit(ndb.Model):
@@ -7,12 +8,11 @@ class Unit(ndb.Model):
 	notebook_name = ndb.StringProperty(indexed = False)
 	notebook_guid = ndb.StringProperty()
 	token = ndb.StringProperty(default='')
-	connected = ndb.BooleanProperty(default=False)
 
 	@staticmethod
 	def get_by_user_key(user_key):
 		try:
-			unit = ndb.Key(flat=list(user_key.pairs()).append(('Unit', 'en'))).get()
+			unit = ndb.Key(flat=list(user_key.flat())+['Unit', 'en']).get()
 		except:
 			return None
 		
