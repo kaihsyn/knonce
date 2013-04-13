@@ -111,7 +111,7 @@ class SettingsHDL(request.RequestHandler):
 					self.response.status = '500 Database Error'
 
 	def nb_list(self):
-		unit = Unit.get_by_user_key(self.current_user.key, ['token'])
+		unit = Unit.get_by_user_key(self.current_user.key)
 		client = helper.get_evernote_client(token=unit.token)
 
 		note_store = client.get_note_store()

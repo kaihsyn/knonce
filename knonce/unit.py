@@ -10,10 +10,10 @@ class Unit(ndb.Model):
 	connected = ndb.BooleanProperty(default=False)
 
 	@staticmethod
-	def get_by_user_key(user_key, projection=None):
+	def get_by_user_key(user_key):
 		try:
-			unit = Unit.query(ancestor=user_key).fetch(1, projection=None)
+			unit = ndb.Key(flat=list(user_key.pairs()).append(('Unit', 'en'))).get()
 		except:
 			return None
 		
-		return unit[0] if len(unit) > 0 else None
+		return unit

@@ -16,7 +16,7 @@ class AuthHDL(request.RequestHandler):
 		if not self.logged_in:
 			self.redirect('/')
 
-		unit = Unit.get_by_user_key(self.current_user.key, ['connected'])
+		unit = Unit.get_by_user_key(self.current_user.key)
 		if unit is not None and not unit.connected:
 			return self.redirect("/settings")
 
@@ -71,7 +71,7 @@ class CallbackHDL(request.RequestHandler):
 
 		unit = Unit.get_by_user_key(self.current_user.key)
 		if unit is None:
-			unit = Unit(parent=self.current_user.key)
+			unit = Unit(id='en', parent=self.current_user.key)
 			logging.info('Create new Unit')
 
 		unit.token = token
