@@ -1,7 +1,6 @@
 from google.appengine.ext import ndb
 
 class Note(ndb.Model):
-	guid = ndb.StringProperty()
 	usn = ndb.IntegerProperty()
 	title = ndb.StringProperty(indexed=False)
 	content = ndb.TextProperty()
