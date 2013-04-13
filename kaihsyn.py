@@ -11,13 +11,13 @@ from evernote.edam.notestore.ttypes import NotesMetadataResultSpec
 
 def sandbox():
 	# connect to evernote
-	auth_token = "S=s1:U=5d553:E=14501517f86:C=13da9a05386:P=1cd:A=en-devtoken:V=2:H=efe4a8b4effc55003bac87158cdd6f87"
+	auth_token = "S=s1:U=5d553:E=14558b4a895:C=13e01037c97:P=1cd:A=en-devtoken:V=2:H=fc42f231c2ddc95d86848b50cba94d9a"
 	client = EvernoteClient(token=auth_token, sandbox=True)
 
 	user_store = client.get_user_store()
 	user = user_store.getUser()
 
-	print user.username
+	print "%s - %s" % (user.username, str(user.id))
 
 	# get notestore
 	note_store = client.get_note_store()
@@ -50,5 +50,5 @@ def sandbox():
 			unit = note_store.getNote(auth_token, note.guid, True, True, False, False)
 			print unit.contentnfo('==========')
 			"""
-		
+
 sandbox()
