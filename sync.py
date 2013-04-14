@@ -25,8 +25,6 @@ class SyncENHDL(request.RequestHandler):
 				logging.error('en-note-guid = %s, not enough parameters.' % self.request.get('guid'))
 				return
 
-		logging.info('LV1')
-
 		""" get unit info """
 		try:
 			unit_arr = Unit.query(Unit.user_id==int(self.request.get('user_id')), Unit.token!='').fetch(1, projection=['notebook_guid', 'token'])
@@ -34,10 +32,8 @@ class SyncENHDL(request.RequestHandler):
 			logging.error('en-user-id = %s, wrong user_id format.' % self.request.get('user_id'))
 			return
 		if len(unit_arr) <= 0:
-			logging.error('en-note-guid = %s, unit don\t exist in database.' % self.request.get('guid'))
+			logging.info('en-note-guid = %s, unit don\t exist in database.' % self.request.get('guid'))
 			return
-
-		logging.info('LV2')
 
 		unit = unit_arr[0]
 
@@ -46,14 +42,18 @@ class SyncENHDL(request.RequestHandler):
 			client = helper.get_evernote_client(token=unit.token)
 			note_store = client.get_note_store()
 			en_note = note_store.getNote(unit.token, self.request.get('guid'), False, False, False, False)
-		except EDAMUserException, e:
+		except EDAMUserException as e:
+			msg = 'en-note-guid = %s, EDAMUser code: %s %s, parm: %s' % (self.request.get('guid'), str(e.errorCode), EDAMErrorCode._VALUES_TO_NAMES[e.errorCode], e.parameter)
+
 			if e.errorCode == EDAMErrorCode._NAMES_TO_VALUES['AUTH_EXPIRED']:
 				unit = unit.key.get()
 				unit.token = ''
 				unit.put()
-			logging.error('en-note-guid = %s, EDAMUser code: %s %s, parm: %s' % (self.request.get('guid'), str(e.errorCode), EDAMErrorCode._VALUES_TO_NAMES[e.errorCode], e.parameter))
+				logging.info(msg)
+			else:
+				logging.error(msg)
 
-		except EDAMNotFoundException, e:
+		except EDAMNotFoundException as e:
 			logging.error('en-note-guid = %s, EDAMNotFound identifier: %s, key: %s' % (self.request.get('guid'), e.identifier, e.key))
 
 		""" start sync """
@@ -62,14 +62,23 @@ class SyncENHDL(request.RequestHandler):
 			""" check notebook """
 			if en_note.notebookGuid != unit.notebook_guid:
 				""" skip sync """
+				logging.info('skip ')
 				return
 
 			""" SYNC: create a new note """
 			try:
 				en_note = note_store.getNote(unit.token, self.request.get('guid'), True, False, False, False)
-			except EDAMUserException, e:
-				logging.error('en-note-guid = %s, EDAMUser code: %s %s, parm: %s' % (self.request.get('guid'), str(e.errorCode), EDAMErrorCode._VALUES_TO_NAMES[e.errorCode], e.parameter))
-			except EDAMNotFoundException, e:
+			except EDAMUserException as e:
+				msg = 'en-note-guid = %s, EDAMUser code: %s %s, parm: %s' % (self.request.get('guid'), str(e.errorCode), EDAMErrorCode._VALUES_TO_NAMES[e.errorCode], e.parameter)
+
+				if e.errorCode == EDAMErrorCode._NAMES_TO_VALUES['AUTH_EXPIRED']:
+					unit = unit.key.get()
+					unit.token = ''
+					unit.put()
+					logging.info(msg)
+				else:
+					logging.error(msg )
+			except EDAMNotFoundException as e:
 				logging.error('en-note-guid = %s, EDAMNotFound identifier: %s, key: %s' % (self.request.get('guid'), e.identifier, e.key))
 
 			note = Note(id='en-%s' % en_note.guid, parent=unit.key)
@@ -89,10 +98,7 @@ class SyncENHDL(request.RequestHandler):
 
 			if en_note.notebookGuid == unit.notebook_guid:
 
-				if note is None:
-					return
-
-				if en_note.deleted is not None:
+				if note is not None and en_note.deleted is not None:
 					""" deleted """
 					note.key.delete()
 					logging.info('en-note-guid = %s, deleted from notebook.' % self.request.get('guid'))
@@ -101,6 +107,7 @@ class SyncENHDL(request.RequestHandler):
 			else:
 
 				if note is None:
+					logging.info('note is none %s'%str(list(unit.key.flat())+['Note', 'en-%s'%en_note.guid]))
 					return
 
 				if en_note.deleted is not None:
@@ -116,10 +123,15 @@ class SyncENHDL(request.RequestHandler):
 					return
 
 				else:
+					""" moved to other notebook """
+					note.key.delete()
+					logging.warning('en-note-guid = %s, action cause note to be deleted.' % self.request.get('guid'))
 					return
 
 			""" SYNC: check if the note is in database, if not, create one """
+			add = False
 			if note is None:
+				add = True
 				note = Note(id='en-%s' % en_note.guid, parent=unit.key)
 
 			note.usn = en_note.updateSequenceNum
@@ -129,7 +141,10 @@ class SyncENHDL(request.RequestHandler):
 			note.created = en_note.created
 
 			note.put()
-			logging.info('en-note-guid = %s, synced.' % self.request.get('guid'))
+			if add:
+				logging.info('en-note-guid = %s, created and synced in update.' % self.request.get('guid'))
+			else:
+				logging.info('en-note-guid = %s, synced.' % self.request.get('guid'))
 
 app = webapp2.WSGIApplication([
 	webapp2.Route('/sync/evernote/note', handler='sync.SyncENHDL:note', name='sync-evernote-note', methods=['GET'])

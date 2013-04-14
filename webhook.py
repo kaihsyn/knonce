@@ -32,10 +32,10 @@ class EvernoteWebhookHDL(webapp2.RequestHandler):
     		miss_var = True
 
     	if miss_var:
-            logging.error('Evernote Webhook: %s %s %s' % (params['user_id'], params['guid'], params['reason']))
+            logging.warning('Evernote Webhook: %s %s %s' % (params['user_id'], params['guid'], params['reason']))
             return
     	else:
-    		logging.info('Evernote Webhook: %s %s %s' % (params['user_id'], params['guid'], params['reason']))
+    		logging.debug('Evernote Webhook: %s %s %s' % (params['user_id'], params['guid'], params['reason']))
 
     	taskqueue.add(queue_name='sync-evernote', url='/sync/evernote/note', params=params, method='GET')
 
