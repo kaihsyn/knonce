@@ -18,17 +18,20 @@
 		</p>
 	{% elif beta is defined and beta %}
 		<p class="serif">
-			Got you in the line!<br>
-			We will send an email to you when rolling out to more users.<br>
+			Hi, thanks for signing on!<br>
 			<br>
-			Thank you!
+			We will send a email to you about our news.<br>
+			Also, if we are rolling out the service by a limit,<br>
+			we'll make sure you're in the front of the line!
 		</p>
 	{% else %}
 		<p class="serif">
 			<a href="/auth/google" class="kbtn"><img src="/img/btn_google.png"></a><br>
 			<br>
-			Login to get in the line for our beta test.<br>
-			For members, login to manage your account.
+			For members, login to manage your account.<br>
+			<br>
+			Knonce is currently in it's private beta.<br>
+			You can still login your google account to receive news from us.
 		</p>
 	{% endif %}
 {% endblock %}
