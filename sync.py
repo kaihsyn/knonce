@@ -15,6 +15,9 @@ from knonce.note import Note
 from knonce import helper
 from knonce import parse
 
+class SyncSettings:
+	max_length = 3200
+
 class SyncENHDL(request.RequestHandler):
 	def note(self):
 		
@@ -42,19 +45,10 @@ class SyncENHDL(request.RequestHandler):
 			client = helper.get_evernote_client(token=unit.token)
 			note_store = client.get_note_store()
 			en_note = note_store.getNote(unit.token, self.request.get('guid'), False, False, False, False)
-		except EDAMUserException as e:
-			msg = 'en-note-guid = %s, EDAMUser code: %s %s, parm: %s' % (self.request.get('guid'), str(e.errorCode), EDAMErrorCode._VALUES_TO_NAMES[e.errorCode], e.parameter)
-
-			if e.errorCode == EDAMErrorCode._NAMES_TO_VALUES['AUTH_EXPIRED']:
-				unit = unit.key.get()
-				unit.token = ''
-				unit.put()
-				logging.info(msg)
-			else:
-				logging.error(msg)
-
+		except (EDAMUserException, EDAMSystemException) as e:
+			return self.en_user_system_exception(e, self.request.get('guid'))
 		except EDAMNotFoundException as e:
-			logging.error('en-note-guid = %s, EDAMNotFound identifier: %s, key: %s' % (self.request.get('guid'), e.identifier, e.key))
+			return self.en_not_found_exception(e, self.request.get('guid'))
 
 		""" start sync """
 		if self.request.get('reason') == 'create':
@@ -62,30 +56,36 @@ class SyncENHDL(request.RequestHandler):
 			""" check notebook """
 			if en_note.notebookGuid != unit.notebook_guid:
 				""" skip sync """
-				logging.info('skip ')
+				logging.info('skipped: not in notebook')
+				return
+
+			""" check length """
+			if en_note.contentLength > SyncSettings.max_length:
+				""" skip sync """
+				logging.info('skipped: length exceed limit, do not create note')
 				return
 
 			""" SYNC: create a new note """
 			try:
 				en_note = note_store.getNote(unit.token, self.request.get('guid'), True, False, False, False)
-			except EDAMUserException as e:
-				msg = 'en-note-guid = %s, EDAMUser code: %s %s, parm: %s' % (self.request.get('guid'), str(e.errorCode), EDAMErrorCode._VALUES_TO_NAMES[e.errorCode], e.parameter)
-
-				if e.errorCode == EDAMErrorCode._NAMES_TO_VALUES['AUTH_EXPIRED']:
-					unit = unit.key.get()
-					unit.token = ''
-					unit.put()
-					logging.info(msg)
-				else:
-					logging.error(msg )
+			except (EDAMUserException, EDAMSystemException) as e:
+				self.en_user_system_exception(e, self.request.get('guid'))
 			except EDAMNotFoundException as e:
-				logging.error('en-note-guid = %s, EDAMNotFound identifier: %s, key: %s' % (self.request.get('guid'), e.identifier, e.key))
+				return self.en_not_found_exception(e, self.request.get('guid'))
 
 			note = Note(id='en-%s' % en_note.guid, parent=unit.key)
 
+			try:
+				en_content = note_store.getNoteContent(unit.token, self.request.get('guid'))
+			except (EDAMUserException, EDAMSystemException) as e:
+				return self.en_user_system_exception(e, self.request.get('guid'))
+			except EDAMNotFoundException as e:
+				return self.en_not_found_exception(e, self.request.get('guid'))
+
+			note.content = parse.parse_evernote(en_content)
+
 			note.usn = en_note.updateSequenceNum
 			note.title = en_note.title
-			note.content = parse.parse_evernote(en_note.content)
 			note.updated = en_note.updated
 			note.created = en_note.created
 
@@ -98,11 +98,19 @@ class SyncENHDL(request.RequestHandler):
 
 			if en_note.notebookGuid == unit.notebook_guid:
 
-				if note is not None and en_note.deleted is not None:
-					""" deleted """
-					note.key.delete()
-					logging.info('en-note-guid = %s, deleted from notebook.' % self.request.get('guid'))
-					return
+				if note is not None:
+
+					if en_note.deleted is not None:
+						""" deleted """
+						note.key.delete()
+						logging.info('en-note-guid = %s, deleted from notebook.' % self.request.get('guid'))
+						return
+
+					if en_note.contentLength > SyncSettings.max_length:
+						""" check length """
+						note.key.delete()
+						logging.info('skipped: length exceed limit, delete current note')
+						return
 
 			else:
 
@@ -134,9 +142,17 @@ class SyncENHDL(request.RequestHandler):
 				add = True
 				note = Note(id='en-%s' % en_note.guid, parent=unit.key)
 
+			try:
+				en_content = note_store.getNoteContent(unit.token, self.request.get('guid'))
+			except (EDAMUserException, EDAMSystemException) as e:
+				return self.en_user_system_exception(e, self.request.get('guid'))
+			except EDAMNotFoundException as e:
+				return self.en_not_found_exception(e, self.request.get('guid'))
+
+			note.content = parse.parse_evernote(en_content)
+
 			note.usn = en_note.updateSequenceNum
 			note.title = en_note.title
-			note.content = parse.parse_evernote(en_note.content)
 			note.updated = en_note.updated
 			note.created = en_note.created
 
@@ -145,6 +161,35 @@ class SyncENHDL(request.RequestHandler):
 				logging.info('en-note-guid = %s, created and synced in update.' % self.request.get('guid'))
 			else:
 				logging.info('en-note-guid = %s, synced.' % self.request.get('guid'))
+
+	def en_user_system_exception(self, exception, guid=None):
+		msg = ''
+
+		if guid is not None:
+			msg += 'en-note-guid = %s, ' % guid
+
+		msg += 'EDAMUser code: %s %s, parm: %s' % (str(exception.errorCode), EDAMErrorCode._VALUES_TO_NAMES[exception.errorCode], exception.parameter)
+
+		if e.errorCode == EDAMErrorCode._NAMES_TO_VALUES['AUTH_EXPIRED']:
+			unit = unit.key.get()
+			unit.token = ''
+			unit.put()
+			logging.info(msg)
+		else:
+			logging.error(msg)
+
+		return
+
+	def en_not_found_exception(self, exception, guid=None):
+		msg = ''
+
+		if guid is not None:
+			msg += 'en-note-guid = %s, ' % guid
+
+		msg += 'EDAMNotFound identifier: %s, key: %s' % (self.request.get('guid'), exception.identifier, exception.key)
+
+		logging.error(msg)
+
 
 app = webapp2.WSGIApplication([
 	webapp2.Route('/sync/evernote/note', handler='sync.SyncENHDL:note', name='sync-evernote-note', methods=['GET'])
