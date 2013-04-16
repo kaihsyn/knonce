@@ -1,4 +1,3 @@
-@import url(http://fonts.googleapis.com/css?family=Delius+Swash+Caps|Sanchez);
 body {
   background-color: whitesmoke; }
 
@@ -8,18 +7,14 @@ a {
 a:hover {
   color: #0898bb; }
 
-a.kbtn {
+a.kbtn, a.kbtn:hover {
   display: inline-block;
   margin-top: 0px;
   margin-bottom: 3px; }
 
-a.kbtn:hover {
-  margin-top: 1px;
-  margin-bottom: 2px; }
-
 a.kbtn:active {
-  margin-top: 3px;
-  margin-bottom: 0px; }
+  margin-top: 2px;
+  margin-bottom: 1px; }
 
 h1 {
   font-family: Sanchez, Courier, serif;
@@ -57,7 +52,7 @@ footer {
   margin-bottom: 20px; }
 
 .title {
-  font-family: "Delius Swash Caps", Helvetica, Arial, Verdana;
+  font-family: "Indie Flower", Helvetica, Arial, Verdana;
   text-shadow: 1px 1px #cccccc; }
 
 .nav-tabs {
@@ -110,8 +105,8 @@ div.control-label {
     padding-left: 20px;
     padding-right: 20px; }
 
-  .bg-gray {
-    padding-top: 40px; }
+  #gray {
+    padding-top: 0px; }
 
   .form-horizontal .control-label {
     width: auto; }

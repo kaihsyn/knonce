@@ -143,7 +143,7 @@ class NBSelectHDL(request.RequestHandler):
 		self.render('settings.html', vars)
 
 app = webapp2.WSGIApplication([
-	routes.DomainRoute('www.%s'%HOST, [
+	routes.DomainRoute('<:(www.%s|localhost)>'%HOST, [
 		webapp2.Route(r'/settings', handler='settings.SettingsHDL:get', name='get-settings', methods=['GET']),
 	    webapp2.Route(r'/settings/<target:(notebook|account)>', handler='settings.SettingsHDL:put', name='update-settings', methods=['PUT']),
 	    webapp2.Route(r'/settings/notebook_list', handler='settings.SettingsHDL:nb_list', name='get-notebook-list', methods=['GET']),

@@ -17,7 +17,7 @@ class MainHDL(request.RequestHandler):
 		self.render('home.html', {'beta':True})
 
 app = webapp2.WSGIApplication([
-	routes.DomainRoute('www.%s'%HOST, [
+	routes.DomainRoute('<:(www.%s|localhost)>'%HOST, [
 	    webapp2.Route('/', handler='home.MainHDL:get', name='main-page', methods=['GET']),
 	    webapp2.Route('/beta', handler='home.MainHDL:beta', name='main-page-w-beta', methods=['GET'])
 	])
