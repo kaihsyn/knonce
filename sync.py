@@ -3,7 +3,6 @@ sys.path.append('./lib')
 
 import webapp2
 import logging
-
 from google.appengine.ext import ndb
 
 import request
