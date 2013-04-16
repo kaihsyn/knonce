@@ -4,9 +4,10 @@ if 'lib' not in sys.path:
 
 import webapp2
 import logging
+from webapp2_extras import routes
 
-import secrets
 import request
+from secrets import HOST, AUTH_CONFIG
 from simpleauth import SimpleAuthHandler
 
 class AuthHDL(request.RequestHandler, SimpleAuthHandler):
@@ -135,7 +136,7 @@ class AuthHDL(request.RequestHandler, SimpleAuthHandler):
     
   def _get_consumer_info_for(self, provider):
     """Returns a tuple (key, secret) for auth init requests."""
-    return secrets.AUTH_CONFIG[provider]
+    return AUTH_CONFIG[provider]
     
   def _to_user_model_attrs(self, data, attrs_map):
     """Get the needed information from the provider dataset."""
@@ -147,7 +148,9 @@ class AuthHDL(request.RequestHandler, SimpleAuthHandler):
     return user_attrs
 
 app = webapp2.WSGIApplication([
-  webapp2.Route('/logout', handler='auth.AuthHDL:logout', name='logout'),
-  webapp2.Route('/auth/<provider>', handler='auth.AuthHDL:_simple_auth', name='auth_login'),
-  webapp2.Route('/auth/<provider>/callback', handler='auth.AuthHDL:_auth_callback', name='auth_callback')
-  ], debug=True, config=request.app_config)
+  routes.DomainRoute('www.%s'%HOST, [
+    webapp2.Route('/logout', handler='auth.AuthHDL:logout', name='logout'),
+    webapp2.Route('/auth/<provider>', handler='auth.AuthHDL:_simple_auth', name='auth_login'),
+    webapp2.Route('/auth/<provider>/callback', handler='auth.AuthHDL:_auth_callback', name='auth_callback')
+  ])
+], debug=True, config=request.app_config)

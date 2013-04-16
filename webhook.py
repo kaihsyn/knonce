@@ -1,8 +1,9 @@
 import webapp2
 import logging
+from webapp2_extras import routes
 
 from google.appengine.api import taskqueue
-from secrets import EN_WEBHOOK
+from secrets import HOST, EN_WEBHOOK
 
 class EvernoteWebhookHDL(webapp2.RequestHandler):
     def get(self):
@@ -40,5 +41,7 @@ class EvernoteWebhookHDL(webapp2.RequestHandler):
     	taskqueue.add(queue_name='sync-evernote', url='/sync/evernote/note', params=params, method='GET')
 
 app = webapp2.WSGIApplication([
-    webapp2.Route('/hook/%s'%EN_WEBHOOK, handler='webhook.EvernoteWebhookHDL:get', name='evernote-webhook', methods=['GET'])
+    routes.DomainRoute('www.%s'%HOST, [
+        webapp2.Route('/hook/%s'%EN_WEBHOOK, handler='webhook.EvernoteWebhookHDL:get', name='evernote-webhook', methods=['GET'])
+    ])
 ], debug=True)

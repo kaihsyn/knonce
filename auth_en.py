@@ -4,10 +4,11 @@ if 'lib' not in sys.path:
 
 import logging
 import webapp2
+from webapp2_extras import routes
 from google.appengine.ext import ndb
 
 import request
-
+from secrets import HOST
 from knonce.unit import Unit
 from knonce import helper
 
@@ -105,6 +106,8 @@ class CallbackHDL(request.RequestHandler):
 		return True
 
 app = webapp2.WSGIApplication([
-	('/auth/evernote', AuthHDL),
-	('/auth/evernote/callback', CallbackHDL)
+	routes.DomainRoute('www.%s'%HOST, [
+		('/auth/evernote', AuthHDL),
+		('/auth/evernote/callback', CallbackHDL)
+	])
 ], debug=True, config=request.app_config)

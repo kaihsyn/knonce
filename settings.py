@@ -4,11 +4,13 @@ if 'lib' not in sys.path:
 
 import logging
 import webapp2
+from webapp2_extras import routes
 from google.appengine.ext.db import TransactionFailedError
 
 from evernote.edam import error
 
 import request
+from secrets import HOST
 from knonce.unit import Unit
 from knonce import helper
 
@@ -141,7 +143,9 @@ class NBSelectHDL(request.RequestHandler):
 		self.render('settings.html', vars)
 
 app = webapp2.WSGIApplication([
-	webapp2.Route(r'/settings', handler='settings.SettingsHDL:get', name='get-settings', methods=['GET']),
-    webapp2.Route(r'/settings/<target:(notebook|account)>', handler='settings.SettingsHDL:put', name='update-settings', methods=['PUT']),
-    webapp2.Route(r'/settings/notebook_list', handler='settings.SettingsHDL:nb_list', name='get-notebook-list', methods=['GET']),
-	], debug=True, config=request.app_config)
+	routes.DomainRoute('www.%s'%HOST, [
+		webapp2.Route(r'/settings', handler='settings.SettingsHDL:get', name='get-settings', methods=['GET']),
+	    webapp2.Route(r'/settings/<target:(notebook|account)>', handler='settings.SettingsHDL:put', name='update-settings', methods=['PUT']),
+	    webapp2.Route(r'/settings/notebook_list', handler='settings.SettingsHDL:nb_list', name='get-notebook-list', methods=['GET']),
+	])
+], debug=True, config=request.app_config)

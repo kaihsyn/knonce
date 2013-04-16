@@ -5,6 +5,9 @@ api_version: 1
 threadsafe: yes
 
 handlers:
+
+## STATIC FILES
+
 - url: /css
   static_dir: statics/css
 
@@ -14,8 +17,7 @@ handlers:
 - url: /script
   static_dir: statics/script
 
-- url: /hook/.+
-  script: webhook.app
+## ADMIN PAGES
 
 - url: /cron/.*
   script: cron.app
@@ -24,6 +26,11 @@ handlers:
 - url: /sync/.*
   script: sync.app
   login: admin
+
+## WWW PAGES
+
+- url: /hook/.+
+  script: webhook.app
 
 - url: /
   script: home.app
@@ -42,6 +49,8 @@ handlers:
 
 - url: /settings(/.*)?
   script: settings.app
+
+## USER PAGES
 
 libraries:
 - name: webapp2
