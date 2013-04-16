@@ -84,7 +84,7 @@ $('#form-account').submit ->
 		$('#f-acct-msg').html('Length of bio exceeds the max limit.').fadeIn().delay(3000).fadeOut()
 		return false
 
-	$('#f-acct-spin').fadeIn('fast')
+	$('#f-acct-spin').show()
 	$('#f-acct-msg').fadeOut().html('')
 
 	$.ajax({
@@ -99,7 +99,7 @@ $('#form-account').submit ->
 		$('#f-acct-msg').html('Failed to save.').fadeIn()
 	)
 	.always(->
-		$('#f-acct-spin').fadeOut('fast')
+		$('#f-acct-spin').hide()
 	)
 
 	return false

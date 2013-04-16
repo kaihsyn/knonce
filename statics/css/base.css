@@ -1,5 +1,5 @@
 body {
-  background-color: whitesmoke; }
+  background-color: #ededed; }
 
 a {
   color: #09abd3; }
@@ -10,11 +10,11 @@ a:hover {
 a.kbtn, a.kbtn:hover {
   display: inline-block;
   margin-top: 0px;
-  margin-bottom: 3px; }
+  margin-bottom: 1px; }
 
 a.kbtn:active {
-  margin-top: 2px;
-  margin-bottom: 1px; }
+  margin-top: 1px;
+  margin-bottom: 0px; }
 
 h1 {
   font-family: Sanchez, Courier, serif;
@@ -22,7 +22,8 @@ h1 {
   font-size: 35px; }
 
 footer {
-  height: 160px; }
+  height: 100px;
+  margin-bottom: 60px; }
 
 .serif {
   font-family: Sanchez, Courier, serif; }
@@ -39,11 +40,10 @@ footer {
   font-family: Sanchez, Courier, serif; }
 
 #top a:hover {
-  margin-top: 1px;
   text-decoration: none; }
 
 #top a:active {
-  margin-top: 3px; }
+  margin-top: 1px; }
 
 #gray {
   background-color: #bbbbbb;
@@ -65,7 +65,7 @@ footer {
 .nav-tabs > .active > a, .nav-tabs > .active > a:hover, .nav-tabs > .active > a:focus {
   border: 1px solid #bbbbbb;
   border-bottom-color: transparent;
-  background-color: whitesmoke; }
+  background-color: #ededed; }
 
 .form-horizontal .control-label {
   width: 120px; }
@@ -112,4 +112,25 @@ div.control-label {
     width: auto; }
 
   .form-horizontal .controls {
-    margin-left: 0px; } }
+    margin-left: 0px; }
+
+  footer {
+    margin-bottom: 0px; }
+
+  #uvTab {
+    top: 65% !important; } }
+@media (min-width: 767px) {
+  #uvTab {
+    border-right-width: 1px !important;
+    border-left-width: 0px !important;
+    background-image: url(http://widget.uservoice.com/images/clients/widget2/tab-left-dark.png) !important;
+    right: auto !important;
+    left: 0px !important;
+    border-top-left-radius: 0px !important;
+    border-top-right-radius: 4px !important;
+    border-bottom-right-radius: 4px !important;
+    border-bottom-left-radius: 0px !important;
+    border-style: solid solid solid none !important;
+    border-right-color: white !important;
+    -webkit-box-shadow: rgba(255, 255, 255, 0.24706) 1px 1px 1px inset, rgba(0, 0, 0, 0.49804) 0px 1px 2px !important;
+    box-shadow: rgba(255, 255, 255, 0.24706) 1px 1px 1px inset, rgba(0, 0, 0, 0.49804) 0px 1px 2px !important; } }
