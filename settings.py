@@ -19,6 +19,9 @@ class SettingsHDL(request.RequestHandler):
 		if not self.logged_in:
 			self.redirect('/')
 
+		if not self.current_user.active:
+			self.redirect('/beta')
+
 		""" add user information """
 		user = self.current_user
 		template_vars = {
@@ -55,7 +58,10 @@ class SettingsHDL(request.RequestHandler):
 
 	def put(self, target):
 		if not self.logged_in:
-			self.redirect('/')
+			self.response.status = '401 Unauthorized'
+
+		if not self.current_user.active:
+			self.response.status = '401 Unauthorized'
 
 		user = self.current_user
 		if target == 'account':
@@ -113,6 +119,12 @@ class SettingsHDL(request.RequestHandler):
 					self.response.status = '500 Database Error'
 
 	def nb_list(self):
+		if not self.logged_in:
+			self.response.status = '401 Unauthorized'
+
+		if not self.current_user.active:
+			self.response.status = '401 Unauthorized'
+
 		unit = Unit.get_by_user_key(self.current_user.key)
 		client = helper.get_evernote_client(token=unit.token)
 
@@ -134,13 +146,6 @@ class SettingsHDL(request.RequestHandler):
 			json_vars['notebooks'].append({ 'name': nb.name, 'guid': nb.guid })
 
 		self.render_json(json_vars)
-
-class NBSelectHDL(request.RequestHandler):
-	def get(self):
-		if not self.logged_in:
-			self.redirect('/')
-
-		self.render('settings.html', vars)
 
 app = webapp2.WSGIApplication([
 	routes.DomainRoute('<:(www.%s|localhost)>'%HOST, [
