@@ -1,12 +1,6 @@
 body {
   background-color: #ededed; }
 
-a {
-  color: #09abd3; }
-
-a:hover {
-  color: #0898bb; }
-
 a.kbtn, a.kbtn:hover {
   display: inline-block;
   margin-top: 0px;
@@ -82,7 +76,7 @@ div.control-label {
 .help-inline.only {
   margin-top: 5px;
   padding-left: 0px;
-  color: #09abd3; }
+  color: #409997; }
 
 .help-inline.no-space {
   padding-left: 0px; }
@@ -118,7 +112,7 @@ div.control-label {
     margin-bottom: 0px; }
 
   #uvTab {
-    top: 65% !important; } }
+    top: 75% !important; } }
 @media (min-width: 767px) {
   #uvTab {
     border-right-width: 1px !important;
