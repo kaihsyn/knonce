@@ -23,7 +23,7 @@ class SettingsHDL(request.RequestHandler):
 		user = self.current_user
 		template_vars = {
 			'user': user,
-			'host': self.request.host,
+			'host': HOST,
 		}
 
 		""" check if still connected """
