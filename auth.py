@@ -4,6 +4,7 @@ if 'lib' not in sys.path:
 
 import webapp2
 import logging
+import datetime
 from webapp2_extras import routes
 
 import request
@@ -102,18 +103,14 @@ class AuthHDL(request.RequestHandler, SimpleAuthHandler):
         
       else:
         logging.info('Creating a brand new user')
-        _attrs['pub_id'] = ''
+        _attrs['en_name'] = ''
+        _attrs['created'] = datetime.datetime.utcnow()
+        _attrs['active'] = False
         ok, user = self.auth.store.user_model.create_user(auth_id, **_attrs)
         if ok:
           self.auth.set_session(self.auth.store.user_to_dict(user))
 
-    active = False
-    try:
-      active = user.active
-    except AttributeError:
-      pass
-
-    if not active:
+    if not user.active:
       self.auth.unset_session()
       self.redirect('/beta')
       return

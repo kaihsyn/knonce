@@ -1,26 +1,51 @@
-KL = exports ? this
-
 # get notebook list
-KL.get_notebook_list = ->
-	$('#nb-select-name').fadeOut('fast')
-	$('#nb-select-spin').fadeIn()
+get_notebook_list = ->
+	$('#nb-select-name').hide()
+	$('#nb-select-spin').show()
 	$('#nb-select>select').html ''
 
 	$('#nb [name="choose_notebook"]').val 'true'
 
-	$.get('/settings/notebook_list')
+	$.get('/settings/notebook/list')
 		.done((data) ->
 			for nb in data.notebooks
 				$('#nb-select>select').append "<option value=\"#{nb.guid}\">#{nb.name}</option>"
-			$('#nb-select>select').fadeIn()
+			$('#nb-select>select').show()
 		)
 		.fail((data) ->
-			$('#nb-select-name').fadeIn()
-			$('#nb-select-msg').html('- Failed to load notebooks list.').fadeIn().delay(5000).fadeOut()
+			$('#nb-select-name').show()
+			$('#nb-select-msg').html('- Failed to load notebooks list.').removeClass('hide')
 		)
 		.always((data) ->
-			$('#nb-select-spin').fadeOut()
+			$('#nb-select-spin').hide()
 		)
+
+# refresh notebook name
+refreshing = false
+refresh_notebook_name = ->
+	if refreshing
+		return
+
+	refreshing = true
+	$('#nb-select-name-refresh>i').addClass('icon-spin')
+
+	$.get('/settings/notebook/name')
+		.fail((data) ->
+			if data.responseText == 'Evernote Authorization Expired'
+				window.location.reload()
+			else if data.responseText == 'Notebook Not Found'
+				$('#nb-select-msg').html('We beleive the notebook has been deleted in your Evernote account.<br>Please send a notebook reset request to support.').removeClass('hide')
+				$('#nb-select-name-refresh>i').hide()
+				$('#nb-select-name>span').hide()
+			else
+				$('#nb-select-name-refresh>i').hide()
+				$('#nb-select-msg').html(' - Failed. Please try again later.').removeClass('hide')
+		)
+		.done((data) ->
+			$('#nb-select-name>span').html data.name
+			$('#nb-select-name-refresh>i').removeClass('icon-spin')
+		)
+	refreshing = false
 
 ## TAB
 
@@ -35,8 +60,13 @@ $('#menu a').click (e) ->
 $('.kl-tooltip').tooltip()
 
 # show notebook list
-$('#nb-select>.help-inline.only').on 'click', 'a', ->
+$('#nb-select-name-list').click ->
 	get_notebook_list()
+	return false
+
+# refresh notebook name
+$('#nb-select-name-refresh').click ->
+	refresh_notebook_name()
 	return false
 
 # notebook form submit

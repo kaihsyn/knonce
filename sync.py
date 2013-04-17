@@ -1,15 +1,18 @@
 import sys
 sys.path.append('./lib')
 
+import re
 import webapp2
 import logging
 from google.appengine.ext import ndb
 
+from webapp2_extras import routes
+from secrets import HOST
 import request
 
 from evernote.edam.error.ttypes import EDAMErrorCode, EDAMUserException, EDAMSystemException, EDAMNotFoundException
 
-from knonce.unit import Unit
+from knonce.unit import Unit, UnitStatus
 from knonce.note import Note
 from knonce import helper
 from knonce import parse
@@ -29,15 +32,24 @@ class SyncENHDL(request.RequestHandler):
 
 		""" get unit info """
 		try:
-			unit_arr = Unit.query(Unit.user_id==int(self.request.get('user_id')), Unit.token!='').fetch(1, projection=['notebook_guid', 'token'])
+			unit_arr = Unit.query(Unit.user_id==int(self.request.get('user_id'))).fetch(1, projection=['notebook_guid', 'token', 'status'])
 		except ValueError:
 			logging.error('en-user-id = %s, wrong user_id format.' % self.request.get('user_id'))
 			return
+
 		if len(unit_arr) <= 0:
 			logging.info('en-note-guid = %s, unit don\t exist in database.' % self.request.get('guid'))
 			return
 
 		unit = unit_arr[0]
+
+		if unit.token is None:
+			logging.info('en-note-guid = %s, unit token is none.' % self.request.get('guid'))
+			return
+
+		if unit.status != UnitStatus.Active:
+			logging.info('en-note-guid = %s, unit not active.' % self.request.get('guid'))
+			return
 
 		""" get note metadata """
 		try:
@@ -66,29 +78,14 @@ class SyncENHDL(request.RequestHandler):
 
 			""" SYNC: create a new note """
 			try:
-				en_note = note_store.getNote(unit.token, self.request.get('guid'), True, False, False, False)
-			except (EDAMUserException, EDAMSystemException) as e:
-				self.en_user_system_exception(e, self.request.get('guid'))
-			except EDAMNotFoundException as e:
-				return self.en_not_found_exception(e, self.request.get('guid'))
-
-			note = Note(id='en-%s' % en_note.guid, parent=unit.key)
-
-			try:
 				en_content = note_store.getNoteContent(unit.token, self.request.get('guid'))
 			except (EDAMUserException, EDAMSystemException) as e:
 				return self.en_user_system_exception(e, self.request.get('guid'))
 			except EDAMNotFoundException as e:
 				return self.en_not_found_exception(e, self.request.get('guid'))
 
-			note.content = parse.parse_evernote(en_content)
-
-			note.usn = en_note.updateSequenceNum
-			note.title = en_note.title
-			note.updated = en_note.updated
-			note.created = en_note.created
-
-			note.put()
+			self.make_note(note, unit, en_note, en_content)
+			
 			logging.info('en-note-guid = %s, created and synced.' % self.request.get('guid'))
 
 		elif self.request.get('reason') == 'update':
@@ -135,12 +132,6 @@ class SyncENHDL(request.RequestHandler):
 					logging.warning('en-note-guid = %s, action cause note to be deleted.' % self.request.get('guid'))
 					return
 
-			""" SYNC: check if the note is in database, if not, create one """
-			add = False
-			if note is None:
-				add = True
-				note = Note(id='en-%s' % en_note.guid, parent=unit.key)
-
 			try:
 				en_content = note_store.getNoteContent(unit.token, self.request.get('guid'))
 			except (EDAMUserException, EDAMSystemException) as e:
@@ -148,18 +139,41 @@ class SyncENHDL(request.RequestHandler):
 			except EDAMNotFoundException as e:
 				return self.en_not_found_exception(e, self.request.get('guid'))
 
-			note.content = parse.parse_evernote(en_content)
+			""" SYNC: check if the note is in database, if not, create one """
+			add = False
+			if note is None:
+				add = True
 
-			note.usn = en_note.updateSequenceNum
-			note.title = en_note.title
-			note.updated = en_note.updated
-			note.created = en_note.created
+			""" MAKE NOTE """
+			self.make_note(note, unit, en_note, en_content)
 
-			note.put()
 			if add:
 				logging.info('en-note-guid = %s, created and synced in update.' % self.request.get('guid'))
 			else:
 				logging.info('en-note-guid = %s, synced.' % self.request.get('guid'))
+
+	@ndb.transactional(xg=True)
+	def make_note(self, note, unit, en_note, en_content):
+		if note is None:
+			note = Note(id='en-%s'%en_note.guid, parent=unit.key)
+
+		if note.title != en_note.title:
+			note.short = '-'.join(re.findall('[A-Za-z0-9]+', re.sub('\'', '', en_note.title))).lower()
+			
+			if len(note.short) > 50:
+				unit = unie.key.get()
+				unit.name_count = unit.name_count + 1
+				unit.put()
+				note.short = unit.name_count
+
+		note.content = parse.parse_evernote(en_content)
+
+		note.usn = en_note.updateSequenceNum
+		note.title = en_note.title
+		note.updated = en_note.updated
+		note.created = en_note.created
+
+		note.put()
 
 	def en_user_system_exception(self, exception, guid=None):
 		msg = ''
@@ -177,8 +191,6 @@ class SyncENHDL(request.RequestHandler):
 		else:
 			logging.error(msg)
 
-		return
-
 	def en_not_found_exception(self, exception, guid=None):
 		msg = ''
 
@@ -189,7 +201,8 @@ class SyncENHDL(request.RequestHandler):
 
 		logging.error(msg)
 
-
 app = webapp2.WSGIApplication([
-	webapp2.Route('/sync/evernote/note', handler='sync.SyncENHDL:note', name='sync-evernote-note', methods=['GET'])
-	], debug=True, config=request.app_config)
+	routes.DomainRoute('<:(www.%s|localhost)>'%HOST, [
+		webapp2.Route('/sync/evernote/note', handler='sync.SyncENHDL:note', name='sync-evernote-note', methods=['GET'])
+	])
+], debug=True, config=request.app_config)

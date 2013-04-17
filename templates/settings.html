@@ -4,6 +4,25 @@
 Settings | Knonce
 {% endblock %}
 
+{% block head %}
+<style>
+#nb-select-name a [class^="icon-"] {
+	color: #999;
+	margin-left: 5px;
+	margin-right: 5px;
+}
+
+#nb-select-name a [class^="icon-"]:hover, #nb-select-name a [class^="icon-"]:active {
+	color: #333;
+	text-decoration: none;
+}
+
+#nb-select-name a [class^="icon-"].icon-spin:hover, #nb-select-name a [class^="icon-"].icon-spin:active {
+	color: #999;
+}
+</style>
+{% endblock %}
+
 {% block body_dark %}
 <h1>Settings</h1>
 {% endblock %}
@@ -41,9 +60,13 @@ Settings | Knonce
 							<i class="icon-spinner icon-spin icon-large"></i>
 						</span>
 						<span id="nb-select-name" class="help-inline only">
-							<a href="#" class="kl-tooltip" data-placement="right" title="Click to change your notebook.">{{unit.notebook_name if unit.notebook_name is not none else 'Choose a notebook to start!'}}</a>
+							{% if unit.notebook_name is not none %}
+								<span>{{unit.notebook_name}}</span> <a href="#" id="nb-select-name-refresh" class="kl-tooltip" data-placement="right" title="Click here to refresh the name of your syncing notebook."><i class="icon-refresh"></i></a>
+							{% else %}
+								<a href="#" class="kl-tooltip" id="nb-select-name-list" data-placement="right" title="Click to change your notebook.">Choose a notebook to start!</a>
+							{% endif %}
 						</span>
-						<span id="nb-select-msg" class="help-inline hide"></span>
+						<span id="nb-select-msg" class="help-inline only hide"></span>
 					</div>
 				</div>
 				<div class="control-group">
@@ -127,18 +150,4 @@ Settings | Knonce
 
 {% block script %}
 <script src="/script/settings.js"></script>
-<script>
-	{# var KL = typeof exports !== "undefined" && exports !== null ? exports : this; #}
-
-	{# default tab #}
-	{% if msg is defined %}
-	$('#menu a[href="#{{ msg.tab }}"]').tab('show');
-	{% endif %}
-
-	{# default tab 
-	{% if unit is defined and unit.notebook_name is none %}
-	KL.get_notebook_list()
-	{% endif %}
-	#}
-</script>
 {% endblock %}

@@ -47,8 +47,12 @@ handlers:
 - url: /auth/google(/callback)?
   script: auth.app
 
-- url: /settings(/.*)?
+- url: /settings(/.*)*
   script: settings.app
+
+- url: /admin(/.*)*
+  script: admin.app
+  login: admin
 
 ## USER PAGES
 

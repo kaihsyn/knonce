@@ -1,10 +1,11 @@
 from google.appengine.ext import ndb
 
 class Note(ndb.Model):
-	usn = ndb.IntegerProperty()
-	title = ndb.StringProperty(indexed=False)
-	content = ndb.TextProperty()
-	updated = ndb.IntegerProperty()
+	usn = ndb.IntegerProperty(indexed=False)
+	short = ndb.StringProperty(required=True)
+	title = ndb.StringProperty(default='', indexed=False)
+	content = ndb.TextProperty(default='')
+	updated = ndb.IntegerProperty(indexed=False)
 	created = ndb.IntegerProperty()
 	tag = ndb.StringProperty(repeated=True)
 
@@ -13,3 +14,4 @@ class Note(ndb.Model):
 class Tag(ndb.Model):
 	guid = ndb.StringProperty()
 	name = ndb.StringProperty()
+	

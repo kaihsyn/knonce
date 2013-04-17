@@ -107,7 +107,7 @@ class CallbackHDL(request.RequestHandler):
 
 app = webapp2.WSGIApplication([
 	routes.DomainRoute('<:(www.%s|localhost)>'%HOST, [
-		('/auth/evernote', AuthHDL),
-		('/auth/evernote/callback', CallbackHDL)
-	])
+		webapp2.Route(r'/auth/evernote', handler='auth_en.AuthHDL:get', name='auth-evernote', methods=['GET']),
+		webapp2.Route(r'/auth/evernote/callback', handler='auth_en.CallbackHDL:get', name='auth-evernote-callback', methods=['GET']),
+	]),
 ], debug=True, config=request.app_config)

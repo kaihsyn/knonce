@@ -11,17 +11,17 @@
 {% endblock %}
 
 {% block body_light %}
-	{% if logged_in %}
-		<p class="serif">
-			Hey, there!<br/>
-			View your <a href="/settings" class="">Account Settings</a> here.
-		</p>
-	{% elif beta is defined and beta %}
+	{% if beta is defined and beta %}
 		<p class="serif">
 			Hey, thanks for signing on!<br>
 			<br>
 			If we have to roll out the service with a limit,<br>
 			we'll make sure you're in the front of the line!
+		</p>
+	{% elif logged_in %}
+		<p class="serif">
+			Hey, there!<br/>
+			View your <a href="/settings" class="">Account Settings</a> here.
 		</p>
 	{% else %}
 		<p class="serif">
