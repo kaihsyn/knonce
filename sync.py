@@ -84,7 +84,7 @@ class SyncENHDL(request.RequestHandler):
 			except EDAMNotFoundException as e:
 				return self.en_not_found_exception(e, self.request.get('guid'))
 
-			self.make_note(note, unit, en_note, en_content)
+			self.make_note(None, unit, en_note, en_content)
 			
 			logging.info('en-note-guid = %s, created and synced.' % self.request.get('guid'))
 
@@ -160,11 +160,11 @@ class SyncENHDL(request.RequestHandler):
 		if note.title != en_note.title:
 			note.short = '-'.join(re.findall('[A-Za-z0-9]+', re.sub('\'', '', en_note.title))).lower()
 			
-			if len(note.short) > 50:
-				unit = unie.key.get()
+			if len(note.short) > 50 or len(Note.query(Note.short==note.short, ancestor=unit.key).fetch(1)) > 0:
+				unit = unit.key.get()
 				unit.name_count = unit.name_count + 1
 				unit.put()
-				note.short = unit.name_count
+				note.short = str(unit.name_count)
 
 		note.content = parse.parse_evernote(en_content)
 
