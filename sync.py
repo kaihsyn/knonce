@@ -2,16 +2,15 @@ import sys
 sys.path.append('./lib')
 
 import re
+import urllib
 import webapp2
 import logging
+import string
 from google.appengine.ext import ndb
-
 from webapp2_extras import routes
 from secrets import HOST
 import request
-
 from evernote.edam.error.ttypes import EDAMErrorCode, EDAMUserException, EDAMSystemException, EDAMNotFoundException
-
 from knonce.unit import Unit, UnitStatus
 from knonce.note import Note
 from knonce import helper
@@ -157,23 +156,38 @@ class SyncENHDL(request.RequestHandler):
 		if note is None:
 			note = Note(id='en-%s'%en_note.guid, parent=unit.key)
 
+		""" set note title """
+		en_note.title = en_note.title.decode('utf-8')
+
 		if note.title != en_note.title:
-			note.short = '-'.join(re.findall('[A-Za-z0-9]+', re.sub('\'', '', en_note.title))).lower()
+
+			note.title = en_note.title
+
+			""" handle english and non-english short name """
+			if all(c in string.printable for c in en_note.title):
+				short = '-'.join(re.findall('\w+', en_note.title)).lower()
+			else:
+				short = urllib.quote(en_note.title)
 			
-			if len(note.short) > 50 or len(Note.query(Note.short==note.short, ancestor=unit.key).fetch(1)) > 0:
-				unit = unit.key.get()
-				unit.name_count = unit.name_count + 1
-				unit.put()
-				note.short = str(unit.name_count)
+			""" if short name is too long or duplicated """
+			if len(short) > 450 or len(Note.query(Note.short==short, ancestor=unit.key).fetch(1)) > 0:
+				short = self.get_lazy_short_name(unit.key)
+
+			note.short = short
 
 		note.content = parse.parse_evernote(en_content)
-
 		note.usn = en_note.updateSequenceNum
-		note.title = en_note.title
 		note.updated = en_note.updated
 		note.created = en_note.created
 
 		note.put()
+
+	def get_lazy_short_name(self, unit_key):
+		unit = unit_key.get()
+		unit.name_count = unit.name_count + 1
+		unit.put()
+
+		return str(unit.name_count)
 
 	def en_user_system_exception(self, exception, guid=None):
 		msg = ''

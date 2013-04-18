@@ -13,5 +13,12 @@ indexes:
 - kind: Unit
   properties:
   - name: user_id
+  - name: notebook_guid
+  - name: status
+  - name: token
+
+- kind: Unit
+  properties:
+  - name: user_id
   - name: token
   - name: notebook_guid
