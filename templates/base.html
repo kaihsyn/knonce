@@ -19,8 +19,8 @@
 	{% block head %}{% endblock %}
 </head>
 <body>
-	<div id="top" class="row">
-	<div class="span9 offset2">
+	<div id="top" class="row-fluid">
+	<div class="span8 offset2">
 	<div id="top">
 		{% if logged_in %}
 			<a href="/logout"><i class="icon-signout"></i> Logout</a>
@@ -29,16 +29,16 @@
 	</div>
 	</div>
 
-	<div id="gray" class="row">
-	<div class="span9 offset2">
+	<div id="gray" class="row-fluid">
+	<div class="span8 offset2">
 	<div class="wrap">
 	{% block body_dark %}{% endblock %}
 	</div>
 	</div>
 	</div>
 
-	<div class="row">
-	<div class="span9 offset2">
+	<div class="row-fluid">
+	<div class="span8 offset2">
 	<div class="wrap">
 	{% block body_light %}{% endblock %}
 	</div>
