@@ -1,7 +1,20 @@
 {% extends "base.html" %}
 
 {% block head %}
-<link href="css/home.css" rel="stylesheet">
+<style>
+#title {
+  color: #fcfcfc;
+  font-size: 60px;
+  font-weight: 400;
+  margin-top: 40px; }
+
+.title-line {
+  color: #333333;
+  font-size: 14px;
+  font-weight: 400;
+  font-family: Sanchez, "Helvetica Neue";
+  display: inline-block; }
+</style>
 {% endblock %}
 
 {% block body_dark %}
@@ -27,10 +40,10 @@
 		<p class="serif">
 			<a href="/auth/google" class="zocial googleplus">Sign in with Google</a><br>
 			<br>
-			Please login to manage your account.<br>
+			Please sign in to manage your account.<br>
 			<br>
-			Knonce is currently in it's private beta.<br>
-			Non-members can still login to get in the waiting line.
+			Knonce is currently in it's close beta.<br>
+			Non-members can still sign in to get in the waiting line.
 		</p>
 	{% endif %}
 {% endblock %}

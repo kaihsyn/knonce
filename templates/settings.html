@@ -28,81 +28,81 @@ Settings | Knonce
 {% endblock %}
 
 {% block body_light %}
+
+{% if msg is defined %}
+<div class="alert alert-{{ msg.type }}">
+	<button type="button" class="close" data-dismiss="alert">&times;</button>
+	<strong>{{ msg.title }}</strong>
+	{{ msg.body }}
+</div>
+{% endif %}
+
+{% if unit is defined %}
 <ul id="menu" class="nav nav-tabs">
 	<li class="active"><a href="#notebook" data-toggle="tab">Notebook</a></li>
 	<li><a href="#account" data-toggle="tab">Account</a></li>
 </ul>
 <div class="tab-content">
 	<div class="tab-pane active" id="notebook">
-		{% if msg is defined and msg.tab == 'notebook' %}
-			<div class="alert alert-{{ msg.type }}">
-				<button type="button" class="close" data-dismiss="alert">&times;</button>
-				<strong>{{ msg.title }}</strong>
-				{{ msg.body }}
+		<form id="nb" class="form-horizontal">
+			<div class="control-group">
+				<div class="control-label">alias</div>
+				<div class="controls">
+					<span class="help-inline no-space">http://</span>
+					<input class="input-medium" type="text" name="alias" value="{{unit.alias}}"></input>
+					<span class="help-inline no-space">.{{ host }}/</span>
+				</div>
 			</div>
-		{% endif %}
-
-		{% if unit is defined %}
-			<form id="nb" class="form-horizontal">
-				<div class="control-group">
-					<div class="control-label">alias</div>
-					<div class="controls">
-						<span class="help-inline no-space">http://</span>
-						<input class="input-medium" type="text" name="alias" value="{{unit.alias}}"></input>
-						<span class="help-inline no-space">.{{ host }}/</span>
-					</div>
+			<div class="control-group">
+				<div class="control-label">notebook</div>
+				<div id="nb-select" class="controls">
+					<select class="hide"></select>
+					<span id="nb-select-spin" class="help-inline hide">
+						<i class="icon-spinner icon-spin icon-large"></i>
+					</span>
+					<span id="nb-select-name" class="help-inline only">
+						<div id="nb-select-name-show" class="{{'hide' if unit.notebook_name is none }}">
+							<span>{{unit.notebook_name}}</span> <a href="#" id="nb-select-name-refresh" class="kl-tooltip" data-placement="right" title="Click here to refresh the name of your syncing notebook."><i class="icon-refresh"></i></a>
+						</div>
+						{% if unit.notebook_name is none %}
+						<div id="nb-select-name-choose">
+							<a href="#" class="kl-tooltip" id="nb-select-name-list" data-placement="right" title="Click to change your notebook.">Choose a notebook to start!</a>
+						</div>
+						{% endif %}
+					</span>
+					<span id="nb-select-msg" class="help-inline only hide"></span>
 				</div>
-				<div class="control-group">
-					<div class="control-label">notebook</div>
-					<div id="nb-select" class="controls">
-						<select class="hide"></select>
-						<span id="nb-select-spin" class="help-inline hide">
-							<i class="icon-spinner icon-spin icon-large"></i>
-						</span>
-						<span id="nb-select-name" class="help-inline only">
-							<div id="nb-select-name-show" class="{{'hide' if unit.notebook_name is none }}">
-								<span>{{unit.notebook_name}}</span> <a href="#" id="nb-select-name-refresh" class="kl-tooltip" data-placement="right" title="Click here to refresh the name of your syncing notebook."><i class="icon-refresh"></i></a>
-							</div>
-							{% if unit.notebook_name is none %}
-							<div id="nb-select-name-choose">
-								<a href="#" class="kl-tooltip" id="nb-select-name-list" data-placement="right" title="Click to change your notebook.">Choose a notebook to start!</a>
-							</div>
-							{% endif %}
-						</span>
-						<span id="nb-select-msg" class="help-inline only hide"></span>
-					</div>
+			</div>
+			<hr class="bs-docs-separator">
+			<div class="control-group">
+				<label class="control-label">display-name</label>
+				<div class="controls">
+					<input class="input-large" type="text" name="display" placeholder="Spiderman" value="{{user.display}}">
 				</div>
-				<div class="control-group">
-					<div id="nb-select" class="controls">
-						<button class="btn btn-primary" type="submit">Save</button>
-						<span id="nb-msg" class="help-inline hide"></span>
-						<span id="nb-spin" class="help-inline hide">
-							<i class="icon-spinner icon-spin icon-large"></i>
-						</span>
-					</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label">bio</label>
+				<div class="controls">
+					<textarea id="f-acct-bio" class="input-xlarge" name="bio" rows="3" placeholder="tell us a little bit about you...">{{user.bio}}</textarea><br/>
+					<span id="f-acct-bio-limit" class="help-inline only gray">max 500 characters</span>
 				</div>
-				<input type="hidden" name="choose_notebook" value="false"></input>
-				<input type="hidden" name="notebook_name" value="{{unit.notebook_name}}"></input>
-				<input type="hidden" name="notebook_guid" value="{{unit.notebook_guid}}"></input>
-			</form>
-		{% else %}
-			<p>
-				Let's get started by coonecting your Evernote account.
-			</p>
-			<p>
-				<a class="kbtn" href="/auth/evernote"><img src="/img/btn_en.png" width="200" alt="Connect Evernote"></a>
-			</p>
-		{% endif %}
+			</div>
+			<hr class="bs-docs-separator">
+			<div class="control-group">
+				<div id="nb-select" class="controls">
+					<button class="btn btn-primary" type="submit">Save</button>
+					<span id="nb-msg" class="help-inline hide"></span>
+					<span id="nb-spin" class="help-inline hide">
+						<i class="icon-spinner icon-spin icon-large"></i>
+					</span>
+				</div>
+			</div>
+			<input type="hidden" name="choose_notebook" value="false"></input>
+			<input type="hidden" name="notebook_name" value="{{unit.notebook_name}}"></input>
+			<input type="hidden" name="notebook_guid" value="{{unit.notebook_guid}}"></input>
+		</form>
 	</div>
 	<div class="tab-pane" id="account">
-		{% if msg is defined and msg.tab == 'account' %}
-			<div class="alert alert-{{ msg.type }}">
-				<button type="button" class="close" data-dismiss="alert">&times;</button>
-				<strong>{{ msg.title }}</strong>
-				{{ msg.body }}
-			</div>
-		{% endif %}
-
 		<form id="form-account" class="form-horizontal">
 			<div class="control-group">
 				<div class="control-label">name</div>
@@ -115,22 +115,9 @@ Settings | Knonce
 				</div>
 			</div>
 			<div class="control-group">
-				<label class="control-label">display-name</label>
-				<div class="controls">
-					<input class="input-large" type="text" name="display" placeholder="Spiderman" value="{{user.display}}">
-				</div>
-			</div>
-			<div class="control-group">
 				<label class="control-label">emaill</label>
 				<div class="controls">
 					<input class="input-large" type="email" name="email" placeholder="you@domain.com" value="{{user.email}}">
-				</div>
-			</div>
-			<div class="control-group">
-				<label class="control-label">bio</label>
-				<div class="controls">
-					<textarea id="f-acct-bio" class="input-xlarge" name="bio" rows="3" placeholder="tell us a little bit about you...">{{user.bio}}</textarea><br/>
-					<span id="f-acct-bio-limit" class="help-inline only gray">max 500 characters</span>
 				</div>
 			</div>
 			<div class="control-group">
@@ -145,6 +132,15 @@ Settings | Knonce
 		</form>
 	</div>
 </div>
+{% else %}
+<p>
+	Let's get started by coonecting your Evernote account.
+</p>
+<p>
+	<a href="/auth/evernote" class="zocial evernote">Connect with Evernote</a>
+</p>
+{% endif %}
+
 {% endblock %}
 
 {% block hidden %}

@@ -71,6 +71,10 @@ $('#nb-select-name-refresh').click ->
 
 # notebook form submit
 $('#nb').submit ->
+	if $('#f-acct-bio').val().length > 500
+		$('#nb-msg').html('Length of bio exceeds the max limit.').fadeIn().delay(3000).fadeOut()
+		return false
+
 	if $('#nb [name="choose_notebook"]').val() == 'true'
 		$('#nb [name="notebook_name"]').val $("#nb-select>select>[value=\"#{$('#nb-select>select').val()}\"]").html()
 		$('#nb [name="notebook_guid"]').val $('#nb-select>select').val()
@@ -101,8 +105,6 @@ $('#nb').submit ->
 
 	return false
 
-## ACCOUNT
-
 # bio check
 $('#f-acct-bio').change ->
 	if $('#f-acct-bio').val().length > 500
@@ -114,12 +116,10 @@ $('#f-acct-bio').change ->
 		$('#f-acct-bio-limit').removeClass 'red'
 		$('#f-acct-btn').removeClass 'disabled'
 
+## ACCOUNT
+
 # account info update submit
 $('#form-account').submit ->
-	if $('#f-acct-bio').val().length > 500
-		$('#f-acct-msg').html('Length of bio exceeds the max limit.').fadeIn().delay(3000).fadeOut()
-		return false
-
 	$('#f-acct-spin').show()
 	$('#f-acct-msg').fadeOut().html('')
 

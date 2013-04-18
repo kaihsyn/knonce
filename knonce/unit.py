@@ -5,12 +5,20 @@ class UnitStatus():
 	Active, NotebookNotExist = range(2)
 
 class Unit(ndb.Model):
-	username = ndb.StringProperty()
-	user_id = ndb.IntegerProperty()
+
+	""" unit information """
 	alias = ndb.StringProperty(default='')
+	display = ndb.StringProperty(default='')
+	bio = ndb.StringProperty(default='')
+
+	""" evernote information """
+	user_id = ndb.IntegerProperty()
+	username = ndb.StringProperty()
 	notebook_name = ndb.StringProperty()
 	notebook_guid = ndb.StringProperty()
 	token = ndb.StringProperty(default='')
+	
+	""" unit status """
 	name_count = ndb.IntegerProperty(default=0, indexed = False)
 	status = ndb.IntegerProperty(default=UnitStatus.Active)
 

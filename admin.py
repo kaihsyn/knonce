@@ -30,7 +30,6 @@ class AdminHDL(request.RequestHandler):
 app = webapp2.WSGIApplication([
 	routes.DomainRoute('<:(www.%s|localhost)>'%HOST, [
 		webapp2.Route('/admin/reset/unit/<alias>', handler='admin.AdminHDL:reset_unit', name='reset-unit', methods=['GET', 'POST']),
-		webapp2.Route('/admin/active/<key>', handler='admin.AdminHDL:active_user', name='active-user', methods=['GET', 'POST']),
-
+		#webapp2.Route('/admin/active/<key>', handler='admin.AdminHDL:active_user', name='active-user', methods=['GET', 'POST']),
 	]),
 ], debug=True, config=request.app_config)

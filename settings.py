@@ -70,26 +70,13 @@ class SettingsHDL(request.RequestHandler):
 
 		user = self.current_user
 		if target == 'account':
-			put = False
+			user.email = self.request.get('email')
 
-			if user.display != self.request.get('display'):
-				user.display = self.request.get('display')
-				put = True
-
-			if user.email != self.request.get('email'):
-				user.email = self.request.get('email')
-				put = True
-
-			if user.bio != self.request.get('bio'):
-				user.bio = self.request.get('bio')
-				put = True
-
-			if put:
-				try:
-					user.put()
-				except TransactionFailedError:
-					self.response.status = '500 Database Error'
-					return
+			try:
+				user.put()
+			except TransactionFailedError:
+				self.response.status = '500 Database Error'
+				return
 
 		elif target == 'notebook':
 			unit = Unit.get_by_user_key(user.key)
@@ -113,6 +100,14 @@ class SettingsHDL(request.RequestHandler):
 
 			if unit.alias != self.request.get('alias'):
 				unit.alias = self.request.get('alias')
+				put = True
+
+			if unit.display != self.request.get('display'):
+				unit.display = self.request.get('display')
+				put = True
+
+			if unit.bio != self.request.get('bio'):
+				unit.bio = self.request.get('bio')
 				put = True
 
 			if unit.notebook_name is None and unit.notebook_guid is None:
