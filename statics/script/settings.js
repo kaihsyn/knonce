@@ -3,7 +3,7 @@
   var get_notebook_list, refresh_notebook_name, refreshing;
 
   get_notebook_list = function() {
-    $('#nb-select-name').hide();
+    $('#nb-select-name-choose').hide();
     $('#nb-select-spin').show();
     $('#nb-select>select').html('');
     $('#nb [name="choose_notebook"]').val('true');
@@ -16,7 +16,7 @@
       }
       return $('#nb-select>select').show();
     }).fail(function(data) {
-      $('#nb-select-name').show();
+      $('#nb-select-name-choose').show();
       return $('#nb-select-msg').html('- Failed to load notebooks list.').removeClass('hide');
     }).always(function(data) {
       return $('#nb-select-spin').hide();
@@ -37,13 +37,13 @@
       } else if (data.responseText === 'Notebook Not Found') {
         $('#nb-select-msg').html('We beleive the notebook has been deleted in your Evernote account.<br>Please send a notebook reset request to support.').removeClass('hide');
         $('#nb-select-name-refresh>i').hide();
-        return $('#nb-select-name>span').hide();
+        return $('#nb-select-name-show>span').hide();
       } else {
         $('#nb-select-name-refresh>i').hide();
         return $('#nb-select-msg').html(' - Failed. Please try again later.').removeClass('hide');
       }
     }).done(function(data) {
-      $('#nb-select-name>span').html(data.name);
+      $('#nb-select-name-show>span').html(data.name);
       return $('#nb-select-name-refresh>i').removeClass('icon-spin');
     });
     return refreshing = false;
@@ -78,7 +78,13 @@
       url: "/settings/notebook",
       data: $(this).serialize()
     }).done(function() {
-      return $('#nb-msg').html('Settings Saved!').fadeIn().delay(5000).fadeOut();
+      $('#nb-msg').html('Settings Saved!').fadeIn().delay(5000).fadeOut();
+      if ($('#nb [name="choose_notebook"]').val() === 'true') {
+        $('#nb-select>select').hide();
+        $('#nb-select-name-show>span').html($('#nb [name="notebook_name"]').val());
+        $('#nb-select-name-show').removeClass('hide');
+        return $('#nb-select-name-choose').hide();
+      }
     }).fail(function() {
       return $('#nb-msg').html('Failed to save.').fadeIn();
     }).always(function() {
