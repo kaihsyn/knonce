@@ -1,15 +1,6 @@
 body {
   background-color: #ededed; }
 
-a.kbtn, a.kbtn:hover {
-  display: inline-block;
-  margin-top: 0px;
-  margin-bottom: 1px; }
-
-a.kbtn:active {
-  margin-top: 1px;
-  margin-bottom: 0px; }
-
 h1 {
   font-family: Sanchez, Courier, serif;
   font-weight: normal;
