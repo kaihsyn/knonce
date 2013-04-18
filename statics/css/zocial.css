@@ -17,7 +17,7 @@ a.zocial {
 	color: #fff;
 	cursor: pointer;
 	display: inline-block;
-	font: normal 13px/2.6 Helvetica, Arial, Tahoma, Verdona, sans-serif;
+	font: normal 13px/2.3 Helvetica, Arial, Tahoma, Verdona, sans-serif;
 	padding: 0 .95em 0 0;
 	text-align: center;
 	text-decoration: none;
@@ -42,8 +42,8 @@ a.zocial {
 	font: 120%/1.65 zocial;
 	font-style: normal;
 	font-weight: normal;
-	margin: 0 0.5em 0 0;
-	padding: .3em .75em .3em .75em;
+	margin: 0 0.75em 0 0;
+	padding: .1em .75em .1em .75em;
 	text-align: center;
 	text-decoration: none;
 	text-transform: none;
@@ -83,21 +83,15 @@ a.zocial {
 /* Gradients */
 
 .zocial {
+}
+
+.zocial:hover, .zocial:focus {
 	background-image: -moz-linear-gradient(rgba(255,255,255,.1), rgba(255,255,255,.05) 49%, rgba(0,0,0,.05) 51%, rgba(0,0,0,.1));
 	background-image: -ms-linear-gradient(rgba(255,255,255,.1), rgba(255,255,255,.05) 49%, rgba(0,0,0,.05) 51%, rgba(0,0,0,.1));
 	background-image: -o-linear-gradient(rgba(255,255,255,.1), rgba(255,255,255,.05) 49%, rgba(0,0,0,.05) 51%, rgba(0,0,0,.1));
 	background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(255,255,255,.1)), color-stop(49%, rgba(255,255,255,.05)), color-stop(51%, rgba(0,0,0,.05)), to(rgba(0,0,0,.1)));
 	background-image: -webkit-linear-gradient(rgba(255,255,255,.1), rgba(255,255,255,.05) 49%, rgba(0,0,0,.05) 51%, rgba(0,0,0,.1));
 	background-image: linear-gradient(rgba(255,255,255,.1), rgba(255,255,255,.05) 49%, rgba(0,0,0,.05) 51%, rgba(0,0,0,.1));
-}
-
-.zocial:hover, .zocial:focus {
-	background-image: -moz-linear-gradient(rgba(255,255,255,.15) 49%, rgba(0,0,0,.1) 51%, rgba(0,0,0,.15));
-	background-image: -ms-linear-gradient(rgba(255,255,255,.15) 49%, rgba(0,0,0,.1) 51%, rgba(0,0,0,.15));
-	background-image: -o-linear-gradient(rgba(255,255,255,.15) 49%, rgba(0,0,0,.1) 51%, rgba(0,0,0,.15));
-	background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(255,255,255,.15)), color-stop(49%, rgba(255,255,255,.15)), color-stop(51%, rgba(0,0,0,.1)), to(rgba(0,0,0,.15)));
-	background-image: -webkit-linear-gradient(rgba(255,255,255,.15) 49%, rgba(0,0,0,.1) 51%, rgba(0,0,0,.15));
-	background-image: linear-gradient(rgba(255,255,255,.15) 49%, rgba(0,0,0,.1) 51%, rgba(0,0,0,.15));
 }
 
 .zocial:active {
