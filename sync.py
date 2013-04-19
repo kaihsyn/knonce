@@ -204,7 +204,7 @@ class SyncENHDL(request.RequestHandler):
 
 		msg += 'EDAMUser code: %s %s, parm: %s' % (str(exception.errorCode), EDAMErrorCode._VALUES_TO_NAMES[exception.errorCode], exception.parameter)
 
-		if e.errorCode == EDAMErrorCode._NAMES_TO_VALUES['AUTH_EXPIRED']:
+		if exception.errorCode == EDAMErrorCode._NAMES_TO_VALUES['AUTH_EXPIRED']:
 			unit = unit.key.get()
 			unit.token = ''
 			unit.put()
@@ -218,7 +218,7 @@ class SyncENHDL(request.RequestHandler):
 		if guid is not None:
 			msg += 'en-note-guid = %s, ' % guid
 
-		msg += 'EDAMNotFound identifier: %s, key: %s' % (self.request.get('guid'), exception.identifier, exception.key)
+		msg += 'EDAMNotFound identifier: %s, key: %s' % (exception.identifier, exception.key)
 
 		logging.error(msg)
 
