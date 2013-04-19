@@ -6,7 +6,8 @@ import logging
 import webapp2
 from webapp2_extras import routes
 from google.appengine.ext import ndb
-
+from evernote.edam.error.ttypes import EDAMErrorCode, EDAMUserException, EDAMSystemException, EDAMNotFoundException
+from evernote.edam.type.ttypes import Notebook
 import request
 from secrets import HOST
 from knonce.unit import Unit
@@ -64,16 +65,17 @@ class CallbackHDL(request.RequestHandler):
 
 	def update_info(self, client, user, token):
 
-		try:
-			user_store = client.get_user_store()
-			en_user = user_store.getUser()
-		except:
-			return False
-
 		unit = Unit.get_by_user_key(self.current_user.key)
 		if unit is None:
 			unit = Unit(id='en', parent=self.current_user.key)
 			logging.info('Create new Unit')
+
+		try:
+			user_store = client.get_user_store()
+			en_user = user_store.getUser()
+		except (EDAMUserException, EDAMSystemException) as e:
+			logging.error('Evernote Error: %s %s, parm: %s' % (str(e.errorCode), EDAMErrorCode._VALUES_TO_NAMES[e.errorCode], e.parameter))
+			return False
 
 		unit.token = token
 		unit.username = en_user.username
