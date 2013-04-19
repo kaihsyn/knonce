@@ -170,8 +170,14 @@ class SyncENHDL(request.RequestHandler):
 				short = urllib.quote(en_note.title)
 			
 			""" if short name is too long or duplicated """
-			if len(short) > 450 or len(Note.query(Note.short==short, ancestor=unit.key).fetch(1)) > 0:
+			retry = 0
+			while len(Note.query(Note.short==short, ancestor=unit.key).fetch(1)) > 0 or len(short) > 450:
 				short = self.get_lazy_short_name(unit.key)
+				retry += 1
+
+				if retry >= 10:
+					logging.error('en-note-guid = %s, faild to create lazy short name.' % en_note.guid)
+					raise Exception
 
 			note.short = short
 
@@ -182,6 +188,7 @@ class SyncENHDL(request.RequestHandler):
 
 		note.put()
 
+	@ndb.transactional
 	def get_lazy_short_name(self, unit_key):
 		unit = unit_key.get()
 		unit.name_count = unit.name_count + 1
