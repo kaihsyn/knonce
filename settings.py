@@ -12,6 +12,7 @@ import request
 from secrets import HOST
 from knonce.unit import Unit, UnitStatus
 from knonce import helper
+import re
 
 class SettingsHDL(request.RequestHandler):
 	def get(self):
@@ -33,7 +34,7 @@ class SettingsHDL(request.RequestHandler):
 		""" check if still connected """
 		unit = Unit.get_by_user_key(user.key)
 		if unit is not None and unit.token != '':
-			if unit.guid is None or unit.guid == '':
+			if unit.notebook_guid is None or unit.notebook_guid == '':
 				self.creatNotebook(unit, False)
 			template_vars['unit'] = unit
 
@@ -88,13 +89,20 @@ class SettingsHDL(request.RequestHandler):
 
 			""" check alias """
 			if self.request.get('alias'):
-				if unit.alias != self.request.get('alias') and Unit.query(Unit.alias==self.request.get('alias')).count(1) > 0:
+				alias = self.request.get('alias').lower()
+				if alias != ''.join(re.findall('[a-z0-9]+', alias.lower())):
 					self.response.status = '400 Bad Request'
-					self.response.write('Value Of \'alias\' Is Taken')
+					self.response.write('Invalid alias name.')
 					return
-				elif self.request.get('alias') == '':
+
+				if unit.alias != alias and (Unit.query(Unit.alias==alias).count(1) > 0 or helper.is_reserved_name(alias)):
 					self.response.status = '400 Bad Request'
-					self.response.write('Value Of \'alias\' Can\'t Be Empty')
+					self.response.write('Value of \'alias\' is taken')
+					return
+
+				if alias == '':
+					self.response.status = '400 Bad Request'
+					self.response.write('Value of \'alias\' can\'t be empty.')
 					return
 
 			put = False
@@ -111,6 +119,7 @@ class SettingsHDL(request.RequestHandler):
 				unit.bio = self.request.get('bio')
 				put = True
 
+			"""
 			if unit.notebook_name is None and unit.notebook_guid is None:
 				if unit.notebook_name != self.request.get('notebook_name'):
 					unit.notebook_name = self.request.get('notebook_name')
@@ -119,6 +128,7 @@ class SettingsHDL(request.RequestHandler):
 				if unit.notebook_guid != self.request.get('notebook_guid'):
 					unit.notebook_guid = self.request.get('notebook_guid')
 					put = True
+			"""
 
 			if put:
 				try:
@@ -194,6 +204,9 @@ class SettingsHDL(request.RequestHandler):
 			self.response.write('Notebook Not Found')
 			return
 
+		if unit.notebook_guid is None or unit.notebook_guid == '':
+			self.creatNotebook(unit, False)
+
 		client = helper.get_evernote_client(token=unit.token)
 
 		try:
@@ -201,7 +214,7 @@ class SettingsHDL(request.RequestHandler):
 			notebook = note_store.getNotebook(unit.token, unit.notebook_guid)
 
 		except (EDAMUserException, EDAMSystemException) as e:
-			logging.error("Evernote API Error: %s on %s." % (e.errorCode, e.parameter))
+			logging.error("Evernote API Error: %s %s on %s." % (e.errorCode, EDAMErrorCode._VALUES_TO_NAMES[e.errorCode], e.parameter))
 
 			if e.errorCode == EDAMErrorCode._NAMES_TO_VALUES['AUTH_EXPIRED']:
 				unit = unit.key.get()
@@ -250,6 +263,7 @@ class SettingsHDL(request.RequestHandler):
 			unit = Unit.get_by_user_key(user.key)
 
 		try:
+			client = helper.get_evernote_client(token=unit.token)
 			note_store = client.get_note_store()
 		except (EDAMUserException, EDAMSystemException) as e:
 			logging.error('Evernote Error: %s %s, parm: %s' % (str(e.errorCode), EDAMErrorCode._VALUES_TO_NAMES[e.errorCode], e.parameter))
@@ -259,18 +273,20 @@ class SettingsHDL(request.RequestHandler):
 
 		retry = 0
 		while unit.notebook_guid is None or unit.notebook_guid == '':
-			if retry > 0:
+			if retry >= 3: 
+				name = 'Knonce %s' % helper.code_generator(5)
+			elif retry > 0:
 				name = 'Knonce %s' % str(retry)
 			else:
 				name = 'Knonce'
 			try:
 				nb = Notebook(name=name)
-				nb = note_store.createNotebook(token, nb)
+				nb = note_store.createNotebook(unit.token, nb)
 			except (EDAMUserException, EDAMSystemException) as e:
 				if e.errorCode == EDAMErrorCode._NAMES_TO_VALUES['DATA_CONFLICT'] and e.parameter == 'Notebook.name':
 					logging.info('Evernote Error: %s %s, parm: %s' % (str(e.errorCode), EDAMErrorCode._VALUES_TO_NAMES[e.errorCode], e.parameter))
 					retry += 1
-					if retry >= 10:
+					if retry > 5:
 						if response:
 							self.response.status = '500 Internal Server Error'
 						return False
@@ -288,7 +304,7 @@ class SettingsHDL(request.RequestHandler):
 			return False
 
 		try:
-			nb = note_store.getNotebook(token, nb.guid)
+			nb = note_store.getNotebook(unit.token, nb.guid)
 		except (EDAMUserException, EDAMSystemException) as e:
 			logging.error('Evernote Error: %s %s, parm: %s' % (str(e.errorCode), EDAMErrorCode._VALUES_TO_NAMES[e.errorCode], e.parameter))
 			if response:

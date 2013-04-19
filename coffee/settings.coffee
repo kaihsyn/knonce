@@ -1,24 +1,24 @@
 # get notebook list
-get_notebook_list = ->
-	$('#nb-select-name-choose').hide()
-	$('#nb-select-spin').show()
-	$('#nb-select>select').html ''
+# get_notebook_list = ->
+# 	$('#nb-select-name-choose').hide()
+# 	$('#nb-select-spin').show()
+# 	$('#nb-select>select').html ''
 
-	$('#nb [name="choose_notebook"]').val 'true'
+# 	$('#nb [name="choose_notebook"]').val 'true'
 
-	$.get('/settings/notebook/list')
-		.done((data) ->
-			for nb in data.notebooks
-				$('#nb-select>select').append "<option value=\"#{nb.guid}\">#{nb.name}</option>"
-			$('#nb-select>select').show()
-		)
-		.fail((data) ->
-			$('#nb-select-name-choose').show()
-			$('#nb-select-msg').html('- Failed to load notebooks list.').removeClass('hide')
-		)
-		.always((data) ->
-			$('#nb-select-spin').hide()
-		)
+# 	$.get('/settings/notebook/list')
+# 		.done((data) ->
+# 			for nb in data.notebooks
+# 				$('#nb-select>select').append "<option value=\"#{nb.guid}\">#{nb.name}</option>"
+# 			$('#nb-select>select').show()
+# 		)
+# 		.fail((data) ->
+# 			$('#nb-select-name-choose').show()
+# 			$('#nb-select-msg').html('- Failed to load notebooks list.').removeClass('hide')
+# 		)
+# 		.always((data) ->
+# 			$('#nb-select-spin').hide()
+# 		)
 
 # refresh notebook name
 refreshing = false
@@ -60,9 +60,9 @@ $('#menu a').click (e) ->
 $('.kl-tooltip').tooltip()
 
 # show notebook list
-$('#nb-select-name-list').click ->
-	get_notebook_list()
-	return false
+# $('#nb-select-name-list').click ->
+# 	get_notebook_list()
+# 	return false
 
 # refresh notebook name
 $('#nb-select-name-refresh').click ->
@@ -75,9 +75,9 @@ $('#nb').submit ->
 		$('#nb-msg').html('Length of bio exceeds the max limit.').fadeIn().delay(3000).fadeOut()
 		return false
 
-	if $('#nb [name="choose_notebook"]').val() == 'true'
-		$('#nb [name="notebook_name"]').val $("#nb-select>select>[value=\"#{$('#nb-select>select').val()}\"]").html()
-		$('#nb [name="notebook_guid"]').val $('#nb-select>select').val()
+	# if $('#nb [name="choose_notebook"]').val() == 'true'
+	# 	$('#nb [name="notebook_name"]').val $("#nb-select>select>[value=\"#{$('#nb-select>select').val()}\"]").html()
+	# 	$('#nb [name="notebook_guid"]').val $('#nb-select>select').val()
 
 	$('#nb-spin').fadeIn('fast')
 	$('#nb-msg').fadeOut().html('')
@@ -90,14 +90,17 @@ $('#nb').submit ->
 	.done(->
 		$('#nb-msg').html('Settings Saved!').fadeIn().delay(5000).fadeOut()
 
-		if $('#nb [name="choose_notebook"]').val() == 'true'
-			$('#nb-select>select').hide()
-			$('#nb-select-name-show>span').html($('#nb [name="notebook_name"]').val())
-			$('#nb-select-name-show').removeClass('hide')
-			$('#nb-select-name-choose').hide()
+		# if $('#nb [name="choose_notebook"]').val() == 'true'
+		# 	$('#nb-select>select').hide()
+		# 	$('#nb-select-name-show>span').html($('#nb [name="notebook_name"]').val())
+		# 	$('#nb-select-name-show').removeClass('hide')
+		# 	$('#nb-select-name-choose').hide()
 	)
-	.fail(->
-		$('#nb-msg').html('Failed to save.').fadeIn()
+	.fail((data)->
+		if data.responseText != ''
+			$('#nb-msg').html(data.responseText).fadeIn()
+		else
+			$('#nb-msg').html('Failed to save.').fadeIn()
 	)
 	.always(->
 		$('#nb-spin').fadeOut('fast')

@@ -16,3 +16,24 @@ def get_evernote_client(token=None):
 			consumer_secret=EN_CONSUMER_SECRET,
 			sandbox=True
 		)
+
+def is_reserved_name(name):
+	reserved_name = [
+		'kaihsyn',
+		'knonce',
+		'admin',
+		'control',
+		'register',
+		'login',
+		'fuck',
+		'suck',
+		'logout',
+		'news',
+		'announce',
+		'blog',
+		'mail',
+		'web',
+		'offer',
+		'group',
+	]
+	return name in reserved_name

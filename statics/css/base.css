@@ -33,8 +33,10 @@ footer {
 #gray {
   background-color: #bbbbbb;
   padding-top: 80px;
-  padding-bottom: 20px;
-  margin-bottom: 20px; }
+  padding-bottom: 21px;
+  margin-bottom: 25px; }
+  #gray h1 {
+    margin-bottom: 6px; }
 
 .title {
   font-family: "Indie Flower", Helvetica, Arial, Verdana;
