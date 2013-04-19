@@ -6,9 +6,8 @@ import logging
 import webapp2
 from webapp2_extras import routes
 from google.appengine.ext.db import TransactionFailedError
-
+from evernote.edam.type.ttypes import Notebook
 from evernote.edam.error.ttypes import EDAMErrorCode, EDAMUserException, EDAMSystemException, EDAMNotFoundException
-
 import request
 from secrets import HOST
 from knonce.unit import Unit, UnitStatus
@@ -34,6 +33,8 @@ class SettingsHDL(request.RequestHandler):
 		""" check if still connected """
 		unit = Unit.get_by_user_key(user.key)
 		if unit is not None and unit.token != '':
+			if unit.guid is None or unit.guid == '':
+				self.creatNotebook(unit, False)
 			template_vars['unit'] = unit
 
 		""" check flashes """
@@ -234,6 +235,76 @@ class SettingsHDL(request.RequestHandler):
 			unit.put()
 
 		self.render_json({'name': notebook.name})
+
+	def creatNotebook(self, unit=None, response=True):
+
+		if not self.logged_in:
+			self.response.status = '401 Unauthorized'
+			return
+
+		if not self.current_user.active:
+			self.response.status = '401 Unauthorized'
+			return
+
+		if unit is None:
+			unit = Unit.get_by_user_key(user.key)
+
+		try:
+			note_store = client.get_note_store()
+		except (EDAMUserException, EDAMSystemException) as e:
+			logging.error('Evernote Error: %s %s, parm: %s' % (str(e.errorCode), EDAMErrorCode._VALUES_TO_NAMES[e.errorCode], e.parameter))
+			if response:
+				self.response.status = '500 Internal Server Error'
+			return False
+
+		retry = 0
+		while unit.notebook_guid is None or unit.notebook_guid == '':
+			if retry > 0:
+				name = 'Knonce %s' % str(retry)
+			else:
+				name = 'Knonce'
+			try:
+				nb = Notebook(name=name)
+				nb = note_store.createNotebook(token, nb)
+			except (EDAMUserException, EDAMSystemException) as e:
+				if e.errorCode == EDAMErrorCode._NAMES_TO_VALUES['DATA_CONFLICT'] and e.parameter == 'Notebook.name':
+					logging.info('Evernote Error: %s %s, parm: %s' % (str(e.errorCode), EDAMErrorCode._VALUES_TO_NAMES[e.errorCode], e.parameter))
+					retry += 1
+					if retry >= 10:
+						if response:
+							self.response.status = '500 Internal Server Error'
+						return False
+					continue
+				else:
+					logging.error('Evernote Error: %s %s, parm: %s' % (str(e.errorCode), EDAMErrorCode._VALUES_TO_NAMES[e.errorCode], e.parameter))
+					if response:
+						self.response.status = '500 Internal Server Error'
+					return False
+			break
+
+		if nb.guid is None:
+			if response:
+				self.response.status = '500 Internal Server Error'
+			return False
+
+		try:
+			nb = note_store.getNotebook(token, nb.guid)
+		except (EDAMUserException, EDAMSystemException) as e:
+			logging.error('Evernote Error: %s %s, parm: %s' % (str(e.errorCode), EDAMErrorCode._VALUES_TO_NAMES[e.errorCode], e.parameter))
+			if response:
+				self.response.status = '500 Internal Server Error'
+			return False
+		except EDAMNotFoundException as e:
+			logging.error('EDAMNotFound identifier: %s, key: %s' % (exception.identifier, exception.key))
+			if response:
+				self.response.status = '500 Internal Server Error'
+			return False
+
+		unit.notebook_name = nb.name
+		unit.notebook_guid = nb.guid
+
+		unit.put()
+		return True
 
 app = webapp2.WSGIApplication([
 	routes.DomainRoute('<:(www.%s|localhost)>'%HOST, [

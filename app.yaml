@@ -17,15 +17,9 @@ handlers:
 - url: /script
   static_dir: statics/script
 
-## ADMIN PAGES
+## USER PAGES
 
-- url: /cron/.*
-  script: cron.app
-  login: admin
 
-- url: /sync/.*
-  script: sync.app
-  login: admin
 
 ## WWW PAGES
 
@@ -50,11 +44,19 @@ handlers:
 - url: /settings(/.*)*
   script: settings.app
 
+## ADMIN PAGES
+
 - url: /admin(/.*)*
   script: admin.app
   login: admin
 
-## USER PAGES
+- url: /cron/.*
+  script: cron.app
+  login: admin
+
+- url: /sync/.*
+  script: sync.app
+  login: admin
 
 libraries:
 - name: webapp2
