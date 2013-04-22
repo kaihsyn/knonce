@@ -7,6 +7,7 @@ class UnitStatus():
 class Unit(ndb.Model):
 
 	""" unit information """
+	title = ndb.StringProperty(default='')
 	alias = ndb.StringProperty(default='')
 	display = ndb.StringProperty(default='')
 	bio = ndb.StringProperty(default='')

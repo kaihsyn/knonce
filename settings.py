@@ -107,6 +107,10 @@ class SettingsHDL(request.RequestHandler):
 
 			put = False
 
+			if unit.title != helper.escape(self.request.get('title')):
+				unit.title = helper.escape(self.request.get('title'))
+				put = True
+
 			if unit.alias != helper.escape(self.request.get('alias')):
 				unit.alias = helper.escape(self.request.get('alias'))
 				put = True
