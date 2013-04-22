@@ -84,8 +84,8 @@ class CallbackHDL(request.RequestHandler):
 		#generate an initial id for the unit if alias is already used
 		unit.alias = unit.username
 		x = 0
-		while Unit.query(Unit.alias==unit.alias).count(1) > 0 or not helper.is_reserved_name(unit.alias):
-			unit.alias = helper.code_generator(size=16)
+		while Unit.query(Unit.alias==unit.alias).count(1) > 0 or helper.is_reserved_name(unit.alias):
+			unit.alias = helper.code_generator(size=8)
 			x += 1
 
 			if x >= 10:

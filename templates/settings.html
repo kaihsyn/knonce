@@ -64,13 +64,6 @@ Settings | Knonce
 						<div id="nb-select-name-show" class="{#{{'hide' if unit.notebook_name is none }}#}">
 							<span>{{unit.notebook_name}}</span> <a href="#" id="nb-select-name-refresh" class="kl-tooltip" data-placement="right" title="Click here to refresh the name of your syncing notebook."><i class="icon-refresh"></i></a>
 						</div>
-						{#
-						{% if unit.notebook_name is none %}
-						<div id="nb-select-name-choose">
-							<a href="#" class="kl-tooltip" id="nb-select-name-list" data-placement="right" title="Click to change your notebook.">Choose a notebook to start!</a>
-						</div>
-						{% endif %}
-						#}
 					</span>
 					<span id="nb-select-msg" class="help-inline only hide"></span>
 				</div>
