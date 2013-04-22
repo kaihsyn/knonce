@@ -42,7 +42,7 @@ class SyncENHDL(request.RequestHandler):
 
 		unit = unit_arr[0]
 
-		if unit.token is None:
+		if unit.token is None or unit.token == '':
 			logging.info('en-note-guid = %s, unit token is none.' % self.request.get('guid'))
 			return
 
@@ -56,7 +56,7 @@ class SyncENHDL(request.RequestHandler):
 			note_store = client.get_note_store()
 			en_note = note_store.getNote(unit.token, self.request.get('guid'), False, False, False, False)
 		except (EDAMUserException, EDAMSystemException) as e:
-			return self.en_user_system_exception(e, self.request.get('guid'))
+			return self.en_user_system_exception(unit, e, self.request.get('guid'))
 		except EDAMNotFoundException as e:
 			return self.en_not_found_exception(e, self.request.get('guid'))
 
@@ -79,7 +79,7 @@ class SyncENHDL(request.RequestHandler):
 			try:
 				en_content = note_store.getNoteContent(unit.token, self.request.get('guid'))
 			except (EDAMUserException, EDAMSystemException) as e:
-				return self.en_user_system_exception(e, self.request.get('guid'))
+				return self.en_user_system_exception(unit, e, self.request.get('guid'))
 			except EDAMNotFoundException as e:
 				return self.en_not_found_exception(e, self.request.get('guid'))
 
@@ -134,7 +134,7 @@ class SyncENHDL(request.RequestHandler):
 			try:
 				en_content = note_store.getNoteContent(unit.token, self.request.get('guid'))
 			except (EDAMUserException, EDAMSystemException) as e:
-				return self.en_user_system_exception(e, self.request.get('guid'))
+				return self.en_user_system_exception(unit, e, self.request.get('guid'))
 			except EDAMNotFoundException as e:
 				return self.en_not_found_exception(e, self.request.get('guid'))
 
@@ -196,7 +196,7 @@ class SyncENHDL(request.RequestHandler):
 
 		return str(unit.name_count)
 
-	def en_user_system_exception(self, exception, guid=None):
+	def en_user_system_exception(self, unit, exception, guid=None):
 		msg = ''
 
 		if guid is not None:
