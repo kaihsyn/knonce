@@ -49,7 +49,7 @@ Settings | Knonce
 				<div class="control-label">alias</div>
 				<div class="controls">
 					<span class="help-inline no-space">http://</span>
-					<input class="input-medium" type="text" name="alias" value="{{unit.alias}}"></input>
+					<input class="input-small" type="text" name="alias" value="{{unit.alias}}"></input>
 					<span class="help-inline no-space">.{{ host }}/</span>
 				</div>
 			</div>
@@ -70,15 +70,21 @@ Settings | Knonce
 			</div>
 			<hr class="bs-docs-separator">
 			<div class="control-group">
+				<label class="control-label">title</label>
+				<div class="controls">
+					<input class="input-large" type="text" name="title" placeholder="Random Notes" value="{{unit.title}}">
+				</div>
+			</div>
+			<div class="control-group">
 				<label class="control-label">display-name</label>
 				<div class="controls">
-					<input class="input-large" type="text" name="display" placeholder="Spiderman" value="{{user.display}}">
+					<input class="input-large" type="text" name="display" placeholder="Spiderman" value="{{unit.display}}">
 				</div>
 			</div>
 			<div class="control-group">
 				<label class="control-label">bio</label>
 				<div class="controls">
-					<textarea id="f-acct-bio" class="input-xlarge" name="bio" rows="3" placeholder="tell us a little bit about you...">{{user.bio}}</textarea><br/>
+					<textarea id="f-acct-bio" class="input-xlarge" name="bio" rows="3" placeholder="tell us a little bit about you...">{{unit.bio}}</textarea><br/>
 					<span id="f-acct-bio-limit" class="help-inline only gray">max 500 characters</span>
 				</div>
 			</div>
