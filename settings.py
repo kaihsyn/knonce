@@ -72,7 +72,7 @@ class SettingsHDL(request.RequestHandler):
 
 		user = self.current_user
 		if target == 'account':
-			user.email = self.request.get('email')
+			user.email = helper.escape(self.request.get('email'))
 
 			try:
 				user.put()
@@ -89,7 +89,7 @@ class SettingsHDL(request.RequestHandler):
 
 			""" check alias """
 			if self.request.get('alias'):
-				alias = self.request.get('alias').lower()
+				alias = helper.escape(self.request.get('alias')).lower()
 				if alias != ''.join(re.findall('[a-z0-9]+', alias.lower())):
 					self.response.status = '400 Bad Request'
 					self.response.write('Invalid alias name.')
@@ -107,28 +107,17 @@ class SettingsHDL(request.RequestHandler):
 
 			put = False
 
-			if unit.alias != self.request.get('alias'):
-				unit.alias = self.request.get('alias')
+			if unit.alias != helper.escape(self.request.get('alias')):
+				unit.alias = helper.escape(self.request.get('alias'))
 				put = True
 
-			if unit.display != self.request.get('display'):
-				unit.display = self.request.get('display')
+			if unit.display != helper.escape(self.request.get('display')):
+				unit.display = helper.escape(self.request.get('display'))
 				put = True
 
-			if unit.bio != self.request.get('bio'):
-				unit.bio = self.request.get('bio')
+			if unit.bio != helper.escape(self.request.get('bio')):
+				unit.bio = helper.escape(self.request.get('bio'))
 				put = True
-
-			"""
-			if unit.notebook_name is None and unit.notebook_guid is None:
-				if unit.notebook_name != self.request.get('notebook_name'):
-					unit.notebook_name = self.request.get('notebook_name')
-					put = True
-
-				if unit.notebook_guid != self.request.get('notebook_guid'):
-					unit.notebook_guid = self.request.get('notebook_guid')
-					put = True
-			"""
 
 			if put:
 				try:

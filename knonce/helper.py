@@ -17,6 +17,9 @@ def get_evernote_client(token=None):
 			sandbox=True
 		)
 
+def escape(string):
+	return string.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;').replace('\"', '&quot;').replace('\'', '&#x27;').replace('/', '&#x2F;')
+
 def is_reserved_name(name):
 	reserved_name = [
 		'kaihsyn',
