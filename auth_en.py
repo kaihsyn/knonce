@@ -85,12 +85,13 @@ class CallbackHDL(request.RequestHandler):
 		unit.alias = unit.username
 		x = 0
 		while Unit.query(Unit.alias==unit.alias).count(1) > 0 or helper.is_reserved_name(unit.alias):
-			unit.alias = helper.code_generator(size=8)
-			x += 1
-
+			
 			if x >= 10:
 				logging.info('Failed to generate valid alias.')
 				return False
+
+			unit.alias = helper.code_generator(size=8)
+			x += 1
 				
 		logging.info('Generated alias is %s' % unit.alias)
 
