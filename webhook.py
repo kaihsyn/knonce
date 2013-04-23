@@ -43,7 +43,7 @@ class EvernoteWebhookHDL(request.RequestHandler):
     	taskqueue.add(queue_name='sync-evernote', url='/sync/evernote/note', params=params, method='GET')
 
 app = webapp2.WSGIApplication([
-    routes.DomainRoute('<:(?i)(www.%s|localhost)>'%HOST, [
+    routes.DomainRoute('<:(?i)(www\.%s|localhost)>'%HOST, [
         webapp2.Route('/hook/%s'%EN_WEBHOOK, handler='webhook.EvernoteWebhookHDL:get', name='evernote-webhook', methods=['GET'])
     ])
 ], debug=True, config=request.app_config)

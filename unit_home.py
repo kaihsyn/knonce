@@ -6,6 +6,6 @@ import logging
 import request
 
 class MainHDL(request.RequestHandler):
-	def get(self):
+	def get(self, alias=None):
 		self.render('unit/home.html')
 

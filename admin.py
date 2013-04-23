@@ -28,7 +28,7 @@ class AdminHDL(request.RequestHandler):
 		self.response.write('done!')
 
 app = webapp2.WSGIApplication([
-	routes.DomainRoute('<:(?i)(www.%s|localhost)>'%HOST, [
+	routes.DomainRoute('<:(?i)(www\.%s|localhost)>'%HOST, [
 		webapp2.Route('/admin/reset/unit/<alias>', handler='admin.AdminHDL:reset_unit', name='reset-unit', methods=['GET', 'POST']),
 		#webapp2.Route('/admin/active/<key>', handler='admin.AdminHDL:active_user', name='active-user', methods=['GET', 'POST']),
 	]),

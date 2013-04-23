@@ -145,7 +145,7 @@ class AuthHDL(request.RequestHandler, SimpleAuthHandler):
     return user_attrs
 
 app = webapp2.WSGIApplication([
-  routes.DomainRoute('<:(?i)(www.%s|localhost)>'%HOST, [
+  routes.DomainRoute('<:(?i)(www\.%s|localhost)>'%HOST, [
     webapp2.Route('/logout', handler='auth.AuthHDL:logout', name='logout'),
     webapp2.Route('/auth/<provider>', handler='auth.AuthHDL:_simple_auth', name='auth_login'),
     webapp2.Route('/auth/<provider>/callback', handler='auth.AuthHDL:_auth_callback', name='auth_callback')

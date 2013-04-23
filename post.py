@@ -10,11 +10,11 @@ import request
 from secrets import HOST
 
 class PostHDL(request.RequestHandler):
-	def get(self):
+	def get(self, alias=None):
 		self.render('unit/post.html')
 
 app = webapp2.WSGIApplication([
-	routes.DomainRoute('<alias><:(?i)(\.knonce\.com)', [
+	routes.DomainRoute('<alias><:(?i)(\.knonce\.com)>', [
 	    webapp2.Route('/post', handler='post.PostHDL:get', name='unit-post', methods=['GET'])
 	]),
 	routes.DomainRoute('localhost', [
