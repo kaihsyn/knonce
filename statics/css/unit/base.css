@@ -9,11 +9,9 @@ h1 {
 .serif {
   font-family: Sanchez, Courier, serif; }
 
-#top {
-  background-color: #bbbbbb;
-  height: 35px;
-  text-align: right;
-  padding-top: 5px; }
+.wrap {
+  padding-left: 15px;
+  padding-right: 15px; }
 
 #gray {
   padding-top: 120px;
@@ -24,7 +22,9 @@ h1 {
 #title {
   text-shadow: 1px 1px #cccccc;
   margin-bottom: 3px;
-  font-family: Sanchez, "Palatino Linotype", "Book Antiqua", "Courier New", Helvetica, Arial, Verdana, serif; }
+  font-family: Sanchez, "Palatino Linotype", "Book Antiqua", "Courier New", Helvetica, Arial, Verdana, serif;
+  width: 570px;
+  max-width: 100%; }
 
 #title.knonce {
   font-family: "Indie Flower", Sanchez, "Palatino Linotype", "Book Antiqua", "Courier New", Helvetica, Arial, Verdana, serif; }
@@ -34,8 +34,8 @@ h1 {
   font-style: italic; }
 
 footer {
-  margin-top: 80px;
-  margin-bottom: 30px; }
+  margin-top: 30px;
+  margin-bottom: 80px; }
 
 .knonce-tag {
   opacity: 0.2;
@@ -59,34 +59,69 @@ footer {
     padding-left: 0px;
     padding-right: 0px; }
 
-  .row {
-    padding-left: 20px;
-    padding-right: 20px; }
-
   #gray {
     padding-top: 40px; } }
-.klist {
-  border-bottom: 1px solid #fdfdfd;
+.tag {
+  background-color: #dddddd;
+  display: inline-block;
+  font-family: Sanchez, Courier, serif;
+  font-size: 12px;
+  margin-top: 15px;
+  padding-right: 5px;
+  padding-left: 5px; }
+
+.author {
+  color: #409997;
+  background-color: #efefef; }
+
+.info {
+  color: #666666; }
+
+.highlight {
+  padding-top: 20px;
   padding-bottom: 30px;
   max-width: 100%;
   width: 570px; }
-  .klist h1 {
+  .highlight h1 {
     color: #409997;
     font-size: 25px;
-    font-family: Sanchez, Courier, serif;
+    font-family: Sanchez, "Palatino Linotype", "Book Antiqua", "Courier New", Helvetica, Arial, Verdana, serif;
     font-weight: normal;
     line-height: 1.2em; }
-  .klist p {
-    line-height: 160%; }
-  .klist .tag {
-    background-color: #f9f9f9;
-    display: inline-block;
-    font-family: Sanchez, Courier, serif;
-    font-size: 12px;
-    margin-bottom: 5px;
-    padding-right: 5px;
-    padding-left: 5px; }
-  .klist .author {
-    color: #ff9500; }
-  .klist .info {
-    color: #333333; }
+  .highlight p {
+    margin-bottom: 0px; }
+
+.content {
+  padding-top: 5px;
+  padding-bottom: 30px;
+  margin-bottom: 30px;
+  max-width: 100%;
+  width: 570px; }
+  .content p {
+    line-height: 180%;
+    margin-bottom: 25px; }
+
+#bright {
+  background-color: #bbbbbb; }
+
+.klist {
+  width: 590px;
+  max-width: 100%;
+  margin: 20px 0px 20px 0px;
+  padding: 5px 5px 5px 5px; }
+  .klist li {
+    display: block;
+    font-family: "Helvetica Neue", Helvetica, Arial, Verdana, sans-serif;
+    font-size: 15px;
+    font-weight: normal;
+    line-height: 1.2em;
+    margin: 0px;
+    padding: 0px; }
+    .klist li a {
+      color: #333333;
+      display: block;
+      padding: 10px; }
+    .klist li a:hover, .klist li a:focus {
+      text-decoration: none;
+      background-color: #fdfdfd;
+      color: #444444; }

@@ -24,6 +24,9 @@ handlers:
 
 ## UNIT PAGES
 
+- url: /post
+  script: post.app
+
 ## WWW PAGES
 
 - url: /hook/.+

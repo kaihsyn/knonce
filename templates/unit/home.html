@@ -2,26 +2,37 @@
 
 
 {% block body_dark %}
-<h1 id="title" class="title">My Random Notes</h1>
-<!-- <h1 id="title" class="title">做，與不做之間</h1> -->
-<div class="title-line">To be, or not to be, that's the question.</div>
+<div class="wrap">
+	<h1 id="title" class="title">My Random Notes</h1>
+	<!-- <h1 id="title" class="title">做，與不做之間</h1> -->
+	<div class="title-line">To be, or not to be, that's the question.</div>
+</div>
 {% endblock %}
 		
 {% block body_light %}
-<section>
-	<div class="klist">
+<section class="wrap">
+	<div class="highlight">
 		<h1>How to code with Python and SASS</h1>
 		<p>
-			Kenneth Widmerpool is a fictional character in Anthony Powell's novel sequence A Dance to the Music of Time, a 12-volume account of upper-class and bohemian life in Britain between 1920 and 1970. Widmerpool is the antithesis of the sequence's narrator-hero Nicholas Jenkins. Initially presented as a comic, even pathetic figure, he becomes increasingly formidable, powerful and ultimately sinister as the novels progress...
+			Kenneth Widmerpool is a fictional character in Anthony Powell's novel sequence A Dance to the Music of Time, a 12-volume account of upper-class and bohemian life in Britain between 1920 and 1970. Regarded by critics as one of the more memorable characters of 20th century fiction, Widmerpool is the antithesis of the sequence's narrator-hero Nicholas Jenkins. Initially presented as a comic, even pathetic figure, he becomes increasingly formidable...
 		</p>
 		<div class="author tag">Kai-Hsin Liu</div>
 		<div class="info tag">Tuesday, April 23, 2013 1:31am</div>
 	</div>
 </section>
+{#
+<ul id="bright" class="klist">
+	<li><a href="#">25 iPhone 5 software secret tips</a></li>
+	<li><a href="#">The year of Bitcoin: Mining 101</a></li>
+	<li><a href="#">Start building your webpages with responsive design concepts</a></li>
+	<li><a href="#">Synchronize with your Evernote account, Knonce.com made it easy to main a blog</a></li>
+	<li><a href="#">Enjoy city travel around your neighborhood</a></li>
+</ul>
+#}
 {% endblock %}
 
 {% block footer %}
-<div>
+<div class="wrap">
 	<a href="http://www.knonce.com" class="knonce-tag"><img src="/img/knonce_tag.png" width="80"></a>
 </div>
 {% endblock %}

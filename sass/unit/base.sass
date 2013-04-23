@@ -2,10 +2,12 @@ $bg-light: #ededed
 $bg-dark: #bbb
 $green: #409997
 $blue: #0B54DB
-$orange: #ff9500
+$orange: #BF7021
 $serif: Sanchez, Courier, serif
 $title: Sanchez, 'Palatino Linotype', 'Book Antiqua', 'Courier New', Helvetica, Arial, Verdana, serif
 $sans-serif: 'Helvetica Neue', Helvetica, Arial, Verdana, sans-serif
+$article-width: 570px
+$wrap-padding: 15px
 
 body
 	background-color: $bg-light
@@ -18,11 +20,9 @@ h1
 .serif
 	font-family: $serif
 
-#top
-	background-color: $bg-dark
-	height: 35px
-	text-align: right
-	padding-top: 5px
+.wrap
+	padding-left: $wrap-padding
+	padding-right: $wrap-padding
 
 #gray
 	padding-top: 120px
@@ -34,6 +34,8 @@ h1
 	text-shadow: 1px 1px #ccc
 	margin-bottom: 3px
 	font-family: $title
+	width: $article-width
+	max-width: 100%
 
 #title.knonce
 	font-family: 'Indie Flower', $title
@@ -43,8 +45,8 @@ h1
 	font-style: italic
 
 footer
-	margin-top: 80px
-	margin-bottom: 30px
+	margin-top: 30px
+	margin-bottom: 80px
 
 .knonce-tag
 	opacity: 0.2
@@ -72,42 +74,79 @@ footer
 		padding-left: 0px
 		padding-right: 0px 
 
-	.row
-		padding-left: 20px
-		padding-right: 20px
-
 	#gray
 		padding-top: 40px
 
 // HOMEPAGE LIST
 
-.klist
-	border-bottom: 1px solid #fdfdfd
+.tag
+	background-color: #ddd
+	display: inline-block
+	font-family: $serif
+	font-size: 12px
+	margin-top: 15px
+	padding-right: 5px
+	padding-left: 5px
+
+.author
+	color: $green
+	background-color: #efefef
+
+.info
+	color: #666
+
+.highlight
+	padding-top: 20px
 	padding-bottom: 30px
 	max-width: 100%
-	width: 570px
+	width: $article-width
 
 	h1
 		color: $green
 		font-size: 25px
-		font-family: $serif
+		font-family: $title
 		font-weight: normal
 		line-height: 1.2em
 
 	p
-		line-height: 160%
+		margin-bottom: 0px
 
-	.tag
-		background-color: #f9f9f9
-		display: inline-block
-		font-family: $serif
-		font-size: 12px
-		margin-bottom: 5px
-		padding-right: 5px
-		padding-left: 5px
+.content
+	padding-top: 5px
+	padding-bottom: 30px
+	margin-bottom: 30px
+	max-width: 100%
+	width: $article-width
 
-	.author
-		color: $orange
+	p
+		line-height: 180%
+		margin-bottom: 25px
 
-	.info
-		color: #333
+
+#bright
+	background-color: #bbb
+
+.klist
+	width: $article-width + 20px
+	max-width: 100%
+	margin: 20px 0px 20px 0px
+	padding: 5px $wrap-padding - 10px 5px $wrap-padding - 10px
+
+	li
+		display: block
+		font-family: $sans-serif
+		font-size: 15px
+		font-weight: normal
+		line-height: 1.2em
+		margin: 0px
+		padding: 0px
+
+		a
+			color: #333
+			display: block
+			padding: 10px
+
+		a:hover, a:focus
+			text-decoration: none
+			background-color: #fdfdfd//#C9BFA9
+			color: #444
