@@ -1,0 +1,26 @@
+body {
+  background-color: #ededed; }
+
+h1 {
+  font-family: Sanchez, Courier, serif;
+  font-weight: normal;
+  font-size: 35px; }
+
+footer {
+  height: 100px;
+  margin-bottom: 60px; }
+
+.serif {
+  font-family: Sanchez, Courier, serif; }
+
+#top {
+  background-color: #bbbbbb;
+  height: 35px;
+  text-align: right;
+  padding-top: 5px; }
+
+#gray {
+  background-color: #bbbbbb;
+  padding-top: 40px;
+  padding-bottom: 21px;
+  margin-bottom: 25px; }
