@@ -71,7 +71,7 @@ $('#nb-select-name-refresh').click ->
 
 # notebook form submit
 $('#nb').submit ->
-	if $('#f-acct-bio').val().length > 500
+	if $('#bio').val().length > 500
 		$('#nb-msg').html('Length of bio exceeds the max limit.').fadeIn().delay(3000).fadeOut()
 		return false
 
@@ -109,8 +109,8 @@ $('#nb').submit ->
 	return false
 
 # bio check
-$('#f-acct-bio').change ->
-	if $('#f-acct-bio').val().length > 500
+$('#bio').change ->
+	if $('#bio').val().length > 500
 		$('#f-acct-bio-limit').addClass 'red'
 		$('#f-acct-bio-limit').removeClass 'gray'
 		$('#f-acct-btn').addClass 'disabled'

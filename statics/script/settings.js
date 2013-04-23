@@ -41,7 +41,7 @@
   });
 
   $('#nb').submit(function() {
-    if ($('#f-acct-bio').val().length > 500) {
+    if ($('#bio').val().length > 500) {
       $('#nb-msg').html('Length of bio exceeds the max limit.').fadeIn().delay(3000).fadeOut();
       return false;
     }
@@ -65,8 +65,8 @@
     return false;
   });
 
-  $('#f-acct-bio').change(function() {
-    if ($('#f-acct-bio').val().length > 500) {
+  $('#bio').change(function() {
+    if ($('#bio').val().length > 500) {
       $('#f-acct-bio-limit').addClass('red');
       $('#f-acct-bio-limit').removeClass('gray');
       return $('#f-acct-btn').addClass('disabled');
