@@ -66,16 +66,20 @@ footer {
   #gray {
     padding-top: 40px; } }
 .klist {
-  width: 570px;
-  max-width: 100%; }
+  border-bottom: 1px solid #fdfdfd;
+  padding-bottom: 30px;
+  max-width: 100%;
+  width: 570px; }
   .klist h1 {
     color: #409997;
     font-size: 25px;
     font-family: Sanchez, Courier, serif;
     font-weight: normal;
     line-height: 1.2em; }
+  .klist p {
+    line-height: 160%; }
   .klist .tag {
-    background-color: white;
+    background-color: #f9f9f9;
     display: inline-block;
     font-family: Sanchez, Courier, serif;
     font-size: 12px;
