@@ -6,10 +6,6 @@ h1 {
   font-weight: normal;
   font-size: 35px; }
 
-footer {
-  height: 100px;
-  margin-bottom: 60px; }
-
 .serif {
   font-family: Sanchez, Courier, serif; }
 
@@ -28,18 +24,30 @@ footer {
 #title {
   text-shadow: 1px 1px #cccccc;
   margin-bottom: 3px;
-  font-family: Sanchez, "Palatino Linotype", "Book Antiqua", "Courier New", Helvetica, Arial, Verdana; }
+  font-family: Sanchez, "Palatino Linotype", "Book Antiqua", "Courier New", Helvetica, Arial, Verdana, serif; }
 
 #title.knonce {
-  font-family: "Indie Flower", Sanchez, "Palatino Linotype", "Book Antiqua", "Courier New", Helvetica, Arial, Verdana; }
+  font-family: "Indie Flower", Sanchez, "Palatino Linotype", "Book Antiqua", "Courier New", Helvetica, Arial, Verdana, serif; }
 
 .title-line {
   color: #555555;
   font-style: italic; }
 
+footer {
+  margin-top: 40px;
+  margin-bottom: 30px; }
+
+.knonce-tag {
+  opacity: 0.2;
+  transition: opacity 0.35s ease-out;
+  -webkit-transition: opacity 0.35s ease-out; }
+
+.knonce-tag:hover, knonce-tag:focus {
+  opacity: 0.7; }
+
 @media (min-width: 1200px) {
   .in-row {
-    margin-left: 180px; } }
+    margin-left: 230px; } }
 @media (max-width: 1199px) and (min-width: 980px) {
   .in-row {
     margin-left: 130px; } }
@@ -57,3 +65,11 @@ footer {
 
   #gray {
     padding-top: 40px; } }
+.klist {
+  width: 570px;
+  max-width: 100%; }
+  .klist h1 {
+    font-size: 25px;
+    font-family: "Helvetica Neue", Helvetica, Arial, Verdana, sans-serif;
+    font-weight: bold;
+    line-height: 1.2em; }
