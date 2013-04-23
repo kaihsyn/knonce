@@ -4,9 +4,9 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	{% if title is defined %}
-	<title>{{ title }} // Knonce</title>
+	<title>{{ title }} // Knonce.com</title>
 	{% else %}
-	<title>{% block title %}// Knonce{% endblock %}</title>
+	<title>{% block title %}// Knonce.com{% endblock %}</title>
 	{% endif %}
 
 	<link href='http://fonts.googleapis.com/css?family=Indie+Flower|Sanchez' rel='stylesheet' type='text/css'>
@@ -19,15 +19,6 @@
 	{% block head %}{% endblock %}
 </head>
 <body>
-	<div id="top" class="row">
-	<div class="span8 offset2">
-	<div id="top">
-		{% if logged_in %}
-			<a href="/logout"><i class="icon-signout"></i> Logout</a>
-		{% endif %}
-	</div>
-	</div>
-	</div>
 
 	<div id="gray" class="row">
 	<div class="span8 offset2">

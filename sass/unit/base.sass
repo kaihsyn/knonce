@@ -1,7 +1,7 @@
 $bg-light: #ededed
 $bg-dark: #bbb
 $serif: Sanchez, Courier, serif
-
+$title: Sanchez, 'Palatino Linotype', 'Book Antiqua', 'Courier New', Helvetica, Arial, Verdana
 
 body
 	background-color: $bg-light
@@ -26,9 +26,22 @@ footer
 
 #gray
 	background-color: $bg-dark
-	padding-top: 40px
+	padding-top: 120px
 	padding-bottom: 21px
 	margin-bottom: 25px
+
+#title
+	text-shadow: 1px 1px #ccc
+	margin-bottom: 3px
+	font-family: $title
+
+#title.knonce
+	font-family: 'Indie Flower', $title
+
+.title-line
+	color: #555
+	font-style: italic
+
 
 // #top a
 // 	display: inline-block
@@ -45,10 +58,6 @@ footer
 
 // 	h1
 // 		margin-bottom: 6px
-
-// .title
-// 	font-family: 'Indie Flower', Helvetica, Arial, Verdana
-// 	text-shadow: 1px 1px #ccc
 
 // .nav-tabs
 // 	border-bottom-color: $tab-border-color
@@ -91,17 +100,17 @@ footer
 // .form-search input, .form-inline input, .form-horizontal input, .form-search textarea, .form-inline textarea, .form-horizontal textarea, .form-search select, .form-inline select, .form-horizontal select, .form-search .help-inline, .form-inline .help-inline, .form-horizontal .help-inline, .form-search .uneditable-input, .form-inline .uneditable-input, .form-horizontal .uneditable-input, .form-search .input-prepend, .form-inline .input-prepend, .form-horizontal .input-prepend, .form-search .input-append, .form-inline .input-append, .form-horizontal .input-append
 // 	font-family: $serif
 
-// @media (max-width: 767px)
-// 	body
-// 		padding-left: 0px
-// 		padding-right: 0px 
+@media (max-width: 767px)
+	body
+		padding-left: 0px
+		padding-right: 0px 
 
-// 	.row
-// 		padding-left: 20px
-// 		padding-right: 20px
+	.row
+		padding-left: 20px
+		padding-right: 20px
 
-// 	#gray
-// 		padding-top: 0px
+	#gray
+		padding-top: 40px
 
 // 	.form-horizontal .control-label
 // 		width: auto

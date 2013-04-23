@@ -21,6 +21,30 @@ footer {
 
 #gray {
   background-color: #bbbbbb;
-  padding-top: 40px;
+  padding-top: 120px;
   padding-bottom: 21px;
   margin-bottom: 25px; }
+
+#title {
+  text-shadow: 1px 1px #cccccc;
+  margin-bottom: 3px;
+  font-family: Sanchez, "Palatino Linotype", "Book Antiqua", "Courier New", Helvetica, Arial, Verdana; }
+
+#title.knonce {
+  font-family: "Indie Flower", Sanchez, "Palatino Linotype", "Book Antiqua", "Courier New", Helvetica, Arial, Verdana; }
+
+.title-line {
+  color: #555555;
+  font-style: italic; }
+
+@media (max-width: 767px) {
+  body {
+    padding-left: 0px;
+    padding-right: 0px; }
+
+  .row {
+    padding-left: 20px;
+    padding-right: 20px; }
+
+  #gray {
+    padding-top: 40px; } }
