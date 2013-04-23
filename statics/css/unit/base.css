@@ -34,7 +34,7 @@ h1 {
   font-style: italic; }
 
 footer {
-  margin-top: 40px;
+  margin-top: 80px;
   margin-bottom: 30px; }
 
 .knonce-tag {
@@ -69,7 +69,20 @@ footer {
   width: 570px;
   max-width: 100%; }
   .klist h1 {
+    color: #409997;
     font-size: 25px;
-    font-family: "Helvetica Neue", Helvetica, Arial, Verdana, sans-serif;
-    font-weight: bold;
+    font-family: Sanchez, Courier, serif;
+    font-weight: normal;
     line-height: 1.2em; }
+  .klist .tag {
+    background-color: white;
+    display: inline-block;
+    font-family: Sanchez, Courier, serif;
+    font-size: 12px;
+    margin-bottom: 5px;
+    padding-right: 5px;
+    padding-left: 5px; }
+  .klist .author {
+    color: #ff9500; }
+  .klist .info {
+    color: #333333; }

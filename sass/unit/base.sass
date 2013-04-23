@@ -1,5 +1,8 @@
 $bg-light: #ededed
 $bg-dark: #bbb
+$green: #409997
+$blue: #0B54DB
+$orange: #ff9500
 $serif: Sanchez, Courier, serif
 $title: Sanchez, 'Palatino Linotype', 'Book Antiqua', 'Courier New', Helvetica, Arial, Verdana, serif
 $sans-serif: 'Helvetica Neue', Helvetica, Arial, Verdana, sans-serif
@@ -40,7 +43,7 @@ h1
 	font-style: italic
 
 footer
-	margin-top: 40px
+	margin-top: 80px
 	margin-bottom: 30px
 
 .knonce-tag
@@ -83,7 +86,23 @@ footer
 	max-width: 100%
 
 	h1
+		color: $green
 		font-size: 25px
-		font-family: $sans-serif
-		font-weight: bold
+		font-family: $serif
+		font-weight: normal
 		line-height: 1.2em
+
+	.tag
+		background-color: #fff
+		display: inline-block
+		font-family: $serif
+		font-size: 12px
+		margin-bottom: 5px
+		padding-right: 5px
+		padding-left: 5px
+
+	.author
+		color: $orange
+
+	.info
+		color: #333
