@@ -316,7 +316,7 @@ class SettingsHDL(request.RequestHandler):
 		return True
 
 app = webapp2.WSGIApplication([
-	routes.DomainRoute('<:(www.%s|localhost)>'%HOST, [
+	routes.DomainRoute('<:(?i)(www.%s|localhost)>'%HOST, [
 		webapp2.Route(r'/settings', handler='settings.SettingsHDL:get', name='get-settings', methods=['GET']),
 	    webapp2.Route(r'/settings/<target:(notebook|account)>', handler='settings.SettingsHDL:put', name='update-settings', methods=['PUT']),
 	    webapp2.Route(r'/settings/notebook/name', handler='settings.SettingsHDL:nb_name', name='update-get-notebook-name', methods=['GET']),

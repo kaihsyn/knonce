@@ -17,17 +17,17 @@ handlers:
 - url: /script
   static_dir: statics/script
 
-## USER PAGES
+## WWW + UNIT PAGES
 
+- url: /
+  script: home.app
 
+## UNIT PAGES
 
 ## WWW PAGES
 
 - url: /hook/.+
   script: webhook.app
-
-- url: /
-  script: home.app
 
 - url: /beta
   script: home.app

@@ -223,7 +223,7 @@ class SyncENHDL(request.RequestHandler):
 		logging.error(msg)
 
 app = webapp2.WSGIApplication([
-	routes.DomainRoute('<:(www.%s|localhost)>'%HOST, [
+	routes.DomainRoute('<:(?i)(www.%s|localhost)>'%HOST, [
 		webapp2.Route('/sync/evernote/note', handler='sync.SyncENHDL:note', name='sync-evernote-note', methods=['GET'])
 	])
 ], debug=True, config=request.app_config)
