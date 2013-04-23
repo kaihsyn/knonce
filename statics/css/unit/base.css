@@ -20,9 +20,9 @@ footer {
   padding-top: 5px; }
 
 #gray {
-  background-color: #bbbbbb;
   padding-top: 120px;
   padding-bottom: 21px;
+  background-color: #bbbbbb;
   margin-bottom: 25px; }
 
 #title {
@@ -37,6 +37,15 @@ footer {
   color: #555555;
   font-style: italic; }
 
+@media (min-width: 1200px) {
+  .in-row {
+    margin-left: 180px; } }
+@media (max-width: 1199px) and (min-width: 980px) {
+  .in-row {
+    margin-left: 130px; } }
+@media (max-width: 979px) and (min-width: 768px) {
+  .in-row {
+    margin-left: 82px; } }
 @media (max-width: 767px) {
   body {
     padding-left: 0px;

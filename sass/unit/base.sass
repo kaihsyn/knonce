@@ -25,9 +25,9 @@ footer
 	padding-top: 5px
 
 #gray
-	background-color: $bg-dark
 	padding-top: 120px
 	padding-bottom: 21px
+	background-color: $bg-dark
 	margin-bottom: 25px
 
 #title
@@ -99,6 +99,18 @@ footer
 
 // .form-search input, .form-inline input, .form-horizontal input, .form-search textarea, .form-inline textarea, .form-horizontal textarea, .form-search select, .form-inline select, .form-horizontal select, .form-search .help-inline, .form-inline .help-inline, .form-horizontal .help-inline, .form-search .uneditable-input, .form-inline .uneditable-input, .form-horizontal .uneditable-input, .form-search .input-prepend, .form-inline .input-prepend, .form-horizontal .input-prepend, .form-search .input-append, .form-inline .input-append, .form-horizontal .input-append
 // 	font-family: $serif
+
+@media (min-width: 1200px)
+	.in-row
+		margin-left: 180px
+
+@media (max-width: 1199px) and (min-width: 980px)
+	.in-row
+		margin-left: 130px
+
+@media (max-width: 979px) and (min-width: 768px)
+	.in-row
+		margin-left: 82px
 
 @media (max-width: 767px)
 	body
