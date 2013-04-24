@@ -1,5 +1,5 @@
 body {
-  background-color: #ededed; }
+  background-color: #edebea; }
 
 h1 {
   font-family: Sanchez, Courier, serif;
@@ -52,7 +52,7 @@ footer {
 .nav-tabs > .active > a, .nav-tabs > .active > a:hover, .nav-tabs > .active > a:focus {
   border: 1px solid #bbbbbb;
   border-bottom-color: transparent;
-  background-color: #ededed; }
+  background-color: #edebea; }
 
 .form-horizontal .control-label {
   width: 120px; }

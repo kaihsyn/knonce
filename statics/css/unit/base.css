@@ -1,5 +1,5 @@
 body {
-  background-color: #ededed; }
+  background-color: #edebea; }
 
 h1 {
   font-family: Sanchez, Courier, serif;
@@ -92,13 +92,14 @@ footer {
     margin-bottom: 0px; }
 
 .content {
-  padding-top: 5px;
+  padding-top: 0px;
   padding-bottom: 30px;
   margin-bottom: 30px;
   max-width: 100%;
   width: 570px; }
   .content p {
-    line-height: 180%;
+    font-size: 15px;
+    line-height: 160%;
     margin-bottom: 25px; }
 
 #bright {
@@ -111,7 +112,7 @@ footer {
   padding: 5px 5px 5px 5px; }
   .klist li {
     display: block;
-    font-family: "Helvetica Neue", Helvetica, Arial, Verdana, sans-serif;
+    font-family: Verdana, Arial, sans-serif;
     font-size: 15px;
     font-weight: normal;
     line-height: 1.2em;
