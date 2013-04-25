@@ -1,5 +1,7 @@
 body {
-  background-color: #edebea; }
+  background-color: #edebea;
+  color: #121212;
+  font-family: Arial, Verdana, sans-serif; }
 
 h1 {
   font-family: Sanchez, Courier, serif;
@@ -30,7 +32,6 @@ h1 {
   font-family: "Indie Flower", Sanchez, "Palatino Linotype", "Book Antiqua", "Courier New", Helvetica, Arial, Verdana, serif; }
 
 .title-line {
-  color: #555555;
   font-style: italic; }
 
 footer {
@@ -61,6 +62,62 @@ footer {
 
   #gray {
     padding-top: 40px; } }
+@media (max-width: 480px) {
+  .knonce-tag {
+    text-align: center; } }
+.highlight {
+  padding-top: 20px;
+  padding-bottom: 30px;
+  max-width: 100%;
+  margin-bottom: 120px;
+  width: 570px; }
+  .highlight h1 {
+    color: #409997;
+    font-size: 25px;
+    font-family: Sanchez, "Palatino Linotype", "Book Antiqua", "Courier New", Helvetica, Arial, Verdana, serif;
+    font-weight: normal;
+    line-height: 1.2em;
+    margin: 0px; }
+  .highlight p {
+    margin-top: 10px; }
+
+#alist {
+  max-width: 100%;
+  width: 600px; }
+
+ul.klist {
+  list-style: none;
+  margin: 10px 0px 50px 0px; }
+  ul.klist li a {
+    background-color: #edebea;
+    display: block;
+    padding: 2px 15px 2px 15px;
+    text-decoration: none;
+    transition: background-color 0.35s ease-out;
+    -webkit-transition: background-color 0.35s ease-out; }
+    ul.klist li a h1 {
+      color: #121212;
+      font-size: 15px;
+      font-family: Arial;
+      font-weight: bold;
+      line-height: 1.25em;
+      text-decoration: none; }
+    ul.klist li a p {
+      border-left: 3px solid #cccccc;
+      color: #666666;
+      font-size: 12px;
+      padding-left: 10px; }
+  ul.klist li a:hover, ul.klist li a:focus {
+    background-color: whitesmoke; }
+  ul.klist li.date {
+    border-bottom: 1px solid #f9f9f9;
+    color: #333333;
+    font-family: Sanchez, Courier, serif;
+    font-size: 13px;
+    text-shadow: 1px 1px #f9f9f9;
+    padding: 5px 15px 5px 15px;
+    margin-bottom: 0px; }
+
 .tag {
   background-color: #dddddd;
   display: inline-block;
@@ -77,20 +134,6 @@ footer {
 .info {
   color: #666666; }
 
-.highlight {
-  padding-top: 20px;
-  padding-bottom: 30px;
-  max-width: 100%;
-  width: 570px; }
-  .highlight h1 {
-    color: #409997;
-    font-size: 25px;
-    font-family: Sanchez, "Palatino Linotype", "Book Antiqua", "Courier New", Helvetica, Arial, Verdana, serif;
-    font-weight: normal;
-    line-height: 1.2em; }
-  .highlight p {
-    margin-bottom: 0px; }
-
 .content {
   padding-top: 0px;
   padding-bottom: 30px;
@@ -101,28 +144,3 @@ footer {
     font-size: 15px;
     line-height: 160%;
     margin-bottom: 25px; }
-
-#bright {
-  background-color: #bbbbbb; }
-
-.klist {
-  width: 590px;
-  max-width: 100%;
-  margin: 20px 0px 20px 0px;
-  padding: 5px 5px 5px 5px; }
-  .klist li {
-    display: block;
-    font-family: Verdana, Arial, sans-serif;
-    font-size: 15px;
-    font-weight: normal;
-    line-height: 1.2em;
-    margin: 0px;
-    padding: 0px; }
-    .klist li a {
-      color: #333333;
-      display: block;
-      padding: 10px; }
-    .klist li a:hover, .klist li a:focus {
-      text-decoration: none;
-      background-color: #fdfdfd;
-      color: #444444; }
