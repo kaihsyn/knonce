@@ -5,7 +5,10 @@ if 'lib' not in sys.path:
 import logging
 import request
 
+from secrets import HOST
+
 class MainHDL(request.RequestHandler):
 	def get(self, alias=None):
-		self.render('unit/home.html')
+		pageval = { 'host': 'www.%s'%HOST }
+		self.render('unit/home.html', pageval)
 

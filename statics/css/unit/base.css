@@ -105,7 +105,7 @@ ul.klist {
     ul.klist li a p {
       border-left: 3px solid #cccccc;
       color: #666666;
-      font-size: 12px;
+      font-size: 13px;
       padding-left: 10px; }
   ul.klist li a:hover, ul.klist li a:focus {
     background-color: whitesmoke; }

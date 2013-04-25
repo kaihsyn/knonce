@@ -11,7 +11,8 @@ from secrets import HOST
 
 class PostHDL(request.RequestHandler):
 	def get(self, alias=None):
-		self.render('unit/post.html')
+		pageval = { 'host': 'www.%s'%HOST }
+		self.render('unit/post.html', pageval)
 
 app = webapp2.WSGIApplication([
 	routes.DomainRoute('<alias><:(?i)(\.knonce\.com)>', [
