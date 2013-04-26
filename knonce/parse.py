@@ -37,3 +37,6 @@ def parse_evernote(raw):
 	logging.info('parse time: %s ms.' % str((time.time() - start_time) * 1000))
 
 	return raw
+
+def create_summary(raw):
+	return raw

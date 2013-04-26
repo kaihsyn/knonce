@@ -8,6 +8,7 @@ class Unit(ndb.Model):
 
 	""" unit information """
 	title = ndb.StringProperty(default='')
+	sub_title = ndb.StringProperty(default='')
 	alias = ndb.StringProperty(default='')
 	display = ndb.StringProperty(default='')
 	bio = ndb.StringProperty(default='')
@@ -20,7 +21,7 @@ class Unit(ndb.Model):
 	token = ndb.StringProperty(default='')
 	
 	""" unit status """
-	name_count = ndb.IntegerProperty(default=0, indexed = False)
+	name_count = ndb.IntegerProperty(default=0)
 	status = ndb.IntegerProperty(default=UnitStatus.Active)
 
 	@staticmethod

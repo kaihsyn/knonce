@@ -4,6 +4,7 @@ class Note(ndb.Model):
 	usn = ndb.IntegerProperty(indexed=False)
 	short = ndb.StringProperty(required=True)
 	title = ndb.StringProperty(default='', indexed=False)
+	summary = ndb.TextProperty(default='')
 	content = ndb.TextProperty(default='')
 	updated = ndb.IntegerProperty(indexed=False)
 	created = ndb.IntegerProperty()

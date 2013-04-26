@@ -182,6 +182,7 @@ class SyncENHDL(request.RequestHandler):
 			note.short = short
 
 		note.content = parse.parse_evernote(en_content)
+		note.summary = parse.create_summary(note.content)
 		note.usn = en_note.updateSequenceNum
 		note.updated = en_note.updated
 		note.created = en_note.created
