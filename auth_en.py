@@ -3,6 +3,7 @@ if 'lib' not in sys.path:
 	sys.path[0:0] = ['lib']
 
 import logging
+import string
 import webapp2
 from webapp2_extras import routes
 from google.appengine.ext import ndb
@@ -82,7 +83,7 @@ class CallbackHDL(request.RequestHandler):
 		unit.user_id = en_user.id
 
 		#generate an initial id for the unit if alias is already used
-		unit.alias = unit.username
+		unit.alias = unit.username.lower()
 		x = 0
 		while Unit.query(Unit.alias==unit.alias).count(1) > 0 or helper.is_reserved_name(unit.alias):
 			
@@ -90,7 +91,7 @@ class CallbackHDL(request.RequestHandler):
 				logging.info('Failed to generate valid alias.')
 				return False
 
-			unit.alias = helper.code_generator(size=8)
+			unit.alias = helper.code_generator(size=8, chars=string.ascii_lowercase + string.digits)
 			x += 1
 				
 		logging.info('Generated alias is %s' % unit.alias)
