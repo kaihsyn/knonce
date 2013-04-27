@@ -15,7 +15,7 @@
 {% block body_light %}
 <section class="wrap">
 	<div class="content">
-		{{ note.content }}
+		{{ note.content|safe }}
 	</div>
 </section>
 {% endblock %}
