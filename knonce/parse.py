@@ -39,4 +39,8 @@ def parse_evernote(raw):
 	return raw
 
 def create_summary(raw):
-	return raw
+
+	""" remove all tags """
+	raw = re.sub('<.*>', '', raw)
+
+	return raw[:280]
