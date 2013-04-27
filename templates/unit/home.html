@@ -1,33 +1,32 @@
 {% extends "unit/base.html" %}
 
-
 {% block body_dark %}
 <div class="wrap">
-	<h1 id="title" class="title">My Random Notes</h1>
-	<!-- <h1 id="title" class="title">做，與不做之間</h1> -->
-	<div class="title-line">To be, or not to be, that's the question.</div>
+	<h1 id="title" class="title">{{ unit.title }}</h1>
+	{% if unit.sub_title is defined and unit.sub_title is not '' %}
+		<div class="title-line">{{  unit.sub_title }}</div>
+	{% endif %}
 </div>
 {% endblock %}
 		
 {% block body_light %}
-{#
-<section class="wrap">
-	<div class="highlight">
-		<h1>How to code with Python and SASS</h1>
-		<p>
-			Kenneth Widmerpool is a fictional character in Anthony Powell's novel sequence A Dance to the Music of Time, a 12-volume account of upper-class and bohemian life in Britain between 1920 and 1970. Regarded by critics as one of the more memorable characters of 20th century fiction, Widmerpool is the antithesis of the sequence's narrator-hero Nicholas Jenkins. Initially presented as a comic, even pathetic figure, he becomes increasingly formidable.
-		</p>
-		<p>
-			Life in Britain between 1920 and 1970. Regarded by critics as one of the more memorable characters of 20th century fiction, Widmerpool is the antithesis of the sequence's narrator-hero Nicholas Jenkins. Initially presented as a comic, even pathetic figure, he becomes increasingly formidable
-		</p>
-		<p>
-			Kenneth Widmerpool is a fictional character in Anthony Powell's novel sequence A Dance to the Music of Time, a 12-volume account of upper-class and bohemian life in Britain between 1920 and 1970. Regarded by critics as one of.
-	</div>
-</section>
-#}
-
 <section id="alist">
 <h1 class="hide">Article List</h1>
+{% for list in notes %}
+<ul class="klist">
+	<li class="date">Wednesday, April 25, 2013</li>
+	{% for note in list %}
+	<li>
+		<a href="/post/{{ note.short }}">
+			<h1>{{ note.title }}</h1>
+			<p>{{ note.summary }}</p>
+		</a>
+	</li>
+	{% endfor %}
+</ul>
+{% endfor %}
+
+{#
 <ul class="klist">
 	<li class="date">Wednesday, April 25, 2013</li>
 	<li>
@@ -88,6 +87,7 @@
 		</a>
 	</li>
 </ul>
+#}
 </section>
 {% endblock %}
 
