@@ -167,11 +167,11 @@ class SyncENHDL(request.RequestHandler):
 			if all(c in string.printable for c in en_note.title):
 				short = '-'.join(re.findall('\w+', en_note.title)).lower()
 			else:
-				short = urllib.quote(en_note.title)
+				short = urllib.quote(en_note.title.encode('utf-8'))
 			
 			""" if short name is too long or duplicated """
 			retry = 0
-			while len(Note.query(Note.short==short, ancestor=unit.key).fetch(1)) > 0 or len(short) > 450:
+			while Note.query(Note.short==short, ancestor=unit.key).get() is not None or len(short) > 450:
 				short = self.get_lazy_short_name(unit.key)
 				retry += 1
 

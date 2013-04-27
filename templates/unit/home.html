@@ -2,9 +2,13 @@
 
 {% block body_dark %}
 <div class="wrap">
+	{% if unit.title is defined and unit.title != '' %}
 	<h1 id="title" class="title">{{ unit.title }}</h1>
-	{% if unit.sub_title is defined and unit.sub_title is not '' %}
-		<div class="title-line">{{  unit.sub_title }}</div>
+	{% else %}
+	<h1 id="title" class="title">Untitled</h1>	
+	{% endif %}
+	{% if unit.sub_title is defined and unit.sub_title != '' %}
+	<div class="title-line">{{  unit.sub_title }}</div>
 	{% endif %}
 </div>
 {% endblock %}
@@ -14,8 +18,8 @@
 <h1 class="hide">Article List</h1>
 {% for list in notes %}
 <ul class="klist">
-	<li class="date">Wednesday, April 25, 2013</li>
-	{% for note in list %}
+	<li class="date">{{ list.strftime('%A, %B %d, %Y') }}</li>
+	{% for note in notes[list] %}
 	<li>
 		<a href="/post/{{ note.short }}">
 			<h1>{{ note.title }}</h1>

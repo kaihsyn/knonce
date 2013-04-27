@@ -97,7 +97,7 @@ class SettingsHDL(request.RequestHandler):
 
 				if unit.alias != alias and (Unit.query(Unit.alias==alias).count(1) > 0 or helper.is_reserved_name(alias)):
 					self.response.status = '400 Bad Request'
-					self.response.write('Value of \'alias\' is taken')
+					self.response.write('Value of \'alias\' is taken.')
 					return
 
 				if alias == '':
