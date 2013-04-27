@@ -3,11 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	{% if title is defined %}
-	<title>{{ title }} // Knonce.com</title>
-	{% else %}
-	<title>{% block title %}// Knonce.com{% endblock %}</title>
-	{% endif %}
+	<title>{% block title %}{{ unit.title + ' ' if unit is defined else '' }}{% endblock %}// Knonce</title>
 
 	<link href='http://fonts.googleapis.com/css?family=Sanchez' rel='stylesheet' type='text/css'>
 

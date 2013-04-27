@@ -38,5 +38,12 @@ def is_reserved_name(name):
 		'web',
 		'offer',
 		'group',
+		'develop',
+		'dev',
+		'api',
+		'shit',
+		'register',
+		'contact',
+		'support',
 	]
 	return name in reserved_name

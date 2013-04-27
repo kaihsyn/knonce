@@ -11,8 +11,9 @@ from knonce.unit import Unit
 from collections import OrderedDict
 
 class MainHDL(request.RequestHandler):
-	def get(self, alias='pvbl311z'):
+	def get(self, alias=None):
 
+		""" check required data """
 		if alias is None:
 			return self.redirect('http://www.knonce.com/')
 
@@ -32,9 +33,9 @@ class MainHDL(request.RequestHandler):
 			'notes': OrderedDict() }
 
 		for note in notes:
-			if note.date not in pageval['notes']:
-				pageval['notes'][note.date] = []
-			pageval['notes'][note.date].append(note)
+			if note.date.date() not in pageval['notes']:
+				pageval['notes'][note.date.date()] = []
+			pageval['notes'][note.date.date()].append(note)
 
 		self.render('unit/home.html', pageval)
 

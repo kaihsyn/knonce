@@ -65,22 +65,6 @@ footer {
 @media (max-width: 480px) {
   .knonce-tag {
     text-align: center; } }
-.highlight {
-  padding-top: 20px;
-  padding-bottom: 30px;
-  max-width: 100%;
-  margin-bottom: 120px;
-  width: 570px; }
-  .highlight h1 {
-    color: #409997;
-    font-size: 25px;
-    font-family: Sanchez, "Palatino Linotype", "Book Antiqua", "Courier New", Helvetica, Arial, Verdana, serif;
-    font-weight: normal;
-    line-height: 1.2em;
-    margin: 0px; }
-  .highlight p {
-    margin-top: 10px; }
-
 #alist {
   max-width: 100%;
   width: 600px; }
@@ -95,7 +79,7 @@ ul.klist {
     text-decoration: none;
     transition: background-color 0.35s ease-out;
     -webkit-transition: background-color 0.35s ease-out; }
-    ul.klist li a h1 {
+    ul.klist li a h1, ul.klist li a h2 {
       color: #121212;
       font-size: 15px;
       font-family: Arial;

@@ -157,7 +157,7 @@ class SyncENHDL(request.RequestHandler):
 			note = Note(id='en-%s'%en_note.guid, parent=unit.key)
 
 		""" set note title """
-		en_note.title = en_note.title.decode('utf-8')
+		en_note.title = en_note.title #.decode('utf-8')
 
 		if note.title != en_note.title:
 
@@ -167,11 +167,13 @@ class SyncENHDL(request.RequestHandler):
 			if all(c in string.printable for c in en_note.title):
 				short = '-'.join(re.findall('\w+', en_note.title)).lower()
 			else:
-				short = urllib.quote(en_note.title.encode('utf-8'))
-			
+				#short = urllib.quote(en_note.title.encode('utf-8')).lower()
+				#short = re.sub('\W+', '-', en_note.title.encode('utf-8')).lower()
+				short = re.sub('\s+', '-', en_note.title, flags=re.U).lower()
+
 			""" if short name is too long or duplicated """
 			retry = 0
-			while Note.query(Note.short==short, ancestor=unit.key).get() is not None or len(short) > 450:
+			while len(short) > 450 or Note.query(Note.short==short, ancestor=unit.key).get() is not None:
 				short = self.get_lazy_short_name(unit.key)
 				retry += 1
 
