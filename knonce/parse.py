@@ -13,12 +13,30 @@ def parse_evernote(raw):
 	raw = re.sub('^(<\!DOCTYPE +)[ A-Za-z0-9\."\-_:\/&=%]*>\s*', '', raw, 1)
 
 	""" replace en-note """
-	subn = re.subn('<en\-note( +((?!>).)*)* *>', '', raw, 1)
-	if subn[1] > 0:
-		raw = subn[0]
-		raw = re.sub('</en\-note *>', '', raw, 1)
-	else:
-		raw = re.sub('<en\-note */>', '', raw, 1)
+	sub_match = re.findall('<en-note(.*?)>',raw,re.M|re.I)
+	for en_sub in sub_match:
+		split = re.split('[ =]',en_sub)
+		temp_str = ""
+		insert = False
+		for s in split:
+			if s != "":
+				if insert:
+					insert = False
+					temp_str+="="+s
+				elif s == 'title':
+					insert = True
+					temp_str+=" "+s
+				elif s == 'style':
+					insert = True
+					temp_str+=" "+s
+				elif s == 'lang':
+					insert = True
+					temp_str+=" "+s
+				elif s == 'xml:lang':
+					insert = True
+					temp_str+=" "+s
+		raw = raw.replace(en_sub,temp_str)
+	raw = raw.replace('en-note','div')
 
 	""" replace en-crypt """
 	raw = re.sub('<en\-crypt( +((?!>).)*)* *>((?!(</en\-crypt *>)).)*</en\-crypt *>', '', raw)
@@ -44,3 +62,4 @@ def create_summary(raw):
 	raw = re.sub('<((?![<>]).)*>', '', raw)
 
 	return raw[:280]
+
