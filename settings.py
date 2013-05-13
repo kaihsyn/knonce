@@ -209,9 +209,11 @@ class SettingsHDL(request.RequestHandler):
 		try:
 			note_store = client.get_note_store()
 			notebook = note_store.getNotebook(unit.token, unit.notebook_guid)
-
 		except (EDAMUserException, EDAMSystemException) as e:
-			logging.error("Evernote API Error: %s %s on %s." % (e.errorCode, EDAMErrorCode._VALUES_TO_NAMES[e.errorCode], e.parameter))
+			if hasattr(e, 'parameter'):
+				logging.error("Evernote API Error: %s %s on %s." % (e.errorCode, EDAMErrorCode._VALUES_TO_NAMES[e.errorCode], e.parameter))
+			elif hasattr(e, 'message'):
+				logging.error('Evernote Error: %s %s, msg: %s' % (str(e.errorCode), EDAMErrorCode._VALUES_TO_NAMES[e.errorCode], e.message))
 
 			if e.errorCode == EDAMErrorCode._NAMES_TO_VALUES['AUTH_EXPIRED']:
 				unit = unit.key.get()
@@ -262,8 +264,13 @@ class SettingsHDL(request.RequestHandler):
 		try:
 			client = helper.get_evernote_client(token=unit.token)
 			note_store = client.get_note_store()
-		except (EDAMUserException, EDAMSystemException) as e:
+		except EDAMUserException as e:
 			logging.error('Evernote Error: %s %s, parm: %s' % (str(e.errorCode), EDAMErrorCode._VALUES_TO_NAMES[e.errorCode], e.parameter))
+			if response:
+				self.response.status = '500 Internal Server Error'
+			return False
+		except EDAMSystemException as e:
+			logging.error('Evernote Error: %s %s, msg: %s' % (str(e.errorCode), EDAMErrorCode._VALUES_TO_NAMES[e.errorCode], e.message))
 			if response:
 				self.response.status = '500 Internal Server Error'
 			return False
