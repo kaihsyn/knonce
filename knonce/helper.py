@@ -9,12 +9,12 @@ def code_generator(size=16, chars=string.ascii_uppercase + string.digits):
 
 def get_evernote_client(token=None):
 	if token:
-		return EvernoteClient(token=token, sandbox=True)
+		return EvernoteClient(token=token, sandbox=False)
 	else:
 		return EvernoteClient(
 			consumer_key=EN_CONSUMER_KEY,
 			consumer_secret=EN_CONSUMER_SECRET,
-			sandbox=True
+			sandbox=False
 		)
 
 def escape(string):
