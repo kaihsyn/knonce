@@ -1,33 +1,17 @@
 {% extends "base.html" %}
 
 {% block title %}
-Settings // Knonce
+Settings // mxchar
 {% endblock %}
 
 {% block head %}
-<style>
-#nb-select-name a [class^="icon-"] {
-	color: #999;
-	margin-left: 5px;
-	margin-right: 5px;
-}
-
-#nb-select-name a [class^="icon-"]:hover, #nb-select-name a [class^="icon-"]:active {
-	color: #333;
-	text-decoration: none;
-}
-
-#nb-select-name a [class^="icon-"].icon-spin:hover, #nb-select-name a [class^="icon-"].icon-spin:active {
-	color: #999;
-}
-</style>
 {% endblock %}
 
-{% block body_dark %}
-<h1>Settings</h1>
+{% block neck %}
+<h1 class="title">Settings // mxchar</h1>
 {% endblock %}
 
-{% block body_light %}
+{% block chest %}
 
 {% if msg is defined %}
 <div class="alert alert-{{ msg.type }}">
@@ -140,12 +124,10 @@ Settings // Knonce
 	</div>
 </div>
 {% else %}
-<p>
-	Let's get started by coonecting your Evernote account.
-</p>
-<p>
-	<a href="/auth/evernote" class="zocial evernote">Connect with Evernote</a>
-</p>
+<div>
+    <i class="fa fa-keyboard-o"></i><br>
+	Let's get started by <a href="/auth/evernote">connecting your Evernote account</a>.
+</div>
 {% endif %}
 
 {% endblock %}

@@ -1,7 +1,7 @@
 import string
 import random
 
-from evernote.api.client import EvernoteClient
+from lib.evernote.api.client import EvernoteClient
 from secrets import EN_CONSUMER_KEY, EN_CONSUMER_SECRET
 
 def code_generator(size=16, chars=string.ascii_uppercase + string.digits):

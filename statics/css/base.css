@@ -1,123 +1,19 @@
 body {
-  background-color: #edebea; }
+  color: #888888;
+  font-family: "calluna-1", "calluna-2"; }
 
-h1 {
-  font-family: Sanchez, Courier, serif;
-  font-weight: normal;
-  font-size: 35px; }
+a {
+  color: #222222; }
 
-footer {
-  height: 100px;
-  margin-bottom: 60px; }
-
-.serif {
-  font-family: Sanchez, Courier, serif; }
-
-#top {
-  background-color: #bbbbbb;
-  height: 35px;
-  text-align: right;
-  padding-top: 5px; }
-
-#top a {
-  display: inline-block;
+a:hover {
+  background-color: #222222;
   color: white;
-  font-family: Sanchez, Courier, serif; }
-
-#top a:hover {
   text-decoration: none; }
 
-#top a:active {
-  margin-top: 1px; }
-
-#gray {
-  background-color: #bbbbbb;
-  padding-top: 80px;
-  padding-bottom: 21px;
-  margin-bottom: 25px; }
-  #gray h1 {
-    margin-bottom: 6px; }
+#neck {
+  margin-top: 45px;
+  margin-bottom: 20px; }
 
 .title {
-  font-family: "Indie Flower", Helvetica, Arial, Verdana;
-  text-shadow: 1px 1px #cccccc; }
-
-.nav-tabs {
-  border-bottom-color: #bbbbbb;
-  margin-bottom: 45px; }
-
-.nav-tabs > li > a:hover, .nav-tabs > li > a:focus {
-  border-color: transparent transparent #bbbbbb; }
-
-.nav-tabs > .active > a, .nav-tabs > .active > a:hover, .nav-tabs > .active > a:focus {
-  border: 1px solid #bbbbbb;
-  border-bottom-color: transparent;
-  background-color: #edebea; }
-
-.form-horizontal .control-label {
-  width: 120px; }
-
-.form-horizontal .controls {
-  margin-left: 140px; }
-
-div.control-label {
-  margin-bottom: 5px; }
-
-.help-inline {
-  display: inline-block; }
-
-.help-inline.only {
-  margin-top: 5px;
-  padding-left: 0px;
-  color: #409997; }
-
-.help-inline.no-space {
-  padding-left: 0px; }
-
-.help-inline.gray {
-  color: #999999; }
-
-.help-inline.red {
-  color: #cc0000; }
-
-.form-search input, .form-inline input, .form-horizontal input, .form-search textarea, .form-inline textarea, .form-horizontal textarea, .form-search select, .form-inline select, .form-horizontal select, .form-search .help-inline, .form-inline .help-inline, .form-horizontal .help-inline, .form-search .uneditable-input, .form-inline .uneditable-input, .form-horizontal .uneditable-input, .form-search .input-prepend, .form-inline .input-prepend, .form-horizontal .input-prepend, .form-search .input-append, .form-inline .input-append, .form-horizontal .input-append {
-  font-family: Sanchez, Courier, serif; }
-
-@media (max-width: 767px) {
-  body {
-    padding-left: 0px;
-    padding-right: 0px; }
-
-  .row {
-    padding-left: 20px;
-    padding-right: 20px; }
-
-  #gray {
-    padding-top: 0px; }
-
-  .form-horizontal .control-label {
-    width: auto; }
-
-  .form-horizontal .controls {
-    margin-left: 0px; }
-
-  footer {
-    margin-bottom: 0px; }
-
-  #uvTab {
-    top: 75% !important; } }
-@media (min-width: 767px) {
-  #uvTab {
-    border-right-width: 1px !important;
-    border-left-width: 0px !important;
-    background-image: url(http://widget.uservoice.com/images/clients/widget2/tab-left-dark.png) !important;
-    right: auto !important;
-    left: 0px !important;
-    border-top-left-radius: 0px !important;
-    border-top-right-radius: 4px !important;
-    border-bottom-right-radius: 4px !important;
-    border-bottom-left-radius: 0px !important;
-    border-style: solid solid solid none !important;
-    border-right-color: white !important;
-    -webkit-box-shadow: rgba(255, 255, 255, 0.24706) 1px 1px 1px inset, rgba(0, 0, 0, 0.49804) 0px 1px 2px !important;
-    box-shadow: rgba(255, 255, 255, 0.24706) 1px 1px 1px inset, rgba(0, 0, 0, 0.49804) 0px 1px 2px !important; } }
+  color: #787833;
+  font-family: "museo-1", "museo-2"; }
