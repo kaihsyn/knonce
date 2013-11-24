@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}
+Setup // mxchar
+{% endblock %}
+
+{% block head %}
+{% endblock %}
+
+{% block neck %}
+<div class="mxc-block mxc-bread">
+	<i class="fa fa-terminal fa-fw"></i> <h2 class="mxc-text">mxchar &gt; setup &gt; edit-website</h2>
+</div>
+{% endblock %}
+
+{% block chest %}
+<form class="mxc-form" role="form" method="post">
+	<div class="form-group">
+		<label for="unit-title">Title</label>
+		<input type="text" class="form-control" id="unit-title" name="title" placeholder="<empty title>" value="{{unit.title}}">
+	</div>
+	<div class="form-group">
+		<label for="unit-sub-title">One-line Description</label>
+		<input type="text" class="form-control" id="unit-sub-title" name="sub-title" placeholder="<empty description>" value="{{unit.sub_title}}">
+	</div>
+	<div class="form-group">
+		<label for="unit-alias">Url</label><br>
+		<div class="mxc-website-url">http://</div>
+		<input type="text" class="form-control mxc-website-url" id="unit-alias" name="alias" value="{{unit.alias}}">
+		<div class="mxc-website-url">.mxchar.com/</div>
+	</div>
+	<div class="form-group">
+		<br>
+		<button type="submit" class="btn btn-default mxc-text">Submit</button>
+	</div>
+</form>
+{% endblock %}

@@ -1,23 +1,20 @@
-import sys
-sys.path.append('./lib')
-
+import evernote.api.client.EvernoteClient as EvernoteClient
+import logging
 import re
+import request
+import string
 import urllib
 import webapp2
-import logging
-import string
-from google.appengine.ext import ndb
-from webapp2_extras import routes
-from secrets import HOST
-import request
+
 from evernote.edam.error.ttypes import EDAMErrorCode, EDAMUserException, EDAMSystemException, EDAMNotFoundException
-from knonce.unit import Unit, UnitStatus
-from knonce.note import Note
+from google.appengine.ext import ndb
 from knonce import helper
 from knonce import parse
-
-class SyncSettings:
-	max_length = 3200
+from knonce.contract import Contract
+from knonce.note import Note
+from knonce.unit import Unit, UnitStatus
+from secrets import HOST
+from webapp2_extras import routes
 
 class SyncENHDL(request.RequestHandler):
 	def note(self):
@@ -31,7 +28,7 @@ class SyncENHDL(request.RequestHandler):
 
 		""" get unit info """
 		try:
-			unit_arr = Unit.query(Unit.user_id==int(self.request.get('user_id'))).fetch(1, projection=['notebook_guid', 'token', 'status'])
+			unit_arr = Unit.query(Unit.user_id==int(self.request.get('user_id'))).fetch(1, projection=['token'])
 		except ValueError:
 			logging.error('en-user-id = %s, wrong user_id format.' % self.request.get('user_id'))
 			return
@@ -46,13 +43,9 @@ class SyncENHDL(request.RequestHandler):
 			logging.info('en-note-guid = %s, unit token is none.' % self.request.get('guid'))
 			return
 
-		if unit.status != UnitStatus.Active:
-			logging.info('en-note-guid = %s, unit not active.' % self.request.get('guid'))
-			return
-
 		""" get note metadata """
 		try:
-			client = helper.get_evernote_client(token=unit.token)
+			client = EvernoteClient(token=unit.token, sandbox=False)
 			note_store = client.get_note_store()
 			en_note = note_store.getNote(unit.token, self.request.get('guid'), False, False, False, False)
 		except (EDAMUserException, EDAMSystemException) as e:
@@ -60,134 +53,53 @@ class SyncENHDL(request.RequestHandler):
 		except EDAMNotFoundException as e:
 			return self.en_not_found_exception(e, self.request.get('guid'))
 
-		""" start sync """
-		if self.request.get('reason') == 'create':
-
-			""" check notebook """
-			if en_note.notebookGuid != unit.notebook_guid:
-				""" skip sync """
-				logging.info('skipped: not in notebook')
-				return
-
-			""" check length """
-			if en_note.contentLength > SyncSettings.max_length:
-				""" skip sync """
-				logging.info('skipped: length exceed limit, do not create note')
-				return
-
-			""" SYNC: create a new note """
-			try:
-				en_content = note_store.getNoteContent(unit.token, self.request.get('guid'))
-			except (EDAMUserException, EDAMSystemException) as e:
-				return self.en_user_system_exception(unit, e, self.request.get('guid'))
-			except EDAMNotFoundException as e:
-				return self.en_not_found_exception(e, self.request.get('guid'))
-
-			self.make_note(None, unit, en_note, en_content)
-			
-			logging.info('en-note-guid = %s, created and synced.' % self.request.get('guid'))
-
-		elif self.request.get('reason') == 'update':
+		""" get note entity """
+		note = None
+		if self.request.get('reason') == 'update' or self.request.get('business_update'):
 
 			note = ndb.Key(flat=list(unit.key.flat())+['Note', 'en-%s' % en_note.guid]).get()
 
-			if en_note.notebookGuid == unit.notebook_guid:
+		""" check if note is deleted """
+		if en_note.deleted is not None and note is not None:
+			""" deleted """
+			note.key.delete()
+			logging.info('en-note-guid = %s, deleted from notebook.' % self.request.get('guid'))
+			return
 
-				if note is not None:
+		""" create a new note is it doesn't exist in datastore """
+		if note is None:
+			""" create new note """
+			note = Note(id='en-%s'%en_note.guid, parent=unit.key)
+			logging.info('note is none %s'%str(list(unit.key.flat())+['Note', 'en-%s'%en_note.guid]))
 
-					if en_note.deleted is not None:
-						""" deleted """
-						note.key.delete()
-						logging.info('en-note-guid = %s, deleted from notebook.' % self.request.get('guid'))
-						return
+		""" sync note content """
+		try:
+			en_content = note_store.getNoteContent(unit.token, self.request.get('guid'))
+		except (EDAMUserException, EDAMSystemException) as e:
+			return self.en_user_system_exception(unit, e, self.request.get('guid'))
+		except EDAMNotFoundException as e:
+			return self.en_not_found_exception(e, self.request.get('guid'))
 
-					if en_note.contentLength > SyncSettings.max_length:
-						""" check length """
-						note.key.delete()
-						logging.info('skipped: length exceed limit, delete current note')
-						return
-
-			else:
-
-				if note is None:
-					logging.info('note is none %s'%str(list(unit.key.flat())+['Note', 'en-%s'%en_note.guid]))
-					return
-
-				if en_note.deleted is not None:
-					""" deleted """
-					note.key.delete()
-					logging.info('en-note-guid = %s, deleted from notebook.' % self.request.get('guid'))
-					return
-
-				elif en_note.notebookGuid != unit.notebook_guid:
-					""" moved to other notebook """
-					note.key.delete()
-					logging.info('en-note-guid = %s, delete note since moved out of notebook.' % self.request.get('guid'))
-					return
-
-				else:
-					""" moved to other notebook """
-					note.key.delete()
-					logging.warning('en-note-guid = %s, action cause note to be deleted.' % self.request.get('guid'))
-					return
-
-			try:
-				en_content = note_store.getNoteContent(unit.token, self.request.get('guid'))
-			except (EDAMUserException, EDAMSystemException) as e:
-				return self.en_user_system_exception(unit, e, self.request.get('guid'))
-			except EDAMNotFoundException as e:
-				return self.en_not_found_exception(e, self.request.get('guid'))
-
-			""" SYNC: check if the note is in database, if not, create one """
-			add = False
-			if note is None:
-				add = True
-
-			""" MAKE NOTE """
-			self.make_note(note, unit, en_note, en_content)
-
-			if add:
-				logging.info('en-note-guid = %s, created and synced in update.' % self.request.get('guid'))
-			else:
-				logging.info('en-note-guid = %s, synced.' % self.request.get('guid'))
+		self.make_note(note, unit, en_note, en_content)
+		logging.info('en-note-guid = %s, synced.' % self.request.get('guid'))
 
 	@ndb.transactional(xg=True)
 	def make_note(self, note, unit, en_note, en_content):
-		if note is None:
-			note = Note(id='en-%s'%en_note.guid, parent=unit.key)
 
-		""" set note title """
-		en_note.title = en_note.title #.decode('utf-8')
+		Contract.requires_not_none(note)
+		Contract.requires_not_none(unit)
+		Contract.requires_not_none(en_note)
+		Contract.requires_not_none(en_content)
 
-		if note.title != en_note.title:
-
-			note.title = en_note.title
-
-			""" handle english and non-english short name """
-			if all(c in string.printable for c in en_note.title):
-				short = '-'.join(re.findall('\w+', en_note.title)).lower()
-			else:
-				#short = urllib.quote(en_note.title.encode('utf-8')).lower()
-				#short = re.sub('\W+', '-', en_note.title.encode('utf-8')).lower()
-				short = re.sub('\s+', '-', en_note.title, flags=re.U).lower()
-
-			""" if short name is too long or duplicated """
-			retry = 0
-			while len(short) > 450 or Note.query(Note.short==short, ancestor=unit.key).get() is not None:
-				short = self.get_lazy_short_name(unit.key)
-				retry += 1
-
-				if retry >= 10:
-					logging.error('en-note-guid = %s, faild to create lazy short name.' % en_note.guid)
-					raise Exception
-
-			note.short = short
-
+		note.title = en_note.title
 		note.content = parse.parse_evernote(en_content)
 		note.summary = parse.create_summary(note.content)
 		note.usn = en_note.updateSequenceNum
 		note.updated = en_note.updated
 		note.created = en_note.created
+
+		if note.title != en_note.title:
+			note.short = create_shortname(en_note.title)
 
 		note.put()
 
@@ -199,6 +111,26 @@ class SyncENHDL(request.RequestHandler):
 
 		return str(unit.name_count)
 
+	def create_shortname(self, note_title):
+
+		""" handle english and non-english short name """
+		if all(c in string.printable for c in note_title):
+			short = '-'.join(re.findall('\w+', note_title)).lower()
+		else:
+			short = re.sub('\s+', '-', note_title, flags=re.U).lower()
+
+		""" if short name is too long or duplicated """
+		retry = 0
+		while len(short) > 450 or Note.query(Note.short==short, ancestor=unit.key).get() is not None:
+			short = self.get_lazy_short_name(unit.key)
+			retry += 1
+
+			if retry >= 10:
+				logging.error('en-note-guid = %s, faild to create lazy short name.' % en_note.guid)
+				raise Exception
+
+		return short
+
 	def en_user_system_exception(self, unit, exception, guid=None):
 		msg = ''
 
@@ -209,7 +141,7 @@ class SyncENHDL(request.RequestHandler):
 
 		if exception.errorCode == EDAMErrorCode._NAMES_TO_VALUES['AUTH_EXPIRED']:
 			unit = unit.key.get()
-			unit.token = ''
+			unit.token = None
 			unit.put()
 			logging.info(msg)
 		else:
@@ -226,7 +158,8 @@ class SyncENHDL(request.RequestHandler):
 		logging.error(msg)
 
 app = webapp2.WSGIApplication([
-	routes.DomainRoute('<:(?i)(www\.%s|localhost)>'%HOST, [
+	#TODO remove knonce.com
+	routes.DomainRoute('<:(?i)(www\.knonce\.com|www\.%s|localhost)>'%HOST, [
 		webapp2.Route('/sync/evernote/note', handler='sync.SyncENHDL:note', name='sync-evernote-note', methods=['GET'])
 	])
 ], debug=True, config=request.app_config)

@@ -52,7 +52,7 @@ class RequestHandler(webapp2.RequestHandler):
     @webapp2.cached_property
     def logged_in(self):
         """Returns true if a user is currently logged in, false otherwise"""
-        return self.auth.get_user_by_session() is not None
+        return self.auth.get_user_by_session() is not None and self.current_user.active
 
     def render(self, template_name, template_vars={}):
         # Preset values for the template

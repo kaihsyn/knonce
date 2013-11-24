@@ -7,22 +7,16 @@ class UnitStatus():
 class Unit(ndb.Model):
 
 	""" unit information """
-	title = ndb.StringProperty(default='')
-	sub_title = ndb.StringProperty(default='')
-	alias = ndb.StringProperty(default='')
-	display = ndb.StringProperty(default='')
-	bio = ndb.StringProperty(default='')
+	title = ndb.StringProperty()
+	sub_title = ndb.StringProperty()
+	alias = ndb.StringProperty()
 
 	""" evernote information """
 	user_id = ndb.IntegerProperty()
-	username = ndb.StringProperty()
-	notebook_name = ndb.StringProperty()
-	notebook_guid = ndb.StringProperty()
-	token = ndb.StringProperty(default='')
+	token = ndb.StringProperty()
 	
 	""" unit status """
 	name_count = ndb.IntegerProperty(default=0)
-	status = ndb.IntegerProperty(default=UnitStatus.Active)
 
 	@staticmethod
 	def get_by_user_key(user_key):

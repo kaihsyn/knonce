@@ -1,19 +1,96 @@
+$mxc-text: "museo-1","museo-2"
+$mxc-green: #2fcccc
+$mxc-yellow: #ffcc33
+
+$mxc-text-color: #666
+
 body
-	color: #888
+	color: $mxc-text-color
 	font-family: "calluna-1","calluna-2"
+	font-weight: 500
+	line-height: 150%
 
 a
 	color: #222
 
-a:hover
-	background-color: #222
-	color: #fff
-	text-decoration: none
+	&:hover
+		background-color: #222
+		color: #fff
+		text-decoration: none
+
+h1, h2
+	font-family: $mxc-text
+
+h1
+	color: $mxc-green
+
+strong
+	color: $mxc-green
+
+.mxc-text
+	font-family: $mxc-text
+	font-weight: 300
+
+.mxc-block
+	margin-bottom: 25px
+
+	&:last-child
+		margin-bottom: 0px
+
+	& > i
+		color: #ccc
+
+	& > div
+		margin-left: 26px
+
+	& > h2
+		color: #aaa
+		display: inline-block
+		font-size: 1em
+		margin: 0px
+		padding: 4px 5px 5px 5px
 
 #neck
 	margin-top: 45px
 	margin-bottom: 20px
 
-.title
-	color: #787833
-	font-family: "museo-1","museo-2"
+	.mxc-block
+		margin-top: 35px
+
+	.mxc-bread
+
+		& > h2
+			background-color: #e5e5e5
+			color: $mxc-text-color
+			display: inline-block
+
+		& > i
+			color: $mxc-text-color
+
+#chest
+	margin-top: 25px
+
+	.mxc-form
+	
+		label
+			color: #222
+			font-family: $mxc-text
+			font-weight: 300
+
+		.form-group
+			margin-top: 25px
+
+		.mxc-website-url
+			display: inline-block
+
+			&.form-control
+				width: 100px
+
+#foot
+	height: 80px
+
+.fa-check-square-o
+	color: $mxc-green
+
+.fa-exclamation-triangle 
+	color: $mxc-yellow

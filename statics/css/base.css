@@ -1,19 +1,74 @@
 body {
-  color: #888888;
-  font-family: "calluna-1", "calluna-2"; }
+  color: #666666;
+  font-family: "calluna-1", "calluna-2";
+  font-weight: 500;
+  line-height: 150%; }
 
 a {
   color: #222222; }
+  a:hover {
+    background-color: #222222;
+    color: white;
+    text-decoration: none; }
 
-a:hover {
-  background-color: #222222;
-  color: white;
-  text-decoration: none; }
+h1, h2 {
+  font-family: "museo-1", "museo-2"; }
+
+h1 {
+  color: #2fcccc; }
+
+strong {
+  color: #2fcccc; }
+
+.mxc-text {
+  font-family: "museo-1", "museo-2";
+  font-weight: 300; }
+
+.mxc-block {
+  margin-bottom: 25px; }
+  .mxc-block:last-child {
+    margin-bottom: 0px; }
+  .mxc-block > i {
+    color: #cccccc; }
+  .mxc-block > div {
+    margin-left: 26px; }
+  .mxc-block > h2 {
+    color: #aaaaaa;
+    display: inline-block;
+    font-size: 1em;
+    margin: 0px;
+    padding: 4px 5px 5px 5px; }
 
 #neck {
   margin-top: 45px;
   margin-bottom: 20px; }
+  #neck .mxc-block {
+    margin-top: 35px; }
+  #neck .mxc-bread > h2 {
+    background-color: #e5e5e5;
+    color: #666666;
+    display: inline-block; }
+  #neck .mxc-bread > i {
+    color: #666666; }
 
-.title {
-  color: #787833;
-  font-family: "museo-1", "museo-2"; }
+#chest {
+  margin-top: 25px; }
+  #chest .mxc-form label {
+    color: #222222;
+    font-family: "museo-1", "museo-2";
+    font-weight: 300; }
+  #chest .mxc-form .form-group {
+    margin-top: 25px; }
+  #chest .mxc-form .mxc-website-url {
+    display: inline-block; }
+    #chest .mxc-form .mxc-website-url.form-control {
+      width: 100px; }
+
+#foot {
+  height: 80px; }
+
+.fa-check-square-o {
+  color: #2fcccc; }
+
+.fa-exclamation-triangle {
+  color: #ffcc33; }

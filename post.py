@@ -1,7 +1,3 @@
-import sys
-if 'lib' not in sys.path:
-	sys.path[0:0] = ['lib']
-
 import logging
 import webapp2
 from webapp2_extras import routes

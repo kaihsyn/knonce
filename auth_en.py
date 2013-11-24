@@ -1,7 +1,3 @@
-import sys
-if 'lib' not in sys.path:
-	sys.path[0:0] = ['lib']
-
 import logging
 import string
 import webapp2
@@ -10,7 +6,7 @@ from google.appengine.ext import ndb
 from evernote.edam.error.ttypes import EDAMErrorCode, EDAMUserException, EDAMSystemException, EDAMNotFoundException
 from evernote.edam.type.ttypes import Notebook
 import request
-from secrets import HOST
+from secrets import HOST, EN_CONSUMER_KEY, EN_CONSUMER_SECRET
 from knonce.unit import Unit
 from knonce import helper
 
@@ -21,9 +17,9 @@ class AuthHDL(request.RequestHandler):
 
 		unit = Unit.get_by_user_key(self.current_user.key)
 		if unit is not None and unit.token != '':
-			return self.redirect("/settings")
+			return self.redirect("/setup")
 
-		client = helper.get_evernote_client()
+		client = EvernoteClient(consumer_key=EN_CONSUMER_KEY, consumer_secret=EN_CONSUMER_SECRET, sandbox=False)
 		callbackUrl = 'http://%s/auth/evernote/callback' % self.request.host
 		request_token = client.get_request_token(callbackUrl)
 
@@ -34,7 +30,7 @@ class AuthHDL(request.RequestHandler):
 		except KeyError:
 			self.session.add_flash(False, level='en', key='connect')
 			logging.error('Failed to retrieve access token data in auth function.')
-			return self.redirect('/settings')
+			return self.redirect('/setup')
 
 		# Redirect the user to the Evernote authorization URL
 		return self.redirect(client.get_authorize_url(request_token))
@@ -45,7 +41,7 @@ class CallbackHDL(request.RequestHandler):
 			self.redirect('/')
 
 		try:
-			client = helper.get_evernote_client()
+			client = EvernoteClient(consumer_key=EN_CONSUMER_KEY, consumer_secret=EN_CONSUMER_SECRET, sandbox=False)
 			token = client.get_access_token(
 				self.session.get('oauth_token'),
 				self.session.get('oauth_token_secret'),
@@ -54,17 +50,17 @@ class CallbackHDL(request.RequestHandler):
 		except KeyError:
 			self.session.add_flash(False, level='en', key='connect')
 			logging.error('Failed to retrieve access token data in call back function.')
-			return self.redirect('/settings')
+			return self.redirect('/setup')
 
-		if not self.update_info(client, self.current_user, token):
+		if not self.update_info(client, token):
 			self.session.add_flash(False, level='en', key='connect')
 			logging.error('Failed to working on unit.')
-			return self.redirect('/settings')
+			return self.redirect('/setup')
 		
 		self.session.add_flash(True, level='en', key='connect')
-		return self.redirect('/settings')
+		return self.redirect('/setup')
 
-	def update_info(self, client, user, token):
+	def update_info(self, client, token):
 
 		unit = Unit.get_by_user_key(self.current_user.key)
 		if unit is None:

@@ -1,31 +1,96 @@
 {% extends "base.html" %}
 
 {% block title %}
-Settings // mxchar
+Setup // mxchar
 {% endblock %}
 
 {% block head %}
+<style>
+.mxc-block a.mxc-edit {
+	opacity: 0;
+	margin: 0px 0px 5px 5px;
+	transition: opacity 0.3s ease;
+}
+.mxc-block:hover a.mxc-edit {
+	opacity: 1;
+}
+</style>
 {% endblock %}
 
 {% block neck %}
-<h1 class="title">Settings // mxchar</h1>
+<div class="mxc-block mxc-bread">
+	<i class="fa fa-terminal fa-fw"></i> <h2 class="mxc-text">mxchar &gt; setup</h2>
+</div>
 {% endblock %}
 
 {% block chest %}
 
-{% if msg is defined %}
-<div class="alert alert-{{ msg.type }}">
-	<button type="button" class="close" data-dismiss="alert">&times;</button>
-	<strong>{{ msg.title }}</strong>
-	{{ msg.body }}
+{% if (msgs|length > 0) or (unit and not (unit.title and user.name and user.mail)) %}
+<div class="mxc-block">
+	<i class="fa fa-keyboard-o fa-fw"></i> <h2 class="mxc-text">System /Messages</h2>
+	{% if msgs|length > 0 %}
+	{% for msg in msgs %}
+	<div>
+		{{'<strong>%s</strong>' % msg.title if msg.title}}
+		{{msg.body|safe}}
+		{% if msg.type == 'success' %}
+		<i class="fa fa-check-square-o"></i>
+		{% endif %}
+	</div>
+	{% endfor %}
+	{% endif %}
+
+	{% if not unit.title %}
+	<div>
+		Please add a title for your website.
+		<i class="fa fa-exclamation-triangle"></i>
+	</div>
+	{% endif %}
+
+	{% if not user.name %}
+	<div>
+		Please update your name.
+		<i class="fa fa-exclamation-triangle"></i>
+	</div>
+	{% endif %}
+
+	{% if not user.email %}
+	<div>
+		Please update your mail address.
+		<i class="fa fa-exclamation-triangle"></i>
+	</div>
+	{% endif %}
 </div>
 {% endif %}
 
-{% if unit is defined %}
-<ul id="menu" class="nav nav-tabs">
-	<li class="active"><a href="#notebook" data-toggle="tab">Notebook</a></li>
-	<li><a href="#account" data-toggle="tab">Account</a></li>
-</ul>
+{% if unit %}
+<div class="mxc-block">
+	<i class="fa fa-asterisk fa-fw"></i> <h2>Website</h2>
+	<a href="/setup/website" class="btn btn-default btn-xs mxc-text mxc-edit">edit</a>
+	<div>
+		{{unit.title if unit.title else '<empty title>'}}<br>
+		{{unit.sub_title if unit.sub_title else '<empty description>'}}<br>
+		http://{{unit.alias}}.{{host}}/
+	</div>
+</div>
+<div class="mxc-block">
+	<i class="fa fa-male fa-fw"></i> <h2>Account</h2>
+	<a href="/setup/account" class="btn btn-default btn-xs mxc-text mxc-edit">edit</a>
+	<div>
+		{{user.name if user.name else '<empty name>'}}<br>
+		{{user.mail if user.mail else '<empty mail>'}}
+	</div>
+</div>
+{% else %}
+<div class="mxc-block">
+    <i class="fa fa-keyboard-o fa-fw"></i><br>
+	Let's get started by <a href="/auth/evernote">connecting your Evernote account</a>.
+</div>
+{% endif %}
+
+{#
+{% if unit %}
+<div class="mxc-block">
 <div class="tab-content">
 	<div class="tab-pane active" id="notebook">
 		<form id="nb" class="form-horizontal">
@@ -45,7 +110,7 @@ Settings // mxchar
 						<i class="icon-spinner icon-spin icon-large"></i>
 					</span>
 					<span id="nb-select-name" class="help-inline only">
-						<div id="nb-select-name-show" class="{#{{'hide' if unit.notebook_name is none }}#}">
+						<div id="nb-select-name-show">
 							<span>{{unit.notebook_name}}</span> <a href="#" id="nb-select-name-refresh" class="kl-tooltip" data-placement="right" title="Click here to refresh the name of your syncing notebook."><i class="icon-refresh"></i></a>
 						</div>
 					</span>
@@ -123,19 +188,13 @@ Settings // mxchar
 		</form>
 	</div>
 </div>
-{% else %}
-<div>
-    <i class="fa fa-keyboard-o"></i><br>
-	Let's get started by <a href="/auth/evernote">connecting your Evernote account</a>.
 </div>
 {% endif %}
-
-{% endblock %}
-
-{% block hidden %}
-
+#}
 {% endblock %}
 
 {% block script %}
-<script src="/script/settings.js"></script>
+{#
+<script src="/script/setup.js"></script>
+#}
 {% endblock %}

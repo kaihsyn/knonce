@@ -1,16 +1,5 @@
 {% extends "base.html" %}
 
-{% block head %}
-<style>
-#home {
-    border-width: 1px solid #CCC;
-    margin: 60px 0px 0px 0px;
-    padding: 0px;
-    width: 450px;
-}
-</style>
-{% endblock %}
-
 {% block neck %}
 <h1 class="title">mxchar</h1>
 <div>
@@ -20,36 +9,45 @@
 {% endblock %}
 
 {% block chest %}
-<div id="home">
+<div class="mxc-block">
 {% if beta %}
-    <i class="fa fa-heart-o"></i><br>
-    Hey, thanks for signing up!
-{% elif logged_in %}
-    <i class="fa fa-keyboard-o"></i><br>
-    Hi, there!<br>
-    View your settings <a href="/settings">here</a>.
-{% else %}
-    <i class="fa fa-keyboard-o"></i><br>
-    mxchar is currently in it's private beta.<br>
-    Registered user please <a href="/auth/google">sign in</a> to manage your account.<br>
-{% endif %}
-
-{% if beta or logged_in %}
-    <br><br>
-    <i class="fa fa-terminal"></i><br>
-    Subscribe to our newsletters and get notified when we rolled out.
-    <!-- Begin MailChimp Signup Form -->
-    <div id="mc_embed_signup" style="margin-top:5px">
-    <form action="http://kaihsinliu.us5.list-manage.com/subscribe/post?u=b7db5856be930669a2305012b&amp;id=3098357c8c" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate form-inline" role="form" target="_blank" novalidate>
-        <div class="mc-field-group form-group">
-            <input type="email" value="" name="EMAIL" class="required email form-control" id="mce-EMAIL" placeholder="Email Address">
-        </div>
-        <input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="btn btn-default">
-        <div class="response" id="mce-error-response" style="display:none"></div>
-        <div class="response" id="mce-success-response" style="display:none"></div>
-    </form>
+    <i class="fa fa-heart-o fa-fw"></i> <h2>Message</h2>
+    <div>
+        Hey, thanks for signing up!
     </div>
-    <!--End mc_embed_signup-->
+{% elif logged_in %}
+    <i class="fa fa-keyboard-o fa-fw"></i> <h2>Message</h2>
+    <div>
+        Hi, there!<br>
+        Setup your account <a href="/setup">here</a>.
+    </div>
+{% else %}
+    <i class="fa fa-keyboard-o fa-fw"></i> <h2>Message</h2>
+    <div>
+        <span class="mxc-text">mxchar</span> is currently in it's private beta.<br>
+        Registered user please <a href="/auth/google">sign in</a> to manage your account.
+    </div>
+{% endif %}
+</div>
+
+<div class="mxc-block">
+{% if beta or logged_in %}
+    <i class="fa fa-terminal fa-fw"></i> <h2>Subscribe</h2>
+    <div>
+        Subscribe to our newsletters and get notified when we rolled out.
+        <!-- Begin MailChimp Signup Form -->
+        <div id="mc_embed_signup" style="margin-top:5px">
+        <form action="http://kaihsinliu.us5.list-manage.com/subscribe/post?u=b7db5856be930669a2305012b&amp;id=3098357c8c" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate form-inline" role="form" target="_blank" novalidate>
+            <div class="mc-field-group form-group">
+                <input type="email" value="" name="EMAIL" class="required email form-control" id="mce-EMAIL" placeholder="Email Address">
+            </div>
+            <input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="btn btn-default">
+            <div class="response" id="mce-error-response" style="display:none"></div>
+            <div class="response" id="mce-success-response" style="display:none"></div>
+        </form>
+        </div>
+        <!--End mc_embed_signup-->
+    </div>
 {% endif %}
 </div>
 {% endblock %}

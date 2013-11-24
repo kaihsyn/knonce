@@ -1,7 +1,3 @@
-import sys
-if 'lib' not in sys.path:
-	sys.path[0:0] = ['lib']
-
 import logging
 import webapp2
 from webapp2_extras import routes
@@ -21,7 +17,7 @@ app = webapp2.WSGIApplication([
 	    webapp2.Route('/', handler='home.MainHDL:get', name='main-page', methods=['GET']),
 	    webapp2.Route('/beta', handler='home.MainHDL:beta', name='main-page-w-beta', methods=['GET'])
 	]),
-	routes.DomainRoute('<alias><:(?i)(\.knonce\.com)>', [
+	routes.DomainRoute('<alias><:(?i)(\.%s)>'%HOST, [
 	    webapp2.Route('/', handler='unit_home.MainHDL:get', name='unit-main-page', methods=['GET'])
 	]),
 	routes.DomainRoute('localhost', [

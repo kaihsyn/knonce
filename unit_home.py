@@ -1,7 +1,3 @@
-import sys
-if 'lib' not in sys.path:
-	sys.path[0:0] = ['lib']
-
 import logging
 import request
 import datetime
@@ -15,12 +11,12 @@ class MainHDL(request.RequestHandler):
 
 		""" check required data """
 		if alias is None:
-			return self.redirect('http://www.knonce.com/')
+			return self.redirect('http://www.%s/'%HOST)
 
 		""" get unit """
 		unit = Unit.query(Unit.alias==alias.lower()).get()
 		if unit is None:
-			return self.redirect('http://www.knonce.com/')
+			return self.redirect('http://www.%s/'%HOST)
 
 		""" grab latest ten notes """
 		notes, cursor, more = Note.query(ancestor=unit.key).order(Note.date).fetch_page(10, projection=['date', 'short', 'title', 'summary'])
