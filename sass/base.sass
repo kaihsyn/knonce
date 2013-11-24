@@ -3,6 +3,7 @@ $mxc-green: #2fcccc
 $mxc-yellow: #ffcc33
 
 $mxc-text-color: #666
+$mxc-bread-bg-color: #eee
 
 body
 	color: $mxc-text-color
@@ -41,31 +42,37 @@ strong
 		color: #ccc
 
 	& > div
-		margin-left: 26px
+		margin-left: 29px
 
 	& > h2
 		color: #aaa
 		display: inline-block
 		font-size: 1em
 		margin: 0px
-		padding: 4px 5px 5px 5px
+		padding: 4px 8px 5px 8px
 
 #neck
 	margin-top: 45px
 	margin-bottom: 20px
 
 	.mxc-block
-		margin-top: 35px
+		margin-top: -5px
 
 	.mxc-bread
 
 		& > h2
-			background-color: #e5e5e5
+			background-color: $mxc-bread-bg-color
 			color: $mxc-text-color
-			display: inline-block
 
 		& > i
 			color: $mxc-text-color
+
+		a
+			color: $mxc-text-color
+
+			&:hover
+				background-color: $mxc-bread-bg-color
+				text-decoration: underline
 
 #chest
 	margin-top: 25px

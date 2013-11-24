@@ -31,25 +31,29 @@ strong {
   .mxc-block > i {
     color: #cccccc; }
   .mxc-block > div {
-    margin-left: 26px; }
+    margin-left: 29px; }
   .mxc-block > h2 {
     color: #aaaaaa;
     display: inline-block;
     font-size: 1em;
     margin: 0px;
-    padding: 4px 5px 5px 5px; }
+    padding: 4px 8px 5px 8px; }
 
 #neck {
   margin-top: 45px;
   margin-bottom: 20px; }
   #neck .mxc-block {
-    margin-top: 35px; }
+    margin-top: -5px; }
   #neck .mxc-bread > h2 {
-    background-color: #e5e5e5;
-    color: #666666;
-    display: inline-block; }
+    background-color: #eeeeee;
+    color: #666666; }
   #neck .mxc-bread > i {
     color: #666666; }
+  #neck .mxc-bread a {
+    color: #666666; }
+    #neck .mxc-bread a:hover {
+      background-color: #eeeeee;
+      text-decoration: underline; }
 
 #chest {
   margin-top: 25px; }

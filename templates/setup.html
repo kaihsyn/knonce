@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block title %}
-Setup // mxchar
+setup // mxchar
 {% endblock %}
 
 {% block head %}
@@ -18,8 +18,9 @@ Setup // mxchar
 {% endblock %}
 
 {% block neck %}
+<h1 class="title">mxchar</h1>
 <div class="mxc-block mxc-bread">
-	<i class="fa fa-terminal fa-fw"></i> <h2 class="mxc-text">mxchar &gt; setup</h2>
+	<i class="fa fa-terminal fa-fw"></i> <h2 class="mxc-text">setup</h2>
 </div>
 {% endblock %}
 
@@ -27,7 +28,7 @@ Setup // mxchar
 
 {% if (msgs|length > 0) or (unit and not (unit.title and user.name and user.mail)) %}
 <div class="mxc-block">
-	<i class="fa fa-keyboard-o fa-fw"></i> <h2 class="mxc-text">System /Messages</h2>
+	<i class="fa fa-keyboard-o fa-fw"></i> <h2 class="mxc-text">System Messages</h2>
 	{% if msgs|length > 0 %}
 	{% for msg in msgs %}
 	<div>
@@ -54,7 +55,7 @@ Setup // mxchar
 	</div>
 	{% endif %}
 
-	{% if not user.email %}
+	{% if not user.mail %}
 	<div>
 		Please update your mail address.
 		<i class="fa fa-exclamation-triangle"></i>
