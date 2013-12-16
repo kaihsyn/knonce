@@ -4,7 +4,7 @@ import datetime
 from webapp2_extras import routes
 
 import request
-from secrets import HOST, AUTH_CONFIG
+from secrets import HOST, AUTH_CONFIG, DEBUG
 from simpleauth import SimpleAuthHandler
 
 class AuthHDL(request.RequestHandler, SimpleAuthHandler):
@@ -144,4 +144,4 @@ app = webapp2.WSGIApplication([
     webapp2.Route('/auth/<provider>', handler='auth.AuthHDL:_simple_auth', name='auth_login'),
     webapp2.Route('/auth/<provider>/callback', handler='auth.AuthHDL:_auth_callback', name='auth_callback')
   ])
-], debug=True, config=request.app_config)
+], debug=DEBUG, config=request.app_config)

@@ -3,11 +3,15 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	{% if title is defined %}
-	<title>{{ title }} // mxchar</title>
+	<title>
+	{% block title %}
+	{% if title %}
+	{{ title }} // mxchar
 	{% else %}
-	<title>{% block title %}mxchar // sync with your notebook, share your views and great ideas{% endblock %}</title>
+	mxchar // sync with your notebook, share your views and great ideas
 	{% endif %}
+	{% endblock %}
+	</title>
 
 	<link href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css" rel="stylesheet">
 	<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.0/css/font-awesome.min.css" rel="stylesheet">

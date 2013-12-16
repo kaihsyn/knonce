@@ -1,12 +1,11 @@
 import logging
-import webapp2
-from webapp2_extras import routes
-
 import request
-from secrets import HOST
+import webapp2
 
 from knonce.note import Note
 from knonce.unit import Unit
+from secrets import HOST, DEBUG
+from webapp2_extras import routes
 
 class PostHDL(request.RequestHandler):
 	def get(self, alias=None, short=None):
@@ -40,4 +39,4 @@ app = webapp2.WSGIApplication([
 	routes.DomainRoute('localhost', [
 	    webapp2.Route('/post/<short>', handler='post.PostHDL:get', name='unit-post', methods=['GET'])
 	])
-], debug=True, config=request.app_config)
+], debug=DEBUG, config=request.app_config)

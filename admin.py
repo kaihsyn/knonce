@@ -6,7 +6,7 @@ from webapp2_extras.appengine.auth.models import User
 
 import request
 
-from secrets import HOST
+from secrets import HOST, DEBUG
 from knonce.unit import Unit, UnitStatus
 from knonce.note import Note
 
@@ -32,4 +32,4 @@ app = webapp2.WSGIApplication([
 		webapp2.Route('/admin/reset/unit/<alias>', handler='admin.AdminHDL:reset_unit', name='reset-unit', methods=['GET', 'POST']),
 		#webapp2.Route('/admin/active/<key>', handler='admin.AdminHDL:active_user', name='active-user', methods=['GET', 'POST']),
 	]),
-], debug=True, config=request.app_config)
+], debug=DEBUG, config=request.app_config)

@@ -1,9 +1,10 @@
-import webapp2
-import logging
 import json
-from webapp2_extras import auth, sessions, jinja2
+import logging
+import webapp2
+
 from jinja2.runtime import TemplateNotFound
 from secrets import SESSION_KEY
+from webapp2_extras import auth, sessions, jinja2
 
 # webapp2 config
 app_config = {

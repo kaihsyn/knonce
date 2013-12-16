@@ -10,17 +10,7 @@ indexes:
 # automatically uploaded to the admin console when you next deploy
 # your application using appcfg.py.
 
-- kind: Note
-  ancestor: yes
-  properties:
-  - name: date
-  - name: short
-  - name: summary
-  - name: title
-
 - kind: Unit
   properties:
   - name: user_id
-  - name: notebook_guid
-  - name: status
   - name: token

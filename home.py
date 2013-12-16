@@ -3,7 +3,7 @@ import webapp2
 from webapp2_extras import routes
 
 import request
-from secrets import HOST
+from secrets import HOST, DEBUG
 
 class MainHDL(request.RequestHandler):
 	def get(self):
@@ -25,4 +25,4 @@ app = webapp2.WSGIApplication([
 		webapp2.Route('/', handler='home.MainHDL:get', name='main-page', methods=['GET']),
 	    webapp2.Route('/beta', handler='home.MainHDL:beta', name='main-page-w-beta', methods=['GET'])
 	])
-], debug=True, config=request.app_config)
+], debug=DEBUG, config=request.app_config)

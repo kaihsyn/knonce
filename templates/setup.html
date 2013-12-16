@@ -32,7 +32,7 @@ setup // mxchar
 	{% if msgs|length > 0 %}
 	{% for msg in msgs %}
 	<div>
-		{{'<strong>%s</strong>' % msg.title if msg.title}}
+		{{'<strong>%s</strong>'|safe%msg.title if msg.title}}
 		{{msg.body|safe}}
 		{% if msg.type == 'success' %}
 		<i class="fa fa-check-square-o"></i>

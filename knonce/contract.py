@@ -21,3 +21,13 @@ class Contract:
     def ensures(test):
         if not test:
             raise PostconditionError()
+
+    @staticmethod
+    def ensures_not_none(object):
+        if object is None:
+            raise PostconditionError()
+
+    @staticmethod
+    def ensures_not_none_or_empty(object):
+        if object is None or object == '':
+            raise PostconditionError()

@@ -1,14 +1,16 @@
 import logging
+import request
 import string
 import webapp2
-from webapp2_extras import routes
-from google.appengine.ext import ndb
+
+from evernote.api.client import EvernoteClient
 from evernote.edam.error.ttypes import EDAMErrorCode, EDAMUserException, EDAMSystemException, EDAMNotFoundException
 from evernote.edam.type.ttypes import Notebook
-import request
-from secrets import HOST, EN_CONSUMER_KEY, EN_CONSUMER_SECRET
-from knonce.unit import Unit
+from google.appengine.ext import ndb
 from knonce import helper
+from knonce.unit import Unit
+from secrets import HOST, EN_CONSUMER_KEY, EN_CONSUMER_SECRET, DEBUG
+from webapp2_extras import routes
 
 class AuthHDL(request.RequestHandler):
 	def get(self):
@@ -99,9 +101,9 @@ class CallbackHDL(request.RequestHandler):
 			return False
 
 		# update user information
-		if user.en_name != en_user.name:
-			user.en_name = en_user.name
-			user.put()
+		if self.current_user.en_name != en_user.name:
+			self.current_user.en_name = en_user.name
+			self.current_user.put()
 
 		return True
 
@@ -110,4 +112,4 @@ app = webapp2.WSGIApplication([
 		webapp2.Route(r'/auth/evernote', handler='auth_en.AuthHDL:get', name='auth-evernote', methods=['GET']),
 		webapp2.Route(r'/auth/evernote/callback', handler='auth_en.CallbackHDL:get', name='auth-evernote-callback', methods=['GET']),
 	]),
-], debug=True, config=request.app_config)
+], debug=DEBUG, config=request.app_config)

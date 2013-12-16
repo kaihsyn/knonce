@@ -1,13 +1,16 @@
 import logging
 import request
 import datetime
-from secrets import HOST
+from secrets import HOST, DEBUG
 from knonce.note import Note
 from knonce.unit import Unit
 from collections import OrderedDict
 
 class MainHDL(request.RequestHandler):
 	def get(self, alias=None):
+
+		if DEBUG:
+			alias = 'kaihsyn'
 
 		""" check required data """
 		if alias is None:
@@ -19,7 +22,7 @@ class MainHDL(request.RequestHandler):
 			return self.redirect('http://www.%s/'%HOST)
 
 		""" grab latest ten notes """
-		notes, cursor, more = Note.query(ancestor=unit.key).order(Note.date).fetch_page(10, projection=['date', 'short', 'title', 'summary'])
+		notes, cursor, more = Note.query(ancestor=unit.key).order(Note.date).fetch_page(20, projection=['date', 'short', 'title'])
 
 		pageval = {
 			'unit': unit,
@@ -34,4 +37,3 @@ class MainHDL(request.RequestHandler):
 			pageval['notes'][note.date.date()].append(note)
 
 		self.render('unit/home.html', pageval)
-

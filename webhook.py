@@ -1,11 +1,12 @@
-import webapp2
 import logging
-from webapp2_extras import routes
-
 import request
+import webapp2
 
 from google.appengine.api import taskqueue
-from secrets import HOST, EN_WEBHOOK
+from secrets import HOST, EN_WEBHOOK, DEBUG
+from webapp2_extras import routes
+
+evernote_reasons = ['create', 'update', 'business_create', 'business_update']
 
 class EvernoteWebhookHDL(request.RequestHandler):
     def get(self):
@@ -25,7 +26,7 @@ class EvernoteWebhookHDL(request.RequestHandler):
     		miss_var = True
 
     	if self.request.get('reason'):
-    		if self.request.get('reason') == 'create' or self.request.get('reason') == 'update':
+    		if self.request.get('reason') in evernote_reasons:
     			params['reason'] = self.request.get('reason')
     		else:
     			params['reason'] = '[wrong format reason: %s]' % self.request.get('reason')
@@ -38,7 +39,7 @@ class EvernoteWebhookHDL(request.RequestHandler):
             logging.warning('Evernote Webhook: %s %s %s' % (params['user_id'], params['guid'], params['reason']))
             return
     	else:
-    		logging.debug('Evernote Webhook: %s %s %s' % (params['user_id'], params['guid'], params['reason']))
+    		logging.info('Evernote Webhook: %s %s %s' % (params['user_id'], params['guid'], params['reason']))
 
     	taskqueue.add(queue_name='sync-evernote', url='/sync/evernote/note', params=params, method='GET')
 
@@ -46,4 +47,4 @@ app = webapp2.WSGIApplication([
     routes.DomainRoute('<:(?i)(www\.knonce\.com|www\.%s|localhost)>'%HOST, [
         webapp2.Route('/hook/%s'%EN_WEBHOOK, handler='webhook.EvernoteWebhookHDL:get', name='evernote-webhook', methods=['GET'])
     ])
-], debug=True, config=request.app_config)
+], debug=DEBUG, config=request.app_config)
